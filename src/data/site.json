@@ -2,27 +2,27 @@
  "pages": {
   "home": {
    "title": "Yagmur Şimşek Sönmez — Product Designer",
-   "description": "Portfolio of Yagmur Şimşek Sönmez, a Berlin-based product designer and UX researcher. Shipped iOS apps, usability research and design systems: HealthBar, PlayMate, iKeep, Kitbox.",
+   "description": "Portfolio of Yagmur Şimşek Sönmez, Berlin-based product designer and UX researcher. Shipped iOS apps, usability research and design systems.",
    "image": "/og.png"
   },
   "healthbar": {
    "title": "HealthBar — Yagmur Şimşek Sönmez",
-   "description": "HealthBar: an RPG-style Apple Health companion for iOS, Apple Watch and widgets. UX/UI case study where usability tests raised dashboard comprehension from 44% to 89%.",
+   "description": "HealthBar: an RPG-style Apple Health companion for iOS and Apple Watch. UX/UI case study: dashboard comprehension rose from 44% to 89% in usability tests.",
    "image": "/images/healthbar_card.png"
   },
   "ikeep": {
    "title": "iKeep — Yagmur Şimşek Sönmez",
-   "description": "iKeep: a copy and paste vault, live on the App Store. Product design case study from information architecture to light and dark UI, designed end to end in one week.",
+   "description": "iKeep: a copy and paste vault, live on the App Store. Product design case study from information architecture to light and dark UI, built in one week.",
    "image": "/images/ikeep-cover-v2.jpg"
   },
   "playmate": {
    "title": "PlayMate — Yagmur Şimşek Sönmez",
-   "description": "PlayMate: a community-driven sports matchmaking iOS app. Product design case study covering user interviews, four rounds of moderated usability testing and information architecture.",
+   "description": "PlayMate: a community-driven sports matchmaking iOS app. Case study with user interviews, moderated usability testing and information architecture.",
    "image": "/images/playmate-cover-v6.png"
   },
   "kitbox": {
    "title": "Kitbox — Yagmur Şimşek Sönmez",
-   "description": "Kitbox: a mobile e-commerce app for a home-goods brand, released on the App Store. UX/UI case study on the design system, onboarding and a 3-step checkout flow.",
+   "description": "Kitbox: a mobile e-commerce app for a home-goods brand, live on the App Store. UX/UI case study on the design system, onboarding and 3-step checkout.",
    "image": "/images/kitbox-card-hero-final.jpg"
   },
   "ai-claim": {
@@ -32,7 +32,7 @@
   },
   "pagepals": {
    "title": "PagePals — Yagmur Şimşek Sönmez",
-   "description": "PagePals: a social, gamified reading platform that turns a static book catalog into a shared community. UX case study with survey research, information architecture and a design system.",
+   "description": "PagePals: a social, gamified reading platform. UX case study covering survey research, information architecture and a design system.",
    "image": "/images/pagepals-hero.png"
   },
   "urban-sports-vs-classpass": {
