@@ -4,12 +4,28 @@ import site from '../data/site.json';
 import aside from '../content/home-aside.html?raw';
 import main from '../content/home-main.html?raw';
 import footer from '../content/home-footer.html?raw';
+import { person } from '../data/person';
 
 const projectsMeta = JSON.stringify(
   Object.fromEntries(Object.entries(site.projects).map(([slug, p]) => [slug, { title: p.title, tagline: p.tagline }])),
 );
 ---
-<Base title={site.pages.home.title} description={site.pages.home.description}>
+<Base
+  title={site.pages.home.title}
+  description={site.pages.home.description}
+  image={site.pages.home.image}
+  jsonLd={[
+    { '@context': 'https://schema.org', ...person },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Yagmur Şimşek Sönmez — Product Designer',
+      url: 'https://yagmursimseksonmez.com/',
+      inLanguage: 'en',
+      author: { '@id': person['@id'] },
+    },
+  ]}
+>
   <div class="min-h-screen w-full bg-background text-foreground">
     <div class="flex flex-col lg:flex-row min-h-screen">
       <Fragment set:html={aside} />

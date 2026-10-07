@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://design.yagmursimseksonmez.com',
+  site: 'https://yagmursimseksonmez.com',
   build: { format: 'directory' },
 });

@@ -1,0 +1,20 @@
+export const person = {
+  '@type': 'Person',
+  '@id': 'https://yagmursimseksonmez.com/#person',
+  name: 'Yagmur Şimşek Sönmez',
+  alternateName: ['Nagehan Yagmur Şimşek Sönmez', 'Yagmur Simsek Sonmez'],
+  jobTitle: 'Product Designer',
+  description: 'Berlin-based product designer and UX researcher with a PhD in the history and theory of architecture.',
+  url: 'https://yagmursimseksonmez.com/',
+  image: 'https://yagmursimseksonmez.com/images/avatar-icon.png',
+  address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
+  knowsAbout: ['Product design', 'UX design', 'UX research', 'Design systems', 'Usability testing', 'iOS app design'],
+  knowsLanguage: ['en', 'de', 'tr'],
+  sameAs: [
+    'https://www.linkedin.com/in/yagmursimseks',
+    'https://www.behance.net/nagehanyagmursimsek',
+    'https://yildiz.academia.edu/NagehanYagmurSimsekSonmez',
+    'https://www.flickr.com/people/126174140@N08/',
+    'https://www.xing.com/profile/Yagmur_SimsekSoenmez/web_profiles',
+  ],
+};

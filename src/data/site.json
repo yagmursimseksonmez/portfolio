@@ -2,43 +2,55 @@
  "pages": {
   "home": {
    "title": "Yagmur Şimşek Sönmez — Product Designer",
-   "description": "Portfolio of Yagmur Şimşek Sönmez — Product Designer. From the Architecture of Information to shipped products: Kitbox, Health Bar, iKeep, Konkret."
+   "description": "Portfolio of Yagmur Şimşek Sönmez, a Berlin-based product designer and UX researcher. Shipped iOS apps, usability research and design systems: HealthBar, PlayMate, iKeep, Kitbox.",
+   "image": "/og.png"
   },
   "healthbar": {
    "title": "HealthBar — Yagmur Şimşek Sönmez",
-   "description": "A gamified health & wellness companion that turns Apple Health data into an RPG."
+   "description": "HealthBar: an RPG-style Apple Health companion for iOS, Apple Watch and widgets. UX/UI case study where usability tests raised dashboard comprehension from 44% to 89%.",
+   "image": "/images/healthbar_card.png"
   },
   "ikeep": {
    "title": "iKeep — Yagmur Şimşek Sönmez",
-   "description": ""
+   "description": "iKeep: a copy and paste vault, live on the App Store. Product design case study from information architecture to light and dark UI, designed end to end in one week.",
+   "image": "/images/ikeep-cover-v2.jpg"
   },
   "playmate": {
    "title": "PlayMate — Yagmur Şimşek Sönmez",
-   "description": "A community-driven sports matchmaking app."
+   "description": "PlayMate: a community-driven sports matchmaking iOS app. Product design case study covering user interviews, four rounds of moderated usability testing and information architecture.",
+   "image": "/images/playmate-cover-v6.png"
   },
   "kitbox": {
    "title": "Kitbox — Yagmur Şimşek Sönmez",
-   "description": "An online shopping app for a home-decor brand."
+   "description": "Kitbox: a mobile e-commerce app for a home-goods brand, released on the App Store. UX/UI case study on the design system, onboarding and a 3-step checkout flow.",
+   "image": "/images/kitbox-card-hero-final.jpg"
   },
   "ai-claim": {
    "title": "AI Claim Copilot — Yagmur Şimşek Sönmez",
-   "description": "Filing an insurance claim in 3 minutes, with AI."
+   "description": "AI Claim Copilot: filing an insurance claim in 3 minutes, with AI. An iOS product design challenge covering the product concept, user flow and screens.",
+   "image": "/images/ai-claim-cover-v4.png"
   },
   "pagepals": {
    "title": "PagePals — Yagmur Şimşek Sönmez",
-   "description": "A social, gamified library that turns reading into a shared ritual."
+   "description": "PagePals: a social, gamified reading platform that turns a static book catalog into a shared community. UX case study with survey research, information architecture and a design system.",
+   "image": "/images/pagepals-hero.png"
   },
   "urban-sports-vs-classpass": {
    "title": "Urban Sports vs ClassPass — Yagmur Şimşek Sönmez",
-   "description": "A task-based UX comparison of discovery, venue selection and class booking."
+   "description": "A task-based comparative UX study of Urban Sports Club vs ClassPass on iOS: class discovery, venue selection and booking, based on a heuristic review.",
+   "image": "/images/usc-cover.png"
   },
   "crypto-auth": {
    "title": "Crypto Platform — Yagmur Şimşek Sönmez",
-   "description": "Crypto-trading Platform Authentication and Onboarding Architecture"
+   "description": "Password-protected case study.",
+   "image": "/og.png",
+   "noindex": true
   },
   "bubbles": {
    "title": "Bubbles — Yagmur Şimşek Sönmez",
-   "description": ""
+   "description": "Bubbles: a task manager for iOS. Case study in progress.",
+   "image": "/og.png",
+   "noindex": true
   }
  },
  "projects": {
