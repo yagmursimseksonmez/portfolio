@@ -8,37 +8,37 @@
   "healthbar": {
    "title": "HealthBar — Yagmur Şimşek Sönmez",
    "description": "HealthBar: an RPG-style Apple Health companion for iOS and Apple Watch. UX/UI case study: dashboard comprehension rose from 44% to 89% in usability tests.",
-   "image": "/images/healthbar_card.png"
+   "image": "/og/healthbar.jpg"
   },
   "ikeep": {
    "title": "iKeep — Yagmur Şimşek Sönmez",
    "description": "iKeep: a copy and paste vault, live on the App Store. Product design case study from information architecture to light and dark UI, built in one week.",
-   "image": "/images/ikeep-cover-v2.jpg"
+   "image": "/og/ikeep.jpg"
   },
   "playmate": {
    "title": "PlayMate — Yagmur Şimşek Sönmez",
    "description": "PlayMate: a community-driven sports matchmaking iOS app. Case study with user interviews, moderated usability testing and information architecture.",
-   "image": "/images/playmate-cover-v6.png"
+   "image": "/og/playmate.jpg"
   },
   "kitbox": {
    "title": "Kitbox — Yagmur Şimşek Sönmez",
    "description": "Kitbox: a mobile e-commerce app for a home-goods brand, live on the App Store. UX/UI case study on the design system, onboarding and 3-step checkout.",
-   "image": "/images/kitbox-card-hero-final.jpg"
+   "image": "/og/kitbox.jpg"
   },
   "ai-claim": {
    "title": "AI Claim Copilot — Yagmur Şimşek Sönmez",
    "description": "AI Claim Copilot: filing an insurance claim in 3 minutes, with AI. An iOS product design challenge covering the product concept, user flow and screens.",
-   "image": "/images/ai-claim-cover-v4.png"
+   "image": "/og/ai-claim.jpg"
   },
   "pagepals": {
    "title": "PagePals — Yagmur Şimşek Sönmez",
    "description": "PagePals: a social, gamified reading platform. UX case study covering survey research, information architecture and a design system.",
-   "image": "/images/pagepals-hero.png"
+   "image": "/og/pagepals.jpg"
   },
   "urban-sports-vs-classpass": {
    "title": "Urban Sports vs ClassPass — Yagmur Şimşek Sönmez",
    "description": "A task-based comparative UX study of Urban Sports Club vs ClassPass on iOS: class discovery, venue selection and booking, based on a heuristic review.",
-   "image": "/images/usc-cover.png"
+   "image": "/og/urban-sports-vs-classpass.jpg"
   },
   "crypto-auth": {
    "title": "Crypto Platform — Yagmur Şimşek Sönmez",

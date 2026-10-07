@@ -7,9 +7,13 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "encrypt-crypto": "node tools/encrypt-crypto.mjs"
+    "encrypt-crypto": "node tools/encrypt-crypto.mjs",
+    "optimize-images": "node tools/optimize-images.mjs"
   },
   "dependencies": {
     "astro": "^7.3.6"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }

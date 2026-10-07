@@ -6,7 +6,7 @@ export const person = {
   jobTitle: 'Product Designer',
   description: 'Berlin-based product designer and UX researcher with a PhD in the history and theory of architecture.',
   url: 'https://yagmursimseksonmez.com/',
-  image: 'https://yagmursimseksonmez.com/images/avatar-icon.png',
+  image: 'https://yagmursimseksonmez.com/images/avatar-icon.webp',
   address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
   knowsAbout: ['Product design', 'UX design', 'UX research', 'Design systems', 'Usability testing', 'iOS app design'],
   knowsLanguage: ['en', 'de', 'tr'],

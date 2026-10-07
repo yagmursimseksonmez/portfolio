@@ -16,6 +16,12 @@ npm run build      # static site in dist/
 - `src/styles/site.css` — compiled Tailwind v4 stylesheet
 - `public/images`, `public/videos` — media
 
+## Images
+
+Drop new PNG/JPG files into `public/images/` and run `npm run optimize-images`: they are converted to WebP
+at the same pixel size (original files stay in git history), references are updated and 1200×630 share
+images land in `public/og/`.
+
 ## Password-protected case study
 
 `/projects/crypto-auth` is published encrypted (`public/crypto.enc.json`, AES-GCM + PBKDF2).
