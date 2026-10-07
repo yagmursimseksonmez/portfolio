@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+# plaintext of the password-protected case study; only the encrypted bundle (public/crypto.enc.json) is published
+private/
+.claude/

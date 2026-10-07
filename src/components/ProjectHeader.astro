@@ -1,0 +1,41 @@
+---
+interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+const links = [
+  ['urban-sports-vs-classpass', 'USC vs ClassPass'],
+  ['healthbar', 'HealthBar'],
+  ['playmate', 'PlayMate'],
+  ['ikeep', 'iKeep'],
+  ['ai-claim', 'AI Claim'],
+  ['crypto-auth', 'Crypto Platform'],
+  ['kitbox', 'Kitbox'],
+  ['bubbles', 'Bubbles'],
+  ['pagepals', 'PagePals'],
+];
+---
+<header class="fixed top-0 left-0 right-0 z-40">
+  <div class="mx-auto max-w-7xl px-6 py-5">
+    <div class="glass rounded-full flex items-center justify-between px-5 py-2.5">
+      <a class="flex items-center gap-2 group" href="/">
+        <span class="font-mono text-[11px] tracking-widest text-muted-foreground group-hover:text-signal transition-colors">Homepage</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-sm">
+        {links.map(([slug, label]) => (
+          <a
+            class={`text-muted-foreground hover:text-foreground transition-colors${slug === current ? ' active' : ''}`}
+            href={`/projects/${slug}`}
+            aria-current={slug === current ? 'page' : undefined}
+          >{label}</a>
+        ))}
+      </nav>
+      <a
+        href="https://www.linkedin.com/in/yagmursimseks/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-mono text-[11px] tracking-widest text-foreground border border-hairline rounded-full px-3 py-1.5 hover:bg-signal hover:text-signal-foreground hover:border-signal transition-all"
+      >LinkedIn →</a>
+    </div>
+  </div>
+</header>

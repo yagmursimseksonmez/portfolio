@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectHeader from '../../components/ProjectHeader.astro';
+import site from '../../data/site.json';
+import gate from '../../content/crypto-gate.html?raw';
+
+const fragments = import.meta.glob('../../content/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+export function getStaticPaths() {
+  return Object.keys(site.pages)
+    .filter((slug) => slug !== 'home')
+    .map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params as { slug: string };
+const page = site.pages[slug as keyof typeof site.pages];
+const isProtected = slug === 'crypto-auth';
+const content = isProtected ? gate : fragments[`../../content/${slug}.html`];
+---
+<Base title={page.title} description={page.description}>
+  <div class="min-h-screen bg-background text-foreground" data-protected={isProtected ? 'crypto' : undefined}>
+    <ProjectHeader current={slug} />
+    <Fragment set:html={content} />
+  </div>
+</Base>

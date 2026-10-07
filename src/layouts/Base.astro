@@ -1,0 +1,48 @@
+---
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = '' } = Astro.props;
+const siteTitle = 'Yagmur Şimşek Sönmez — Product Designer';
+const ogDescription = 'Architecture of Information. Human-Centered Design. Products that ship.';
+const ogImage = new URL('/og.png', Astro.site).href;
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('portfolio-theme');
+        document.documentElement.dataset.theme = t === 'dark' || t === 'light' ? t : 'light';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

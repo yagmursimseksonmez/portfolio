@@ -1,0 +1,127 @@
+{
+ "pages": {
+  "home": {
+   "title": "Yagmur Şimşek Sönmez — Product Designer",
+   "description": "Portfolio of Yagmur Şimşek Sönmez — Product Designer. From the Architecture of Information to shipped products: Kitbox, Health Bar, iKeep, Konkret."
+  },
+  "healthbar": {
+   "title": "HealthBar — Yagmur Şimşek Sönmez",
+   "description": "A gamified health & wellness companion that turns Apple Health data into an RPG."
+  },
+  "ikeep": {
+   "title": "iKeep — Yagmur Şimşek Sönmez",
+   "description": ""
+  },
+  "playmate": {
+   "title": "PlayMate — Yagmur Şimşek Sönmez",
+   "description": "A community-driven sports matchmaking app."
+  },
+  "kitbox": {
+   "title": "Kitbox — Yagmur Şimşek Sönmez",
+   "description": "An online shopping app for a home-decor brand."
+  },
+  "ai-claim": {
+   "title": "AI Claim Copilot — Yagmur Şimşek Sönmez",
+   "description": "Filing an insurance claim in 3 minutes, with AI."
+  },
+  "pagepals": {
+   "title": "PagePals — Yagmur Şimşek Sönmez",
+   "description": "A social, gamified library that turns reading into a shared ritual."
+  },
+  "urban-sports-vs-classpass": {
+   "title": "Urban Sports vs ClassPass — Yagmur Şimşek Sönmez",
+   "description": "A task-based UX comparison of discovery, venue selection and class booking."
+  },
+  "crypto-auth": {
+   "title": "Crypto Platform — Yagmur Şimşek Sönmez",
+   "description": "Crypto-trading Platform Authentication and Onboarding Architecture"
+  },
+  "bubbles": {
+   "title": "Bubbles — Yagmur Şimşek Sönmez",
+   "description": ""
+  }
+ },
+ "projects": {
+  "healthbar": {
+   "title": "HealthBar",
+   "tagline": "A gamified health & wellness companion that turns Apple Health data into an RPG.",
+   "palette": [
+    "#1B1613",
+    "#ADA46C",
+    "#1A2C52"
+   ]
+  },
+  "playmate": {
+   "title": "PlayMate",
+   "tagline": "A community-driven sports matchmaking app.",
+   "palette": [
+    "#1a0d2e",
+    "#E879F9",
+    "#2a1b3d"
+   ]
+  },
+  "ikeep": {
+   "title": "iKeep",
+   "tagline": "Personal organization app.",
+   "palette": [
+    "#0d0d0d",
+    "#C5E86C",
+    "#1f1f1f"
+   ]
+  },
+  "kitbox": {
+   "title": "Kitbox",
+   "tagline": "An online shopping app for a home-decor brand.",
+   "palette": [
+    "#397A67",
+    "#7CCAB4",
+    "#EAEAEA"
+   ]
+  },
+  "ai-claim": {
+   "title": "AI Claim Copilot",
+   "tagline": "Filing an insurance claim in 3 minutes, with AI.",
+   "palette": [
+    "#0a0a0a",
+    "#D9F84A",
+    "#1f1f1f"
+   ]
+  },
+  "crypto-auth": {
+   "title": "Crypto Platform",
+   "tagline": "Crypto-trading Platform Authentication and Onboarding Architecture",
+   "palette": [
+    "#0B1F3A",
+    "#F7B500",
+    "#EAEAEA"
+   ]
+  },
+  "pagepals": {
+   "title": "PagePals",
+   "tagline": "A social, gamified library that turns reading into a shared ritual.",
+   "palette": [
+    "#7CCAB4",
+    "#C45C5C",
+    "#FCF2F2"
+   ]
+  },
+  "urban-sports-vs-classpass": {
+   "title": "Urban Sports vs ClassPass",
+   "tagline": "A task-based UX comparison of discovery, venue selection and class booking.",
+   "palette": [
+    "#1f1f1f",
+    "#7CCAB4",
+    "#2a2a2a"
+   ]
+  },
+  "bubbles": {
+   "title": "Bubbles",
+   "tagline": "Task Manager",
+   "palette": [
+    "#0d1a2e",
+    "#7CC4FF",
+    "#1f2a3d"
+   ]
+  }
+ }
+}

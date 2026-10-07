@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import aside from '../content/home-aside.html?raw';
+import main from '../content/home-main.html?raw';
+import footer from '../content/home-footer.html?raw';
+
+const projectsMeta = JSON.stringify(
+  Object.fromEntries(Object.entries(site.projects).map(([slug, p]) => [slug, { title: p.title, tagline: p.tagline }])),
+);
+---
+<Base title={site.pages.home.title} description={site.pages.home.description}>
+  <div class="min-h-screen w-full bg-background text-foreground">
+    <div class="flex flex-col lg:flex-row min-h-screen">
+      <Fragment set:html={aside} />
+      <Fragment set:html={main} />
+      <Fragment set:html={footer} />
+    </div>
+  </div>
+  <div id="project-pill" class="pointer-events-none fixed z-[9999] hidden lg:block" style="display:none;width:280px" data-projects={projectsMeta}>
+    <div class="project-cursor-pill">
+      <div class="project-cursor-text">
+        <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-primary" data-pill-title></div>
+        <p class="mt-1.5 font-mono text-[10px] leading-relaxed text-muted-foreground" data-pill-tagline></p>
+      </div>
+    </div>
+  </div>
+</Base>
