@@ -10,23 +10,22 @@ npm run build      # static site in dist/
 
 ## Structure
 
-- `src/content/*.html` — page content (one file per case study; `home-*.html` for the homepage)
-- `src/data/site.json` — page titles/descriptions and the hover-card data
-- `src/scripts/site.js` — theme toggle, scroll spy, custom cursors, marquee, password gate
-- `src/styles/site.css` — compiled Tailwind v4 stylesheet
+- `src/content/projects/*.md` — one file per case study. Frontmatter holds the card, facts and image sections;
+  the Markdown body is the project snapshot text. `status: complete` renders the full case study,
+  `rewriting` / `in-progress` render a short stub page. Schema: `src/content.config.ts`.
+- `src/pages/index.astro` — homepage (hero, selected work, experience, about)
+- `src/components/` — top bar and footer
+- `src/styles/site.css` — design tokens and all styles (dark "midnight gallery" system)
+- `src/scripts/site.js` — Berlin clock, hero mural sizing, before/after slider
 - `public/images`, `public/videos` — media
+
+## Adding or rewriting a case study
+
+Edit (or copy) a file in `src/content/projects/`. Set `status: complete` once the case is ready; fill `rows`
+for before/after pairs and `features` for a screenshot grid. `order` sets its position on the homepage.
 
 ## Images
 
 Drop new PNG/JPG files into `public/images/` and run `npm run optimize-images`: they are converted to WebP
 at the same pixel size (original files stay in git history), references are updated and 1200×630 share
 images land in `public/og/`.
-
-## Password-protected case study
-
-`/projects/crypto-auth` is published encrypted (`public/crypto.enc.json`, AES-GCM + PBKDF2).
-The plaintext lives in `private/` (git-ignored). To change the content or password:
-
-```bash
-CRYPTO_PASSWORD='new-password' npm run encrypt-crypto
-```

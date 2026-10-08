@@ -1,19 +1,45 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import TopBar from '../components/TopBar.astro';
+import Footer from '../components/Footer.astro';
 import site from '../data/site.json';
-import aside from '../content/home-aside.html?raw';
-import main from '../content/home-main.html?raw';
-import footer from '../content/home-footer.html?raw';
 import { person } from '../data/person';
 
-const projectsMeta = JSON.stringify(
-  Object.fromEntries(Object.entries(site.projects).map(([slug, p]) => [slug, { title: p.title, tagline: p.tagline }])),
-);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const experience = [
+  ['2025 — now', 'Product Designer', 'Konkret · freelance, Berlin'],
+  ['2024 — 2025', 'Product Designer', 'Hergele Mobility'],
+  ['2023 — 2024', 'Product Designer', 'Kitbox'],
+  ['2021 — 2025', 'Design Lecturer', 'Bahçeşehir & Beykent University, Istanbul'],
+  ['2019 — 2021', 'Lead Visual Designer', 'Beykent University, Istanbul'],
+  ['2016 — 2019', 'UX Researcher', 'Valencia Technical University · Beykent University'],
+];
+
+const education = [
+  ['2026', 'UI/UX Design Bootcamp', 'ReDI School, Berlin'],
+  ['2019 — 2025', 'PhD, History and Theory of Architecture', 'Yıldız Technical University'],
+  ['2023 — 2025', 'MA, Visual Communication Design', 'Anadolu University'],
+  ['2016 — 2019', 'MSc, History and Theory of Architecture', 'Yıldız Technical University'],
+  ['2011 — 2016', 'BSc, Interior Architecture', 'Istanbul Technical University'],
+];
+
+const photos = [
+  'Frame_207.webp',
+  'IMG_4429-2.webp',
+  'red-print.webp',
+  'IMG_9083.webp',
+  'Scan_74.webp',
+  'conference-dare.webp',
+  'IMG_5630.webp',
+  'cdc42e6b-196e-43d2-bcd0-53933498906a.webp',
+];
 ---
 <Base
-  title={site.pages.home.title}
-  description={site.pages.home.description}
-  image={site.pages.home.image}
+  title={site.home.title}
+  description={site.home.description}
+  image={site.home.image}
   jsonLd={[
     { '@context': 'https://schema.org', ...person },
     {
@@ -26,19 +52,113 @@ const projectsMeta = JSON.stringify(
     },
   ]}
 >
-  <div class="min-h-screen w-full bg-background text-foreground">
-    <div class="flex flex-col lg:flex-row min-h-screen">
-      <Fragment set:html={aside} />
-      <Fragment set:html={main} />
-      <Fragment set:html={footer} />
-    </div>
-  </div>
-  <div id="project-pill" class="pointer-events-none fixed z-[9999] hidden lg:block" style="display:none;width:280px" data-projects={projectsMeta}>
-    <div class="project-cursor-pill">
-      <div class="project-cursor-text">
-        <div class="font-mono text-[11px] uppercase tracking-[0.2em] text-primary" data-pill-title></div>
-        <p class="mt-1.5 font-mono text-[10px] leading-relaxed text-muted-foreground" data-pill-tagline></p>
+  <TopBar />
+
+  <main>
+    <section class="wrap" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="sr-only">Yagmur Şimşek Sönmez, product designer in Berlin</h1>
+      <p class="mural" data-mural aria-hidden="true">
+        <span class="mural__line">spaces,</span> <span class="mural__line">systems,</span> <span class="mural__line">screens</span>
+      </p>
+
+      <div class="intro">
+        <a class="intro__jump mono fog" href="#work">Selected work ↓</a>
+        <div>
+          <p class="intro__lead">
+            I’m Yagmur, a product designer in Berlin. Four apps shipped to the App Store, usability research and
+            design systems built from scratch. <em>Before that, a PhD in architecture and years of teaching design.</em>
+          </p>
+          <div class="actions">
+            <span class="status"><span class="status__dot" aria-hidden="true"></span>Open to work</span>
+            <a class="btn" href="mailto:n.yagmur.simsek@gmail.com">Get in touch →</a>
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <section class="wrap section" id="work" aria-labelledby="work-title">
+      <div class="section__head">
+        <h2 class="section__title" id="work-title">Selected work</h2>
+        <span class="mono fog">{String(projects.length).padStart(2, '0')} projects</span>
+      </div>
+      <div class="folders">
+        {projects.map((p, i) => (
+          <article class="folder" style={`--i:${i}`}>
+            <div class="folder__tabrow" aria-hidden="true">
+              <div class="folder__tab"><span class="mono">{String(i + 1).padStart(2, '0')}</span>{p.data.title}</div>
+            </div>
+            <a class="folder__body" href={`/projects/${p.id}/`}>
+              <div class="entry">
+                <span class="entry__year mono fog">{p.data.year}</span>
+                <h3 class="entry__title">{p.data.title}</h3>
+                <p class="entry__desc">{p.data.summary}</p>
+                <ul class="tags">{p.data.tags.map((t) => <li class="tag">{t}</li>)}</ul>
+              </div>
+              <div class="folder__media">
+                {p.data.cover ? (
+                  <img
+                    src={p.data.cover.src}
+                    alt={p.data.cover.alt}
+                    width={p.data.cover.width}
+                    height={p.data.cover.height}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="folder__placeholder">Case study in progress</div>
+                )}
+                <span class="folder__open btn btn--sm">
+                  {p.data.status === 'complete' ? 'Read case study →' : 'Preview →'}
+                </span>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="wrap section" id="experience" aria-labelledby="exp-title">
+      <div class="section__head">
+        <h2 class="section__title" id="exp-title">Experience</h2>
+        <a class="mono fog" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer">Full CV on LinkedIn ↗</a>
+      </div>
+      <ul class="rows">
+        {experience.map(([years, role, where]) => (
+          <li class="row"><span class="mono">{years}</span><span>{role}</span><span class="row__sub">{where}</span></li>
+        ))}
+      </ul>
+      <h3 class="subhead mono">○ Education</h3>
+      <ul class="rows">
+        {education.map(([years, degree, where]) => (
+          <li class="row"><span class="mono">{years}</span><span>{degree}</span><span class="row__sub">{where}</span></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="wrap section" id="about" aria-labelledby="about-title">
+      <div class="section__head">
+        <h2 class="section__title" id="about-title">About</h2>
+        <span class="mono fog">English · Turkish · German</span>
+      </div>
+      <div class="about">
+        <p class="about__name">Yagmur <small>pronounced “yaa-moor”<br />means rain in Turkish</small></p>
+        <div class="about__text">
+          <p>
+            I came to product design through architecture. Interior architecture, then a master’s and a PhD in the
+            history and theory of architecture, taught me to watch how people move through a space before deciding what goes in it.
+          </p>
+          <p>
+            Four years of teaching design studios taught me to explain those decisions. Today I do the same with
+            screens: research, structure, interface, and shipping it.
+          </p>
+        </div>
+      </div>
+      <div class="photos">
+        {photos.map((f) => <img src={`/images/${f}`} alt="" loading="lazy" decoding="async" />)}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
 </Base>

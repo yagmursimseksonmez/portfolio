@@ -16,7 +16,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(image, Astro.site).href;
 ---
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,7 +25,7 @@ const ogImage = new URL(image, Astro.site).href;
     <meta name="author" content="Yagmur Şimşek Sönmez" />
     <meta name="robots" content={noindex || stagedOnly ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#f7f8fb" />
+    <meta name="theme-color" content="#25262d" />
 
     <meta property="og:site_name" content="Yagmur Şimşek Sönmez" />
     <meta property="og:type" content="website" />
@@ -44,15 +44,9 @@ const ogImage = new URL(image, Astro.site).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&display=swap"
     />
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
-    <script is:inline>
-      try {
-        var t = localStorage.getItem('portfolio-theme');
-        document.documentElement.dataset.theme = t === 'dark' || t === 'light' ? t : 'light';
-      } catch (e) {}
-    </script>
   </head>
   <body>
     <slot />

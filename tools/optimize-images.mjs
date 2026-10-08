@@ -1,5 +1,5 @@
 // Converts PNG/JPG in public/images (and private/crypto-images) to WebP, keeping pixel dimensions,
-// rewrites references in src/ and private/crypto-main.html, adds width/height to <img>, and
+// rewrites references in src/content/projects and the homepage, adds width/height to <img>, and
 // builds 1200x630 JPEG share images in public/og/.
 //
 //   npm run optimize-images
@@ -24,8 +24,7 @@ async function psnr(a, b) {
 }
 
 // 1) share images, made from the originals before they are replaced
-const og = { healthbar: 'healthbar_card.png', playmate: 'playmate-cover-v6.png', ikeep: 'ikeep-cover-v2.jpg', kitbox: 'kitbox-card-hero-final.jpg',
-  'ai-claim': 'ai-claim-cover-v4.png', pagepals: 'pagepals-hero.png', 'urban-sports-vs-classpass': 'usc-cover.png' };
+const og = { healthbar: 'healthbar_card.png', playmate: 'playmate-cover-v6.png', ikeep: 'ikeep-cover-v2.jpg', kitbox: 'kitbox-card-hero-final.jpg' };
 mkdirSync('public/og', { recursive: true });
 for (const [slug, file] of Object.entries(og)) {
   const src = `public/images/${file}`;
@@ -82,11 +81,7 @@ function rewrite(file) {
   });
   if (s !== orig) writeFileSync(file, s);
 }
-for (const f of readdirSync('src/content')) rewrite(join('src/content', f));
-for (const f of ['src/data/person.ts', 'private/crypto-main.html']) if (existsSync(f)) rewrite(f);
+for (const f of readdirSync('src/content/projects')) rewrite(join('src/content/projects', f));
+for (const f of ['src/data/person.ts', 'src/pages/index.astro']) rewrite(f);
 
-// 4) point page metadata at the share images
-const sitePath = 'src/data/site.json';
-const site = JSON.parse(readFileSync(sitePath, 'utf8'));
-for (const slug of Object.keys(og)) site.pages[slug].image = `/og/${slug}.jpg`;
-writeFileSync(sitePath, JSON.stringify(site, null, 1));
+// Share images are referenced from each project's `ogImage` frontmatter as /og/<slug>.jpg.
