@@ -1,40 +1,443 @@
-// ------------------------------------------------------------------ clock
-function initClock() {
-  const el = document.querySelector('[data-clock]');
-  if (!el) return;
-  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' });
-  const tick = () => (el.textContent = fmt.format(new Date()));
-  tick();
-  setInterval(tick, 15000);
+const root = document.documentElement;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const mobile = matchMedia('(max-width: 700px)');
+
+function cssMs(el, name) {
+  if (reduceMotion.matches) return 0;
+  const raw = getComputedStyle(el).getPropertyValue(name).trim();
+  const n = parseFloat(raw);
+  if (Number.isNaN(n)) return 0;
+  return raw.endsWith('ms') ? n : n * 1000;
 }
 
-// ------------------------------------------------------------ hero mural
-// Scale the mural so its widest line spans the content column exactly.
-function initMural() {
-  const el = document.querySelector('[data-mural]');
-  if (!el) return;
-  const fit = () => {
-    el.style.fontSize = '';
-    const lines = [...el.querySelectorAll('.mural__line')];
-    const stacked = getComputedStyle(lines[0]).display === 'block';
-    const range = document.createRange();
-    let widest = 0;
-    for (const target of stacked ? lines : [el]) {
-      range.selectNodeContents(target);
-      widest = Math.max(widest, range.getBoundingClientRect().width);
+// ------------------------------------------------------------ Berlin clock
+const TZ = 'Europe/Berlin';
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const partsFmt = new Intl.DateTimeFormat('en-GB', {
+  timeZone: TZ, weekday: 'short', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h23',
+});
+const shortFmt = new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: 'numeric', minute: '2-digit', hourCycle: 'h23' });
+
+function berlinNow() {
+  const parts = partsFmt.formatToParts(new Date());
+  const get = (t) => parts.find((p) => p.type === t)?.value;
+  return { day: DAYS.indexOf(get('weekday')) + 1, h: +get('hour'), m: +get('minute'), s: +get('second') };
+}
+const isWorkday = (day) => day >= 1 && day <= 5;
+const isOpen = (t) => isWorkday(t.day) && t.h >= 9 && t.h < 18;
+
+function hoursUntilOpen(t) {
+  let days = isWorkday(t.day) && t.h < 9 ? 0 : 1;
+  let day = ((t.day - 1 + days) % 7) + 1;
+  while (!isWorkday(day)) { days += 1; day = (day % 7) + 1; }
+  const hours = days * 24 + 9 - t.h - t.m / 60;
+  return Math.max(1, Math.round(hours));
+}
+
+function startClock() {
+  const label = document.querySelector('[data-clock]');
+  const card = document.querySelector('[data-hours]');
+  const openLabel = card?.querySelector('[data-open-label]');
+  const reopens = card?.querySelector('[data-reopens]');
+  const hands = Object.fromEntries([...document.querySelectorAll('[data-hand]')].map((el) => [el.dataset.hand, el]));
+  const tick = () => {
+    const t = berlinNow();
+    if (label) label.textContent = shortFmt.format(new Date());
+    if (hands.h) {
+      hands.h.style.transform = `rotate(${(t.h % 12) * 30 + t.m * 0.5}deg)`;
+      hands.m.style.transform = `rotate(${t.m * 6 + t.s * 0.1}deg)`;
+      hands.s.style.transform = `rotate(${t.s * 6}deg)`;
     }
-    if (!widest) return;
-    const size = parseFloat(getComputedStyle(el).fontSize);
-    el.style.fontSize = `${(size * el.clientWidth) / widest}px`;
+    if (card) {
+      const open = isOpen(t);
+      card.classList.toggle('is-open-hours', open);
+      openLabel.textContent = open ? 'Open' : 'Closed';
+      reopens.hidden = open;
+      if (!open) {
+        const n = hoursUntilOpen(t);
+        reopens.textContent = `Opens in ${n} ${n === 1 ? 'hour' : 'hours'}`;
+      }
+    }
+    setTimeout(tick, 1000 - (Date.now() % 1000));
   };
-  document.fonts.ready.then(fit);
-  new ResizeObserver(fit).observe(el.parentElement);
+  tick();
 }
 
-// ----------------------------------------------------- before/after slider
-function initCompare() {
+// ------------------------------------------------------- particle hero type
+// Coloured discs drift up behind the lettering; the pointer pulls nearby ones in.
+function startHero() {
+  const wrap = document.querySelector('[data-hero]');
+  const canvas = wrap?.querySelector('canvas');
+  const ctx = canvas?.getContext('2d');
+  if (!ctx) return null;
+
+  const colors = ['#FFD100', '#FFEE32', '#D6D6D6', '#333533'];
+  const base = '#FAFAF8';
+  const font = (size) => `700 ${size}px Inter, system-ui, sans-serif`;
+  const tracking = -0.045;
+  const particles = [];
+  const pointer = { x: 0, y: 0, inside: false };
+  let lines = [];
+  let w = 0;
+  let h = 0;
+  let unit = 1;
+  let magnet = 110;
+  let running = false;
+  let raf = 0;
+  let covered = false;
+  let onScreen = true;
+
+  const rand = (a, b) => Math.random() * (b - a) + a;
+  function spawn(fromBottom) {
+    const r = rand(30, 60) * unit;
+    const speed = rand(2, 8) * unit;
+    return { x: rand(0, w), y: fromBottom ? h + r : rand(0, h), vx: 0, vy: speed, speed, r, color: colors[Math.floor(rand(0, colors.length))] };
+  }
+
+  function layout() {
+    const text = mobile.matches ? ['I design', 'things'] : ['I design things'];
+    const cssW = wrap.clientWidth;
+    ctx.font = font(100);
+    if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * 100}px`;
+    const m = text.map((t) => ctx.measureText(t));
+    const inkW = Math.max(...m.map((x) => x.actualBoundingBoxLeft + x.actualBoundingBoxRight));
+    const size = (100 * cssW) / inkW;
+    const k = size / 100;
+    const ascent = m[0].actualBoundingBoxAscent * k;
+    const descent = Math.max(...m.map((x) => x.actualBoundingBoxDescent)) * k;
+    const leading = size * 0.86;
+    const cssH = ascent + descent + leading * (text.length - 1);
+    wrap.style.height = `${cssH}px`;
+
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    w = cssW;
+    h = cssH;
+    unit = Math.max(0.35, w / 1240);
+    magnet = Math.min(180, Math.max(90, Math.min(w, h) * 0.42));
+    lines = text.map((t, i) => ({ t, x: m[i].actualBoundingBoxLeft * k, y: ascent + i * leading, size }));
+
+    const want = Math.round(40 * Math.max(0.5, (w * h) / (1240 * 230)));
+    while (particles.length < want) particles.push(spawn(false));
+    particles.length = Math.min(particles.length, want);
+    for (const p of particles) { p.x = Math.min(p.x, w); p.y = Math.min(p.y, h); }
+  }
+
+  function draw() {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, w, h);
+    for (const p of particles) {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // Keep only what falls inside the letters.
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.fillStyle = '#000';
+    for (const l of lines) {
+      ctx.font = font(l.size);
+      if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * l.size}px`;
+      ctx.fillText(l.t, l.x, l.y);
+    }
+  }
+
+  function step() {
+    if (!running) return;
+    const r2 = magnet * magnet;
+    for (const p of particles) {
+      let pull = 0;
+      if (pointer.inside) {
+        const dx = pointer.x - p.x;
+        const dy = pointer.y - p.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < r2) pull = (1 - Math.sqrt(d2) / magnet) ** 2;
+      }
+      if (pull > 0) {
+        p.vx += (pointer.x - p.x) * 0.14 * pull;
+        p.vx *= 1 - 0.22 * pull;
+        p.vy = p.speed * (1 - pull * 0.9);
+      } else {
+        p.vx *= 0.9;
+        if (Math.abs(p.vx) < 0.04) p.vx = 0;
+        p.vy += (p.speed - p.vy) * 0.1;
+      }
+      p.x += p.vx;
+      p.y -= p.vy;
+      if (p.y < -p.r * 2) Object.assign(p, spawn(true));
+    }
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  function sync() {
+    const go = onScreen && !covered && !reduceMotion.matches && document.visibilityState === 'visible';
+    if (go && !running) { running = true; raf = requestAnimationFrame(step); }
+    if (!go) { running = false; cancelAnimationFrame(raf); draw(); }
+  }
+
+  const setPointer = (e) => {
+    const r = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - r.left;
+    pointer.y = e.clientY - r.top;
+    pointer.inside = true;
+  };
+  canvas.addEventListener('pointermove', setPointer, { passive: true });
+  canvas.addEventListener('pointerenter', setPointer, { passive: true });
+  canvas.addEventListener('pointerleave', () => (pointer.inside = false), { passive: true });
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(canvas);
+  document.addEventListener('visibilitychange', sync);
+  reduceMotion.addEventListener('change', sync);
+
+  const relayout = () => { layout(); if (!running) draw(); };
+  new ResizeObserver(relayout).observe(wrap.parentElement);
+  mobile.addEventListener('change', relayout);
+  document.fonts.ready.then(relayout);
+  layout();
+  sync();
+
+  let coverTimer = 0;
+  return {
+    setCovered(next) {
+      clearTimeout(coverTimer);
+      if (!next) { covered = false; sync(); return; }
+      coverTimer = setTimeout(() => { covered = true; sync(); }, cssMs(root, '--time-cards'));
+    },
+  };
+}
+
+// ------------------------------------------------------------------ contact
+const contact = document.querySelector('[data-contact]');
+const contactToggle = contact?.querySelector('[data-contact-toggle]');
+const contactMenu = contact?.querySelector('.contact-menu');
+const contactOpen = () => !!contact?.classList.contains('is-open');
+
+function setContact(open) {
+  if (!contact || open === contactOpen()) return;
+  if (open) focusGallery(null);
+  contact.classList.toggle('is-open', open);
+  contactToggle.setAttribute('aria-expanded', String(open));
+  contactMenu.setAttribute('aria-hidden', String(!open));
+}
+
+function startContact() {
+  if (!contact) return;
+  const measure = () => contact.style.setProperty('--btn-w', `${Math.ceil(contactToggle.offsetWidth)}px`);
+  measure();
+  document.fonts.ready.then(measure);
+  contactToggle.addEventListener('click', (e) => { e.stopPropagation(); setContact(!contactOpen()); });
+  document.addEventListener('pointerdown', (e) => { if (contactOpen() && !contact.contains(e.target)) setContact(false); });
+  contact.querySelectorAll('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const box = btn.closest('.email');
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        box.classList.add('copied');
+        setTimeout(() => box.classList.remove('copied'), 1000);
+      } catch { /* clipboard unavailable */ }
+    });
+  });
+}
+
+// ------------------------------------------------------------------ gallery
+// Cards are ordered back (index 0, top of the pile) to front. `active` is a card
+// index, BOOK for the about book, or null for the resting stack.
+const BOOK = 'book';
+const gallery = document.querySelector('[data-gallery]');
+const header = document.querySelector('header');
+const cards = gallery ? [...gallery.querySelectorAll('[data-card]')] : [];
+const book = gallery?.querySelector('[data-book]');
+const bookScroll = book?.querySelector('[data-book-scroll]');
+const count = cards.length;
+let active = null;
+let hero = null;
+
+const tabSize = () => parseFloat(getComputedStyle(gallery).getPropertyValue('--tab')) || 60;
+
+function measureGallery() {
+  const origin = header.getBoundingClientRect().bottom;
+  const peek = Math.max(tabSize(), (innerHeight - origin) / count);
+  gallery.style.setProperty('--origin', `${origin}px`);
+  gallery.style.setProperty('--peek', `${peek}px`);
+}
+
+function cardY(k, next) {
+  if (next === null) return null; // resting position comes from CSS
+  const tab = tabSize();
+  const front = next === BOOK || k > next;
+  if (mobile.matches) {
+    if (next === BOOK) return `${innerHeight}px`;
+    if (!front) return `${k * tab}px`;
+    return `${innerHeight - (count - k) * tab}px`;
+  }
+  return front ? `${innerHeight - tab}px` : '0px';
+}
+
+function setFocus(next) {
+  const prev = active;
+  active = next;
+  const focused = next !== null;
+  const isBook = next === BOOK;
+  gallery.classList.toggle('is-focused', focused);
+  gallery.classList.toggle('is-book', isBook);
+  gallery.classList.toggle('has-front', focused && !isBook && next < count - 1);
+  if (prev !== next) hero?.setCovered(focused);
+
+  cards.forEach((card, k) => {
+    const isActive = k === next;
+    card.classList.toggle('is-active', isActive);
+    card.classList.toggle('is-front', focused && (isBook || k > next));
+    card.classList.toggle('is-back', focused && !isBook && k < next);
+    card.setAttribute('aria-current', String(isActive));
+    card.tabIndex = isActive ? -1 : 0;
+    const y = cardY(k, next);
+    if (y === null) card.style.removeProperty('--y');
+    else card.style.setProperty('--y', y);
+    if (!isActive || prev !== next) card.querySelector('.card-content').scrollLeft = 0;
+  });
+
+  if (book) {
+    book.tabIndex = isBook ? -1 : 0;
+    if (prev !== next && isBook) openBook(prev === null);
+    else if (prev !== next && prev === BOOK) closeBook();
+  }
+
+  const hash = isBook ? '#about' : focused ? `#${cards[next].id}` : '';
+  if (location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
+  if (!focused && gallery.contains(document.activeElement)) document.activeElement.blur();
+}
+
+// Closing the open book folds the cover first, then the stack settles.
+function focusGallery(next) {
+  if (!gallery) return;
+  if (next === null && active === BOOK && book.classList.contains('is-open')) {
+    closeBook(() => { if (active === BOOK) setFocus(null); });
+    return;
+  }
+  if (next !== null) setContact(false);
+  setFocus(next);
+}
+
+let bookTimer = 0;
+let afterClose = null;
+function openBook(waitForArrival) {
+  clearTimeout(bookTimer);
+  book.classList.remove('is-closing');
+  afterClose = null;
+  bookScroll.scrollTop = 0;
+  const start = () => {
+    if (active !== BOOK) return;
+    book.classList.add('is-open');
+    requestAnimationFrame(updateTimeline);
+  };
+  const wait = waitForArrival ? cssMs(root, '--time-cards') : 0;
+  if (wait) bookTimer = setTimeout(start, wait + 20);
+  else start();
+}
+
+function closeBook(done) {
+  if (book.classList.contains('is-closing')) { if (done) afterClose = done; return; }
+  clearTimeout(bookTimer);
+  if (!book.classList.contains('is-open')) { done?.(); return; }
+  afterClose = done ?? null;
+  book.classList.remove('is-open');
+  book.classList.add('is-closing');
+  bookTimer = setTimeout(() => {
+    book.classList.remove('is-closing');
+    const fn = afterClose;
+    afterClose = null;
+    fn?.();
+  }, cssMs(book, '--close-dur') + 40);
+}
+
+function workItems(card) {
+  return [...card.querySelector('.work').children];
+}
+
+function stepWork(delta) {
+  if (typeof active !== 'number') return false;
+  const content = cards[active].querySelector('.card-content');
+  const items = workItems(cards[active]);
+  const origin = content.getBoundingClientRect().left;
+  let current = 0;
+  let best = Infinity;
+  items.forEach((item, i) => {
+    const d = Math.abs(item.getBoundingClientRect().left - origin - 20);
+    if (d < best) { best = d; current = i; }
+  });
+  const next = items[Math.max(0, Math.min(items.length - 1, current + delta))];
+  const max = content.scrollWidth - content.clientWidth;
+  const left = Math.max(0, Math.min(max, next.offsetLeft - parseFloat(getComputedStyle(next.parentElement).paddingLeft)));
+  content.scrollTo({ left, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  return true;
+}
+
+function startGallery() {
+  if (!gallery) return;
+  cards.forEach((card, k) => {
+    card.querySelector('.card-tab h2').addEventListener('click', () => { if (active !== k) focusGallery(k); });
+    card.querySelector('.card-sheet').addEventListener('click', () => { if (active !== k) focusGallery(k); });
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === card && active !== k) { e.preventDefault(); focusGallery(k); }
+    });
+    const content = card.querySelector('.card-content');
+    content.addEventListener('wheel', (e) => {
+      if (active !== k) return;
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      if (content.scrollWidth <= content.clientWidth) return;
+      e.preventDefault();
+      content.scrollLeft += e.deltaY;
+    }, { passive: false });
+  });
+
+  book?.addEventListener('click', () => { if (active !== BOOK) focusGallery(BOOK); });
+  book?.addEventListener('keydown', (e) => {
+    if (active !== BOOK && e.target === book && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); focusGallery(BOOK); }
+  });
+  document.querySelectorAll('[data-open-book]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); focusGallery(BOOK); }),
+  );
+  gallery.querySelector('[data-dismiss]').addEventListener('click', () => focusGallery(null));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (active !== null) { e.preventDefault(); focusGallery(null); }
+      else if (contactOpen()) setContact(false);
+      return;
+    }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      if (stepWork(e.key === 'ArrowRight' ? 1 : -1)) e.preventDefault();
+      return;
+    }
+    if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+    if (active === null && !gallery.contains(document.activeElement)) return;
+    e.preventDefault();
+    // Up walks toward the back of the pile and finally the book; down comes forward.
+    if (e.key === 'ArrowUp') {
+      if (active === BOOK) return;
+      if (active === null) focusGallery(count - 1);
+      else if (active === 0) focusGallery(BOOK);
+      else focusGallery(active - 1);
+    } else if (active === null || active === BOOK) focusGallery(0);
+    else focusGallery(Math.min(count - 1, active + 1));
+  });
+
+  const relayout = () => { measureGallery(); setFocus(active); };
+  addEventListener('resize', relayout);
+  mobile.addEventListener('change', relayout);
+  new ResizeObserver(relayout).observe(header);
+  measureGallery();
+}
+
+// -------------------------------------------------- before / after slider
+function startCompare() {
   document.querySelectorAll('[data-compare]').forEach((box) => {
-    const knob = box.querySelector('.compare__knob');
+    const knob = box.querySelector('.compare-knob');
     const set = (pct) => {
       pct = Math.min(100, Math.max(0, pct));
       box.style.setProperty('--pos', `${pct}%`);
@@ -45,31 +448,145 @@ function initCompare() {
       set(((e.clientX - r.left) / r.width) * 100);
     };
     box.addEventListener('pointerdown', (e) => {
+      if (!box.closest('.card.is-active')) return;
+      e.stopPropagation();
       box.setPointerCapture(e.pointerId);
       fromEvent(e);
-      const move = (ev) => fromEvent(ev);
       const up = () => {
-        box.removeEventListener('pointermove', move);
+        box.removeEventListener('pointermove', fromEvent);
         box.removeEventListener('pointerup', up);
         box.removeEventListener('pointercancel', up);
       };
-      box.addEventListener('pointermove', move);
+      box.addEventListener('pointermove', fromEvent);
       box.addEventListener('pointerup', up);
       box.addEventListener('pointercancel', up);
     });
     knob.addEventListener('keydown', (e) => {
       const now = Number(knob.getAttribute('aria-valuenow'));
-      const step = e.shiftKey ? 10 : 2;
-      if (e.key === 'ArrowLeft') set(now - step);
-      else if (e.key === 'ArrowRight') set(now + step);
-      else if (e.key === 'Home') set(0);
-      else if (e.key === 'End') set(100);
-      else return;
+      const map = { ArrowLeft: now - 5, ArrowRight: now + 5, Home: 0, End: 100 };
+      if (!(e.key in map)) return;
       e.preventDefault();
+      e.stopPropagation();
+      set(map[e.key]);
     });
   });
 }
 
-initClock();
-initMural();
-initCompare();
+// ---------------------------------------------------------- book timeline
+// Month dashes swell near the middle of the page; the current role rolls past on a drum.
+let updateTimeline = () => {};
+function startTimeline() {
+  const tl = document.querySelector('[data-timeline]');
+  if (!tl || !bookScroll) return;
+  const dashRoot = tl.querySelector('[data-dashes]');
+  const yearItems = [...tl.querySelectorAll('.timeline-years li')];
+  const jobItems = [...tl.querySelectorAll('.timeline-job')];
+  const spans = jobItems.map((j) => Math.max(1, Number(j.dataset.years) || 1));
+  const starts = spans.map((_, i) => spans.slice(0, i).reduce((a, b) => a + b, 0));
+  const months = yearItems.length * 12;
+  for (let i = 0; i < months; i++) {
+    const dash = document.createElement('div');
+    dash.className = 'timeline-dash';
+    dash.appendChild(document.createElement('span'));
+    dashRoot.appendChild(dash);
+  }
+  const marks = [...dashRoot.querySelectorAll('span')];
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const smooth = (t) => { const x = clamp(t, 0, 1); return x * x * (3 - 2 * x); };
+
+  function jobAt(month) {
+    const year = month / 12;
+    const last = jobItems.length - 1;
+    for (let i = 0; i <= last; i++) {
+      const end = i === last ? yearItems.length : starts[i] + spans[i];
+      if (year < end || i === last) {
+        if (i < last && year > end - 0.35) return i + smooth((year - (end - 0.35)) / 0.35);
+        return i;
+      }
+    }
+    return last;
+  }
+
+  function styleJob(item, offset) {
+    const abs = Math.abs(offset);
+    item.style.visibility = abs > 2.55 ? 'hidden' : 'visible';
+    const [company, title] = item.children;
+    company.style.opacity = String(clamp(Math.exp(-abs * 1.05), 0.04, 1));
+    title.style.opacity = String(clamp(Math.exp(-abs * 0.78), 0.06, 1));
+    if (reduceMotion.matches) {
+      item.style.transform = `translateY(calc(-50% + ${offset * 98}px))`;
+      return;
+    }
+    item.style.transform = `translateY(calc(-50% + ${offset * 24}px)) rotateX(${offset * -20}deg) translateZ(200px)`;
+    company.style.transform = `translateY(${offset * -3}px) rotateX(${offset * -5}deg)`;
+    title.style.transform = `translateY(${offset * -1}px) rotateX(${offset * -3}deg)`;
+  }
+
+  updateTimeline = () => {
+    const pane = bookScroll.getBoundingClientRect();
+    const center = pane.top + pane.height / 2;
+    const slot = marks[0].parentElement.offsetHeight || 32;
+    const first = marks[0].parentElement.getBoundingClientRect().top + slot / 2;
+    const month = clamp((center - first) / slot, 0, months - 1);
+    const range = slot * 4.5;
+    marks.forEach((mark, i) => {
+      const p = clamp(1 - Math.abs(first + i * slot - center) / range, 0, 1) ** 2;
+      mark.style.transform = `scaleX(${1 + p * 0.875}) scaleY(${1 + p * 0.5})`;
+    });
+    const year = clamp(Math.floor(month / 12), 0, yearItems.length - 1);
+    yearItems.forEach((li, i) => li.classList.toggle('is-current', i === year));
+    const job = jobAt(month);
+    jobItems.forEach((item, i) => styleJob(item, i - job));
+  };
+
+  let frame = 0;
+  const request = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; updateTimeline(); }); };
+  bookScroll.addEventListener('scroll', request, { passive: true });
+  new ResizeObserver(request).observe(bookScroll);
+  updateTimeline();
+}
+
+// -------------------------------------------------------------------- intro
+function playIntro() {
+  if (!root.classList.contains('is-intro')) return;
+  const finish = () => {
+    root.classList.remove('is-intro', 'is-intro-play', 'is-intro-chrome');
+    document.querySelector('.hero')?.style.removeProperty('--intro-y');
+  };
+  const heroEl = document.querySelector('.hero');
+  const ready = Promise.all([
+    document.fonts.ready,
+    ...cards.map((c) => c.querySelector('.work img')).filter(Boolean).map((img) => img.decode().catch(() => {})),
+  ]);
+  const timeout = new Promise((r) => setTimeout(r, 3000));
+  // Never leave the page blank: a hidden tab gets no animation frames, so finish on a timer regardless.
+  const safety = setTimeout(finish, 5000);
+  Promise.race([ready, timeout]).then(() => {
+    measureGallery();
+    const r = heroEl.getBoundingClientRect();
+    heroEl.style.setProperty('--intro-y', `${innerHeight / 2 - (r.top + r.height / 2)}px`);
+    setTimeout(() => {
+      root.classList.add('is-intro-play');
+      const lastCard = cssMs(root, '--intro-start') + Math.max(0, count - 1) * cssMs(root, '--intro-stagger') + cssMs(root, '--intro-card');
+      const chromeAt = Math.max(0, cssMs(root, '--intro-hero') - 80);
+      setTimeout(() => root.classList.add('is-intro-chrome'), chromeAt);
+      setTimeout(() => { clearTimeout(safety); finish(); }, Math.max(lastCard, chromeAt + cssMs(root, '--intro-chrome')) + 40);
+    }, 32);
+  });
+}
+
+startClock();
+hero = startHero();
+startContact();
+startGallery();
+startCompare();
+startTimeline();
+playIntro();
+
+// Deep links: /#ikeep opens that folder, /#about opens the book.
+const linked = location.hash.slice(1);
+if (linked) {
+  const k = cards.findIndex((c) => c.id === linked);
+  const target = linked === 'about' ? BOOK : k >= 0 ? k : null;
+  if (target !== null) setTimeout(() => focusGallery(target), root.classList.contains('is-intro') ? 1400 : 0);
+}

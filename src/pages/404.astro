@@ -1,14 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import TopBar from '../components/TopBar.astro';
 ---
 <Base title="Page not found — Yagmur Şimşek Sönmez" description="This page does not exist." noindex>
-  <TopBar />
-  <main class="wrap lost">
+  <main style="height:100dvh;display:grid;place-items:center;text-align:center;padding:20px">
     <div>
-      <span class="mono fog">404</span>
-      <h1>Page not found</h1>
-      <a class="btn" href="/">Back to homepage →</a>
+      <h1 style="font-size:clamp(48px,9vw,120px);font-weight:700;letter-spacing:-0.04em">Lost?</h1>
+      <p style="margin:12px 0 28px;color:var(--secondary)">This page does not exist.</p>
+      <a class="link primary" href="/" style="display:inline-flex;height:60px"><h3>Back to the folders</h3></a>
     </div>
   </main>
 </Base>

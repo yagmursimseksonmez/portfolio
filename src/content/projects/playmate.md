@@ -12,3 +12,9 @@ facts:
   - { label: Platform, value: iOS }
   - { label: Role, value: 'Product Designer (research, IA, UI)' }
 ---
+
+I designed PlayMate, a community app that matches people for sports.
+
+- **Research** Started from user interviews before drawing a single screen.
+- **Testing** Ran four rounds of moderated usability testing.
+- **Structure** Built the full information architecture and shaped the interface around what the tests showed.

@@ -7,8 +7,9 @@ interface Props {
   image?: string;
   noindex?: boolean;
   jsonLd?: object[];
+  intro?: boolean;
 }
-const { title, description = '', image = '/og.png', noindex = false, jsonLd = [] } = Astro.props;
+const { title, description = '', image = '/og.png', noindex = false, jsonLd = [], intro = false } = Astro.props;
 
 // While the site is staged on a preview host, the deploy sets PUBLIC_NOINDEX=true so it never competes with the live site.
 const stagedOnly = import.meta.env.PUBLIC_NOINDEX === 'true';
@@ -25,7 +26,7 @@ const ogImage = new URL(image, Astro.site).href;
     <meta name="author" content="Yagmur Şimşek Sönmez" />
     <meta name="robots" content={noindex || stagedOnly ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#25262d" />
+    <meta name="theme-color" content="#202020" />
 
     <meta property="og:site_name" content="Yagmur Şimşek Sönmez" />
     <meta property="og:type" content="website" />
@@ -44,9 +45,14 @@ const ogImage = new URL(image, Astro.site).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
     />
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {intro && (
+      <script is:inline>
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('is-intro');
+      </script>
+    )}
   </head>
   <body>
     <slot />

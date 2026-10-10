@@ -1,7 +1,7 @@
 ---
 title: HealthBar
 order: 2
-year: '2025'
+year: '2025 → now'
 summary: An RPG-style companion that turns Apple Health data into a game.
 tags: [iOS, Apple Watch, UX research]
 status: rewriting
@@ -12,3 +12,9 @@ facts:
   - { label: Platform, value: iOS · Apple Watch · widgets }
   - { label: Role, value: 'Product Designer (end-to-end UX/UI)' }
 ---
+
+I lead design for HealthBar, an RPG-style Apple Health companion for iOS, Apple Watch and widgets.
+
+- **Comprehension** Usability tests raised dashboard comprehension from 44% to 89%.
+- **Speed** Cut the time to a correct read from 13 to 4 seconds.
+- **Iteration** I keep improving the app with regular A/B tests.

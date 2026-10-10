@@ -28,6 +28,8 @@ const projects = defineCollection({
     // Case study details
     facts: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
     link: z.object({ label: z.string(), href: z.string() }).optional(),
+    // Show a "See more" link on the folder's info card when there is no `link`.
+    seeMore: z.boolean().default(true),
     kicker: z.string().optional(),
     compare: z.object({ before: image, after: image }).optional(),
     diagram: image.extend({ label: z.string() }).optional(),
@@ -40,6 +42,12 @@ const projects = defineCollection({
       )
       .default([]),
     features: z.array(image.extend({ title: z.string() })).default([]),
+    // Opens the folder strip: a still with a muted, looping screen recording laid over its left side.
+    showcase: z.object({ image, video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }) }).optional(),
+    // Plays first in the folder strip, muted and looping.
+    video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }).optional(),
+    // Extra full-width boards after the cover, each with a small label and a title.
+    gallery: z.array(image.extend({ label: z.string(), title: z.string() })).default([]),
   }),
 });
 

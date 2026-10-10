@@ -10,19 +10,17 @@ npm run build      # static site in dist/
 
 ## Structure
 
-- `src/content/projects/*.md` — one file per case study. Frontmatter holds the card, facts and image sections;
-  the Markdown body is the project snapshot text. `status: complete` renders the full case study,
-  `rewriting` / `in-progress` render a short stub page. Schema: `src/content.config.ts`.
-- `src/pages/index.astro` — homepage (hero, selected work, experience, about)
-- `src/components/` — top bar and footer
-- `src/styles/site.css` — design tokens and all styles (dark "midnight gallery" system)
-- `src/scripts/site.js` — Berlin clock, hero mural sizing, before/after slider
-- `public/images`, `public/videos` — media
+The site is one fixed screen, modelled on maciej.co: a particle hero, a stack of project folders that open
+full screen and scroll sideways, and a "Hi" book behind them for the about page. `/#ikeep` or `/#about`
+opens a folder or the book directly.
 
-## Adding or rewriting a case study
-
-Edit (or copy) a file in `src/content/projects/`. Set `status: complete` once the case is ready; fill `rows`
-for before/after pairs and `features` for a screenshot grid. `order` sets its position on the homepage.
+- `src/content/projects/*.md` — one file per project. `order` sets its place in the stack (1 = top);
+  frontmatter fills the folder (cover, compare, diagram, before/after `rows`, `features`), the Markdown
+  body is the Scope text. `status: rewriting` / `in-progress` shows just the cover and a short note.
+  Schema: `src/content.config.ts`.
+- `src/pages/index.astro` — the whole page, including the contact panel and the about book (bio, timeline)
+- `src/styles/site.css` — all styles and animations
+- `src/scripts/site.js` — hero particles, folder stack, book, timeline, contact panel, intro
 
 ## Images
 

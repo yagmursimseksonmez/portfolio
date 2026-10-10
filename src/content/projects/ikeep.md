@@ -71,6 +71,8 @@ features:
   - { title: Edit details, src: /images/ikeep-feature-4-3.webp, alt: iKeep — Edit details, width: 587, height: 1270 }
 ---
 
-iKeep is an iOS app, live on the App Store, for the values you copy again and again: IDs, IBANs, Wi-Fi passwords, door codes.
+I designed iKeep in one week: an iOS vault for the values people copy again and again, now live on the App Store.
 
-Open it, see your items, tap once, and the value is copied.
+- **Recognisable items** Turned identical list rows into colour-coded cards, in light and dark mode.
+- **Thumb-first actions** Moved item creation into thumb reach and added search, edit and delete.
+- **Organisation** Added sorting, plus categories people can create and reorder.

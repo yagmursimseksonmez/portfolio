@@ -1,45 +1,32 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import TopBar from '../components/TopBar.astro';
-import Footer from '../components/Footer.astro';
 import site from '../data/site.json';
 import { person } from '../data/person';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const count = projects.length;
+const rendered = await Promise.all(projects.map(async (p) => (await render(p)).Content));
+const isWide = (img: { width?: number; height?: number }) => !!img.width && !!img.height && img.width > img.height;
 
-const experience = [
-  ['2025 — now', 'Product Designer', 'Konkret · freelance, Berlin'],
-  ['2024 — 2025', 'Product Designer', 'Hergele Mobility'],
-  ['2023 — 2024', 'Product Designer', 'Kitbox'],
-  ['2021 — 2025', 'Design Lecturer', 'Bahçeşehir & Beykent University, Istanbul'],
-  ['2019 — 2021', 'Lead Visual Designer', 'Beykent University, Istanbul'],
-  ['2016 — 2019', 'UX Researcher', 'Valencia Technical University · Beykent University'],
+// Newest first; `years` is how many year rows each role spans on the timeline.
+const jobs = [
+  { company: 'Konkret', title: 'Product Designer · freelance', years: 2 },
+  { company: 'Hergele Mobility', title: 'Product Designer', years: 1 },
+  { company: 'Kitbox', title: 'Product Designer', years: 1 },
+  { company: 'Bahçeşehir & Beykent', title: 'Design Lecturer', years: 2 },
+  { company: 'Beykent University', title: 'Lead Visual Designer', years: 2 },
+  { company: 'Valencia Tech · Beykent', title: 'UX Researcher', years: 3 },
 ];
+const years = Array.from({ length: jobs.reduce((n, j) => n + j.years, 0) }, (_, i) => 2026 - i);
 
-const education = [
-  ['2026', 'UI/UX Design Bootcamp', 'ReDI School, Berlin'],
-  ['2019 — 2025', 'PhD, History and Theory of Architecture', 'Yıldız Technical University'],
-  ['2023 — 2025', 'MA, Visual Communication Design', 'Anadolu University'],
-  ['2016 — 2019', 'MSc, History and Theory of Architecture', 'Yıldız Technical University'],
-  ['2011 — 2016', 'BSc, Interior Architecture', 'Istanbul Technical University'],
-];
-
-const photos = [
-  'Frame_207.webp',
-  'IMG_4429-2.webp',
-  'red-print.webp',
-  'IMG_9083.webp',
-  'Scan_74.webp',
-  'conference-dare.webp',
-  'IMG_5630.webp',
-  'cdc42e6b-196e-43d2-bcd0-53933498906a.webp',
-];
+const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
 <Base
   title={site.home.title}
   description={site.home.description}
   image={site.home.image}
+  intro
   jsonLd={[
     { '@context': 'https://schema.org', ...person },
     {
@@ -52,113 +39,222 @@ const photos = [
     },
   ]}
 >
-  <TopBar />
-
-  <main>
-    <section class="wrap" aria-labelledby="hero-title">
-      <h1 id="hero-title" class="sr-only">Yagmur Şimşek Sönmez, product designer in Berlin</h1>
-      <p class="mural" data-mural aria-hidden="true">
-        <span class="mural__line">spaces,</span> <span class="mural__line">systems,</span> <span class="mural__line">screens</span>
-      </p>
-
-      <div class="intro">
-        <a class="intro__jump mono fog" href="#work">Selected work ↓</a>
-        <div>
-          <p class="intro__lead">
-            I’m Yagmur, a product designer in Berlin. Four apps shipped to the App Store, usability research and
-            design systems built from scratch. <em>Before that, a PhD in architecture and years of teaching design.</em>
-          </p>
-          <div class="actions">
-            <span class="status"><span class="status__dot" aria-hidden="true"></span>Open to work</span>
-            <a class="btn" href="mailto:n.yagmur.simsek@gmail.com">Get in touch →</a>
-            <a class="btn btn--ghost" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="wrap section" id="work" aria-labelledby="work-title">
-      <div class="section__head">
-        <h2 class="section__title" id="work-title">Selected work</h2>
-        <span class="mono fog">{String(projects.length).padStart(2, '0')} projects</span>
-      </div>
-      <div class="folders">
-        {projects.map((p, i) => (
-          <article class="folder" style={`--i:${i}`}>
-            <div class="folder__tabrow" aria-hidden="true">
-              <div class="folder__tab"><span class="mono">{String(i + 1).padStart(2, '0')}</span>{p.data.title}</div>
+  <div id="root">
+    <div class="contact" data-contact>
+      <div class="contact-panel">
+        <button class="contact-toggle" type="button" aria-expanded="false" aria-controls="contact-menu" data-contact-toggle>
+          <h3>Contact</h3>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 3h2v6h6v2h-6v6H9v-6H3V9h6z" /></svg>
+        </button>
+        <div class="contact-menu" id="contact-menu" aria-hidden="true">
+          <div class="contact-card" data-hours>
+            <div class="contact-status"><h3 data-open-label>Open</h3><h3 data-reopens hidden></h3></div>
+            <div class="contact-time">
+              <div class="clock" role="img" aria-label="Berlin time">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  {Array.from({ length: 12 }, (_, i) => (
+                    <line class="tick" x1="50" y1="6" x2="50" y2={i % 3 === 0 ? 14 : 10} stroke-width={i % 3 === 0 ? 2 : 1.2} stroke-linecap="round" transform={`rotate(${i * 30} 50 50)`} />
+                  ))}
+                  <line class="hand hand-h" data-hand="h" x1="50" y1="50" x2="50" y2="28" stroke-width="3.2" stroke-linecap="round" />
+                  <line class="hand hand-m" data-hand="m" x1="50" y1="50" x2="50" y2="16" stroke-width="2.2" stroke-linecap="round" />
+                  <line class="hand hand-s" data-hand="s" x1="50" y1="56" x2="50" y2="12" stroke-width="1" stroke-linecap="round" />
+                  <circle cx="50" cy="50" r="2" fill="var(--accent)" />
+                </svg>
+              </div>
             </div>
-            <a class="folder__body" href={`/projects/${p.id}/`}>
-              <div class="entry">
-                <span class="entry__year mono fog">{p.data.year}</span>
-                <h3 class="entry__title">{p.data.title}</h3>
-                <p class="entry__desc">{p.data.summary}</p>
-                <ul class="tags">{p.data.tags.map((t) => <li class="tag">{t}</li>)}</ul>
-              </div>
-              <div class="folder__media">
-                {p.data.cover ? (
-                  <img
-                    src={p.data.cover.src}
-                    alt={p.data.cover.alt}
-                    width={p.data.cover.width}
-                    height={p.data.cover.height}
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
-                ) : (
-                  <div class="folder__placeholder">Case study in progress</div>
-                )}
-                <span class="folder__open btn btn--sm">
-                  {p.data.status === 'complete' ? 'Read case study →' : 'Preview →'}
-                </span>
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="wrap section" id="experience" aria-labelledby="exp-title">
-      <div class="section__head">
-        <h2 class="section__title" id="exp-title">Experience</h2>
-        <a class="mono fog" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer">Full CV on LinkedIn ↗</a>
-      </div>
-      <ul class="rows">
-        {experience.map(([years, role, where]) => (
-          <li class="row"><span class="mono">{years}</span><span>{role}</span><span class="row__sub">{where}</span></li>
-        ))}
-      </ul>
-      <h3 class="subhead mono">○ Education</h3>
-      <ul class="rows">
-        {education.map(([years, degree, where]) => (
-          <li class="row"><span class="mono">{years}</span><span>{degree}</span><span class="row__sub">{where}</span></li>
-        ))}
-      </ul>
-    </section>
-
-    <section class="wrap section" id="about" aria-labelledby="about-title">
-      <div class="section__head">
-        <h2 class="section__title" id="about-title">About</h2>
-        <span class="mono fog">English · Turkish · German</span>
-      </div>
-      <div class="about">
-        <p class="about__name">Yagmur <small>pronounced “yaa-moor”<br />means rain in Turkish</small></p>
-        <div class="about__text">
-          <p>
-            I came to product design through architecture. Interior architecture, then a master’s and a PhD in the
-            history and theory of architecture, taught me to watch how people move through a space before deciding what goes in it.
-          </p>
-          <p>
-            Four years of teaching design studios taught me to explain those decisions. Today I do the same with
-            screens: research, structure, interface, and shipping it.
-          </p>
+            <div class="contact-foot">
+              <h3>Open to product design roles and selected freelance projects</h3>
+              <h4>Based in Berlin · working in English, Turkish and German</h4>
+            </div>
+          </div>
+          <a class="link primary" href="mailto:n.yagmur.simsek@gmail.com"><h3>Get in touch</h3><Fragment set:html={arrow} /></a>
+          <div class="email">
+            <a href="mailto:n.yagmur.simsek@gmail.com"><h3>n.yagmur.simsek@gmail.com</h3></a>
+            <button type="button" data-copy="n.yagmur.simsek@gmail.com">Copy</button>
+          </div>
+          <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
         </div>
       </div>
-      <div class="photos">
-        {photos.map((f) => <img src={`/images/${f}`} alt="" loading="lazy" decoding="async" />)}
-      </div>
-    </section>
-  </main>
+    </div>
 
-  <Footer />
+    <header>
+      <nav class="grid">
+        <h3>Yagmur Şimşek Sönmez</h3>
+        <h3>Product Designer</h3>
+        <h3>“Portfolio”</h3>
+        <h3><span data-clock>--:--</span> Berlin</h3>
+      </nav>
+      <div class="hero">
+        <h1 class="sr-only">Yagmur Şimşek Sönmez — I design things</h1>
+        <div class="build" data-hero aria-hidden="true"><canvas></canvas></div>
+      </div>
+      <div class="subheader grid">
+        <h3>Selected work ↓</h3>
+        <p>
+          Designer. Researcher. Crafter. PhD in architectural history. I research first, then ship, 0→1.
+          <a class="inline" href="#about" data-open-book>Learn more</a>
+        </p>
+      </div>
+    </header>
+
+    <main class="gallery" id="gallery" style={`--count:${count}`} data-gallery>
+      <button class="gallery-dismiss" type="button" aria-label="Close" data-dismiss>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 3h2v6h6v2h-6v6H9v-6H3V9h6z" /></svg>
+      </button>
+      <div class="gallery-keys" aria-hidden="true"><span>↑</span><span>←</span><span>↓</span><span>→</span></div>
+
+      <div class="gallery-stage">
+        <section class="book" id="about" tabindex="0" aria-label="About Yagmur" data-book>
+          <div class="book-stage">
+            <div class="book-leaf">
+              <div class="book-face book-cover"><h2>Hi</h2></div>
+              <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" loading="lazy" decoding="async" /></div>
+            </div>
+            <div class="book-right">
+              <div class="book-scroll" data-book-scroll>
+                <div class="bio">
+                  <svg class="bio-mark" viewBox="0 0 600 260" fill="none" aria-hidden="true">
+                    <path d="M20 200C70 60 120 20 150 60s-10 150 40 150 90-170 130-170 20 140 70 140 60-120 100-150 60 10 70 60" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <h2>I’m Yagmur</h2>
+                  <p>
+                    I’m a product designer based in Berlin. I came to screens through architecture: interior architecture,
+                    then a master’s and a PhD in the history and theory of architecture, all about how people move through space.
+                  </p>
+                  <p>
+                    Four years of teaching design studios taught me to explain every decision. Today I take products from
+                    research and information architecture to interface and App Store release, and I have shipped four apps that way.
+                  </p>
+                  <img class="photo" src="/images/conference-dare.webp" alt="Yagmur presenting at the Digital Architecture Research conference" width="1920" height="1207" loading="lazy" decoding="async" />
+                  <p>
+                    I work best close to the people building the product: founders, developers and the users we test with.
+                    If you are making something people should find easy to move through, let’s talk.
+                  </p>
+                  <div class="bio-links">
+                    <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
+                    <a class="link" href="https://www.behance.net/nagehanyagmursimsek" target="_blank" rel="noopener noreferrer"><h3>Behance</h3><Fragment set:html={arrow} /></a>
+                    <a class="link" href="mailto:n.yagmur.simsek@gmail.com"><h3>Email</h3><Fragment set:html={arrow} /></a>
+                  </div>
+                </div>
+                <div class="timeline" data-timeline>
+                  <h2 class="timeline-label">Experience</h2>
+                  <div class="timeline-dashes" data-dashes></div>
+                  <ul class="timeline-years">{years.map((y) => <li><h2>{y}</h2></li>)}</ul>
+                  <div class="timeline-jobs">
+                    {jobs.map((j) => (
+                      <div class="timeline-job" data-years={j.years}><h2>{j.company}</h2><h3>{j.title}</h3></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {projects.map((p, k) => {
+          const d = p.data;
+          const Content = rendered[k];
+          const role = d.facts.find((f) => f.label === 'Role')?.value;
+          const platform = d.facts.find((f) => f.label === 'Platform')?.value;
+          const tools = d.facts.find((f) => f.label === 'Tools')?.value;
+          return (
+            <section class="card" id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
+              <div class="card-tab"><h2>{d.title}</h2></div>
+              <div class="card-sheet">
+                <article class="card-content">
+                  <div class="work">
+                    {d.showcase && (
+                      <figure class="showcase">
+                        <div class="showcase-stage">
+                          <img src={d.showcase.image.src} alt={d.showcase.image.alt} width={d.showcase.image.width} height={d.showcase.image.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} />
+                          <video src={d.showcase.video.src} width={d.showcase.video.width} height={d.showcase.video.height} aria-label={d.showcase.video.label} autoplay muted loop playsinline preload="metadata"></video>
+                        </div>
+                      </figure>
+                    )}
+                    {d.video && (
+                      <figure>
+                        <video class="clip" src={d.video.src} width={d.video.width} height={d.video.height} aria-label={d.video.label} autoplay muted loop playsinline preload="metadata"></video>
+                      </figure>
+                    )}
+                    {d.cover && (
+                      <figure><img src={d.cover.src} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} /></figure>
+                    )}
+                    {!d.cover && !d.showcase && <figure class="placeholder">Case study in progress</figure>}
+                    {d.gallery.map((g) => (
+                      <figure>
+                        <div class="board">
+                          <div><h4>{g.label}</h4><h3>{g.title}</h3></div>
+                          <div class="board-shots"><img src={g.src} alt={g.alt} width={g.width} height={g.height} loading="lazy" decoding="async" /></div>
+                        </div>
+                      </figure>
+                    ))}
+                    {d.compare && (
+                      <figure>
+                        <div class="compare" data-compare>
+                          <img src={d.compare.before.src} alt={d.compare.before.alt} draggable="false" loading="lazy" decoding="async" />
+                          <img class="after" src={d.compare.after.src} alt={d.compare.after.alt} draggable="false" loading="lazy" decoding="async" />
+                          <div class="compare-handle">
+                            <button class="compare-knob" type="button" role="slider" aria-label="Compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                              <svg width="8" height="12" viewBox="0 0 10 14" fill="none" aria-hidden="true"><path d="M8 1 2 7l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                              <svg width="8" height="12" viewBox="0 0 10 14" fill="none" aria-hidden="true"><path d="m2 1 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                            </button>
+                          </div>
+                        </div>
+                      </figure>
+                    )}
+                    {d.diagram && (
+                      <figure class="light"><img src={d.diagram.src} alt={d.diagram.alt} width={d.diagram.width} height={d.diagram.height} loading="lazy" decoding="async" /></figure>
+                    )}
+                    {d.rows.map((r) => (
+                      <figure>
+                        {[['Before', r.before], ['After', r.after]].map(([label, side]) => (
+                          <div class:list={['board', label === 'Before' ? 'is-before' : 'is-after']}>
+                            <div><h4>{label}</h4><h3>{side.title}</h3></div>
+                            <div class="board-shots">
+                              {side.images.map((img) => (
+                                <img class:list={{ wide: isWide(img) }} src={img.src} alt={img.alt} width={img.width} height={img.height} loading="lazy" decoding="async" />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </figure>
+                    ))}
+                    {d.features.length > 0 && (
+                      <figure>
+                        {d.features.map((f) => (
+                          <div class="board">
+                            <div><h4>Added</h4><h3>{f.title}</h3></div>
+                            <div class="board-shots"><img src={f.src} alt={f.alt} width={f.width} height={f.height} loading="lazy" decoding="async" /></div>
+                          </div>
+                        ))}
+                      </figure>
+                    )}
+                    <div class="info">
+                      <div class="info-scope">
+                        <h3>Scope</h3>
+                        <Content />
+                      </div>
+                      {role && <div class="pill"><h3>Position</h3><h3>{role.replace(/\s*\(.*\)/, '')}</h3></div>}
+                      <div class="pill"><h3>Time</h3><h3>{d.year}</h3></div>
+                      {tools && <div class="pill"><h3>Tools</h3><h3>{tools}</h3></div>}
+                      {platform && <div class="pill"><h3>Platform</h3><h3>{platform.split(' · ')[0]}</h3></div>}
+                      {(d.link || d.seeMore) && (
+                        <div class="links">
+                          {d.link ? (
+                            <a class="link" href={d.link.href} target="_blank" rel="noopener noreferrer"><h3>App Store</h3><Fragment set:html={arrow} /></a>
+                          ) : (
+                            <a class="link" href={`mailto:n.yagmur.simsek@gmail.com?subject=${encodeURIComponent(`${d.title} — see more`)}`}><h3>See more</h3><Fragment set:html={arrow} /></a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </main>
+  </div>
 </Base>
