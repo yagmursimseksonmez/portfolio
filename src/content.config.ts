@@ -46,8 +46,33 @@ const projects = defineCollection({
     showcase: z.object({ image, video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }) }).optional(),
     // Plays first in the folder strip, muted and looping.
     video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }).optional(),
-    // Extra full-width boards after the cover, each with a small label and a title.
-    gallery: z.array(image.extend({ label: z.string(), title: z.string() })).default([]),
+    // Extra boards after the cover, each with a small label and a title. A board shows one image
+    // (`src`) or several screens side by side (`items`); an item whose src ends in .mp4 plays as video.
+    gallery: z
+      .array(
+        z.object({
+          label: z.string(),
+          title: z.string(),
+          src: z.string().optional(),
+          alt: z.string().optional(),
+          width: z.number().optional(),
+          height: z.number().optional(),
+          items: z.array(image).optional(),
+        }),
+      )
+      .default([]),
+    // "See more" opens these as a short read in a side panel: a label, then text, points or stats.
+    details: z
+      .array(
+        z.object({
+          label: z.string(),
+          title: z.string().optional(),
+          text: z.string().optional(),
+          points: z.array(z.string()).default([]),
+          stats: z.array(z.object({ value: z.string(), issue: z.string(), fix: z.string() })).default([]),
+        }),
+      )
+      .default([]),
   }),
 });
 

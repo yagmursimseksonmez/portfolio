@@ -108,22 +108,22 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           <div class="book-stage">
             <div class="book-leaf">
               <div class="book-face book-cover"><h2>Hi</h2></div>
-              <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" loading="lazy" decoding="async" /></div>
+              <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" width="1824" height="1273" loading="lazy" decoding="async" /></div>
             </div>
             <div class="book-right">
               <div class="book-scroll" data-book-scroll>
                 <div class="bio">
-                  <svg class="bio-mark" viewBox="0 0 600 260" fill="none" aria-hidden="true">
-                    <path d="M20 200C70 60 120 20 150 60s-10 150 40 150 90-170 130-170 20 140 70 140 60-120 100-150 60 10 70 60" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
+                  <img class="bio-avatar" src="/images/avatar-palette.webp" alt="Illustrated portrait of Yagmur" width="640" height="640" loading="lazy" decoding="async" />
                   <h2>I’m Yagmur</h2>
                   <p>
-                    I’m a product designer based in Berlin. I came to screens through architecture: interior architecture,
-                    then a master’s and a PhD in the history and theory of architecture, all about how people move through space.
+                    Four apps shipped to the App Store. Usability research. Design systems built from scratch. Before that: a PhD, a master’s and years of lecturing.
+                  </p>
+                  <p>
+                    Different fields, same thread: I’m interested in how people move through things; spaces, systems, screens.
                   </p>
                   <p>
                     Four years of teaching design studios taught me to explain every decision. Today I take products from
-                    research and information architecture to interface and App Store release, and I have shipped four apps that way.
+                    research and information architecture to interface and App Store release.
                   </p>
                   <img class="photo" src="/images/conference-dare.webp" alt="Yagmur presenting at the Digital Architecture Research conference" width="1920" height="1207" loading="lazy" decoding="async" />
                   <p>
@@ -132,7 +132,8 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                   </p>
                   <div class="bio-links">
                     <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
-                    <a class="link" href="https://www.behance.net/nagehanyagmursimsek" target="_blank" rel="noopener noreferrer"><h3>Behance</h3><Fragment set:html={arrow} /></a>
+                    <a class="link" href="https://yildiz.academia.edu/NagehanYagmurSimsekSonmez" target="_blank" rel="noopener noreferrer"><h3>Academia</h3><Fragment set:html={arrow} /></a>
+                    <a class="link" href="https://www.flickr.com/people/126174140@N08/" target="_blank" rel="noopener noreferrer"><h3>Flickr</h3><Fragment set:html={arrow} /></a>
                     <a class="link" href="mailto:n.yagmur.simsek@gmail.com"><h3>Email</h3><Fragment set:html={arrow} /></a>
                   </div>
                 </div>
@@ -145,6 +146,9 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <div class="timeline-job" data-years={j.years}><h2>{j.company}</h2><h3>{j.title}</h3></div>
                     ))}
                   </div>
+                </div>
+                <div class="book-end">
+                  <img class="photo" src="/images/about-mirror-room.webp" alt="Yagmur taking a mirror selfie in a room of colourful projected patterns" width="1200" height="1600" loading="lazy" decoding="async" />
                 </div>
               </div>
             </div>
@@ -184,7 +188,15 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <figure>
                         <div class="board">
                           <div><h4>{g.label}</h4><h3>{g.title}</h3></div>
-                          <div class="board-shots"><img src={g.src} alt={g.alt} width={g.width} height={g.height} loading="lazy" decoding="async" /></div>
+                          <div class="board-shots">
+                            {(g.items ?? [{ src: g.src!, alt: g.alt ?? '', width: g.width, height: g.height }]).map((m) =>
+                              m.src.endsWith('.mp4') ? (
+                                <video class="shot-video" src={m.src} width={m.width} height={m.height} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video>
+                              ) : (
+                                <img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" />
+                              ),
+                            )}
+                          </div>
                         </div>
                       </figure>
                     ))}
@@ -242,6 +254,8 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         <div class="links">
                           {d.link ? (
                             <a class="link" href={d.link.href} target="_blank" rel="noopener noreferrer"><h3>App Store</h3><Fragment set:html={arrow} /></a>
+                          ) : d.details.length > 0 ? (
+                            <button class="link" type="button" aria-expanded="false" aria-controls={`${p.id}-details`} data-details-open><h3>See more</h3><Fragment set:html={arrow} /></button>
                           ) : (
                             <a class="link" href={`mailto:n.yagmur.simsek@gmail.com?subject=${encodeURIComponent(`${d.title} — see more`)}`}><h3>See more</h3><Fragment set:html={arrow} /></a>
                           )}
@@ -250,6 +264,33 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                     </div>
                   </div>
                 </article>
+                {d.details.length > 0 && (
+                  <aside class="details" id={`${p.id}-details`} aria-label={`${d.title} details`} aria-hidden="true" data-details>
+                    <div class="details-head">
+                      <h3>{d.title}</h3>
+                      <button class="details-close" type="button" aria-label="Close details" data-details-close>
+                        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 3h2v6h6v2h-6v6H9v-6H3V9h6z" /></svg>
+                      </button>
+                    </div>
+                    <div class="details-body">
+                      {d.details.map((sec) => (
+                        <section class="details-section">
+                          <h4>{sec.label}</h4>
+                          {sec.title && <h3>{sec.title}</h3>}
+                          {sec.text && <p>{sec.text}</p>}
+                          {sec.points.length > 0 && <ul class="details-points">{sec.points.map((pt) => <li>{pt}</li>)}</ul>}
+                          {sec.stats.length > 0 && (
+                            <ul class="details-stats">
+                              {sec.stats.map((st) => (
+                                <li><strong>{st.value}</strong><span>{st.issue}</span><em>→ {st.fix}</em></li>
+                              ))}
+                            </ul>
+                          )}
+                        </section>
+                      ))}
+                    </div>
+                  </aside>
+                )}
               </div>
             </section>
           );

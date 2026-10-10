@@ -280,6 +280,7 @@ function cardY(k, next) {
 function setFocus(next) {
   const prev = active;
   active = next;
+  if (prev !== next) document.querySelectorAll('[data-details].is-open').forEach((p) => setDetails(p, false));
   const focused = next !== null;
   const isBook = next === BOOK;
   gallery.classList.toggle('is-focused', focused);
@@ -378,6 +379,9 @@ function stepWork(delta) {
 
 function startGallery() {
   if (!gallery) return;
+  // Focus moves inside a folder must never scroll the stage itself; the layout is driven by transforms.
+  const stage = gallery.querySelector('.gallery-stage');
+  stage.addEventListener('scroll', () => { stage.scrollTop = 0; stage.scrollLeft = 0; });
   cards.forEach((card, k) => {
     card.querySelector('.card-tab h2').addEventListener('click', () => { if (active !== k) focusGallery(k); });
     card.querySelector('.card-sheet').addEventListener('click', () => { if (active !== k) focusGallery(k); });
@@ -405,6 +409,7 @@ function startGallery() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (openDetails()) { e.preventDefault(); setDetails(openDetails(), false); return; }
       if (active !== null) { e.preventDefault(); focusGallery(null); }
       else if (contactOpen()) setContact(false);
       return;
@@ -432,6 +437,30 @@ function startGallery() {
   mobile.addEventListener('change', relayout);
   new ResizeObserver(relayout).observe(header);
   measureGallery();
+}
+
+// --------------------------------------------------------- "See more" panel
+function setDetails(panel, open) {
+  if (!panel) return;
+  panel.classList.toggle('is-open', open);
+  panel.setAttribute('aria-hidden', String(!open));
+  const opener = panel.closest('[data-card]').querySelector('[data-details-open]');
+  opener?.setAttribute('aria-expanded', String(open));
+  if (open) panel.querySelector('[data-details-close]').focus({ preventScroll: true });
+  else if (panel.contains(document.activeElement)) opener?.focus({ preventScroll: true });
+}
+const openDetails = () => document.querySelector('[data-details].is-open');
+
+function startDetails() {
+  document.querySelectorAll('[data-details-open]').forEach((btn) => {
+    const panel = btn.closest('[data-card]').querySelector('[data-details]');
+    btn.addEventListener('click', (e) => { e.stopPropagation(); setDetails(panel, !panel.classList.contains('is-open')); });
+  });
+  document.querySelectorAll('[data-details-close]').forEach((btn) =>
+    btn.addEventListener('click', (e) => { e.stopPropagation(); setDetails(btn.closest('[data-details]'), false); }),
+  );
+  // Scrolling inside the panel should not drive the sideways strip.
+  document.querySelectorAll('[data-details]').forEach((panel) => panel.addEventListener('wheel', (e) => e.stopPropagation()));
 }
 
 // -------------------------------------------------- before / after slider
@@ -580,6 +609,7 @@ hero = startHero();
 startContact();
 startGallery();
 startCompare();
+startDetails();
 startTimeline();
 playIntro();
 
