@@ -206,7 +206,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <figure class="light"><img src={d.diagram.src} alt={d.diagram.alt} width={d.diagram.width} height={d.diagram.height} loading="lazy" decoding="async" /></figure>
                     )}
                     {d.rows.map((r) => (
-                      <figure>
+                      <figure class:list={{ 'wide-pair': r.before.images.every(isWide) }}>
                         {[['Before', r.before], ['After', r.after]].map(([label, side]) => (
                           <div class:list={['board', label === 'Before' ? 'is-before' : 'is-after']}>
                             <div><h4>{label}</h4><h3>{side.title}</h3></div>

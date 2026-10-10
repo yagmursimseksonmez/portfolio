@@ -424,19 +424,29 @@ nav h3 { white-space: nowrap; }
 /* Boards: a label and title, with the screens directly beneath — no dead space between them. */
 .board { display: flex; flex-direction: column; gap: 14px; height: 100%; min-width: 0; }
 .board h4 { color: var(--tertiary); }
-.board h3 { min-height: 2.2em; max-width: 20ch; }
-.board-shots { display: flex; flex: 1 1 auto; min-height: 0; gap: 8px; align-items: flex-start; }
+.board h3 { min-height: 2.4em; font-size: 18px; line-height: 1.2; }
+/* The label block never widens a board: it wraps to the width of the screens below. */
+.board > div:first-child { width: 0; min-width: 100%; }
+/* Fixed shot height (frame minus the label block) so each board is exactly as wide as its screens. */
+.board { --board-head: 78px; }
+.board-shots { display: flex; flex: 0 0 auto; height: calc(var(--img-h) - var(--board-head)); gap: 8px; align-items: flex-start; }
 .board-shots img { height: 100%; width: auto; border-radius: 0; box-shadow: none !important; }
 .board-shots img.wide { height: auto; width: min(36vw, 460px); border-radius: var(--radius-image); }
 .work figure:has(.board) { gap: 12px; align-items: stretch; }
 .board + .board { padding-left: 12px; border-left: 1px solid hsla(0, 0%, 100%, 0.08); }
 /* Before / after read as two panels: neutral and dim before, warm after. */
-.board.is-before, .board.is-after { padding: 16px; border-radius: 14px; border: 0; }
+.board.is-before, .board.is-after { --board-head: 110px; padding: 16px; border-radius: 14px; border: 0; }
 .board.is-before { background: rgba(0, 0, 0, 0.22); }
 .board.is-before h3 { color: var(--secondary); }
 .board.is-before .board-shots img { filter: saturate(0.6); opacity: 0.85; }
 .board.is-after { background: rgba(255, 209, 0, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 209, 0, 0.35); }
 .board.is-after h4 { color: var(--accent); }
+/* Wide shots (e.g. category chips) stack before above after instead of leaving dead space. */
+.work figure.wide-pair { flex-direction: column; }
+.wide-pair .board { height: calc((var(--img-h) - 12px) / 2); }
+.wide-pair .board + .board { border-left: 0; }
+.wide-pair .board-shots { height: calc((var(--img-h) - 12px) / 2 - var(--board-head)); }
+.wide-pair .board-shots img.wide { height: 100%; width: auto; }
 .board.is-before h4::before { content: '○ '; }
 .board.is-after h4::before { content: '● '; }
 
