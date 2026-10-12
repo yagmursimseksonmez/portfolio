@@ -58,6 +58,10 @@ const projects = defineCollection({
           width: z.number().optional(),
           height: z.number().optional(),
           items: z.array(image).optional(),
+          // Long scrolling screens: shown larger and cropped, they open downward and pan on hover.
+          tall: z.boolean().default(false),
+          // Bare app screens: equal width, phone proportions, rounded corners.
+          screens: z.boolean().default(false),
         }),
       )
       .default([]),

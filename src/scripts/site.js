@@ -281,6 +281,10 @@ function setFocus(next) {
   const prev = active;
   active = next;
   if (prev !== next) document.querySelectorAll('[data-details].is-open').forEach((p) => setDetails(p, false));
+  if (prev !== next) {
+    document.querySelectorAll('[data-tall].is-open').forEach((f) => f.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse' })));
+    gallery.classList.remove('is-peeking');
+  }
   const focused = next !== null;
   const isBook = next === BOOK;
   gallery.classList.toggle('is-focused', focused);
@@ -437,6 +441,55 @@ function startGallery() {
   mobile.addEventListener('change', relayout);
   new ResizeObserver(relayout).observe(header);
   measureGallery();
+}
+
+// ------------------------------------------------------------ tall boards
+// Hovering a tall board opens it down to the bottom of the folder and pans the screens to their end.
+function startTallBoards() {
+  document.querySelectorAll('[data-tall]').forEach((fig) => {
+    const shots = fig.querySelector('.board-shots');
+    const imgs = [...shots.querySelectorAll('img')];
+    const open = () => {
+      if (!fig.closest('.card.is-active') || fig.classList.contains('is-open')) return;
+      const content = fig.closest('.card-content');
+      // The tabs of the folders in front slide out of view, so the board can open to the bottom edge.
+      gallery.classList.add('is-peeking');
+      const limit = content.getBoundingClientRect().bottom - 12;
+      const figRect = fig.getBoundingClientRect();
+      const grow = Math.max(0, limit - figRect.bottom);
+      const winH = shots.getBoundingClientRect().height + grow;
+      fig.style.height = `${figRect.height + grow}px`;
+      fig.classList.add('is-open');
+      shots.style.setProperty('--win-h', `${winH}px`);
+      // Each screen scrolls to its own end; longer screens take longer, at the same pace.
+      imgs.forEach((img) => {
+        const travel = Math.max(0, img.getBoundingClientRect().height - winH);
+        const ms = reduceMotion.matches ? 0 : Math.min(4200, Math.max(900, travel * 3.2));
+        img.style.setProperty('--pan-dur', `${ms}ms`);
+        img.style.setProperty('--pan', `${-travel}px`);
+      });
+    };
+    const close = () => {
+      if (!fig.classList.contains('is-open')) return;
+      imgs.forEach((img) => {
+        img.style.setProperty('--pan-dur', reduceMotion.matches ? '0ms' : '600ms');
+        img.style.setProperty('--pan', '0px');
+      });
+      shots.style.removeProperty('--win-h');
+      fig.style.removeProperty('height');
+      fig.classList.remove('is-open');
+      gallery.classList.remove('is-peeking');
+    };
+    fig.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') open(); });
+    fig.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') close(); });
+    fig.addEventListener('focus', open);
+    fig.addEventListener('blur', close);
+    // Touch: tap toggles.
+    fig.addEventListener('click', (e) => {
+      if (e.pointerType === 'mouse') return;
+      fig.classList.contains('is-open') ? close() : open();
+    });
+  });
 }
 
 // --------------------------------------------------------- "See more" panel
@@ -609,6 +662,7 @@ hero = startHero();
 startContact();
 startGallery();
 startCompare();
+startTallBoards();
 startDetails();
 startTimeline();
 playIntro();
