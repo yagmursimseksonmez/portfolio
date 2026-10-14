@@ -91,7 +91,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <div class="subheader grid">
         <h3>Selected work ↓</h3>
         <p>
-          Designer. Researcher. Crafter. PhD in architectural history. I research first, then ship, 0→1.
+          Designer. Researcher. Crafter. PhD in architectural history. I research first, then ship, 0→1.{' '}
           <a class="inline" href="#about" data-open-book>Learn more</a>
         </p>
       </div>
@@ -167,6 +167,38 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
               <div class="card-sheet">
                 <article class="card-content">
                   <div class="work">
+                    {d.hero && (
+                      <figure class="hero">
+                        <div class="device">
+                          <video src={d.hero.video.src} width={d.hero.video.width} height={d.hero.video.height} aria-label={d.hero.video.label} autoplay muted loop playsinline preload="metadata"></video>
+                        </div>
+                        <div class="hero-copy">
+                          <div class="hero-top">
+                            <h4>{d.hero.kicker}</h4>
+                            <h2>{d.hero.title}</h2>
+                            <p class="hero-lede">{d.hero.lede}</p>
+                            {d.hero.hp && (
+                              <div class="hp" role="img" aria-label={`${d.hero.hp.label}: ${d.hero.hp.value} of 10`}>
+                                <svg class="hp-heart" viewBox="0 0 9 8" aria-hidden="true" shape-rendering="crispEdges"><path d="M1 0h2v1h1v1h1V1h1V0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1z" /></svg>
+                                <div class="hp-bar" aria-hidden="true">{Array.from({ length: 10 }, (_, n) => <i class:list={{ on: n < d.hero!.hp!.value }} style={`--n:${n}`}></i>)}</div>
+                                <span class="hp-label">{d.hero.hp.label}</span>
+                              </div>
+                            )}
+                          </div>
+                          {d.hero.points.length > 0 && (
+                            <ul class="hero-points">
+                              {d.hero.points.map((pt, n) => (
+                                <li><span>{String(n + 1).padStart(2, '0')}</span><h3>{pt.title}</h3><p>{pt.text}</p></li>
+                              ))}
+                            </ul>
+                          )}
+                          <div class="hero-foot">
+                            {d.hero.chips.length > 0 && <ul class="chips">{d.hero.chips.map((c) => <li>{c}</li>)}</ul>}
+                            {d.link && <a class="link primary" href={d.link.href} target="_blank" rel="noopener noreferrer"><h3>App Store</h3><Fragment set:html={arrow} /></a>}
+                          </div>
+                        </div>
+                      </figure>
+                    )}
                     {d.showcase && (
                       <figure class="showcase">
                         <div class="showcase-stage">
@@ -180,18 +212,39 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         <video class="clip" src={d.video.src} width={d.video.width} height={d.video.height} aria-label={d.video.label} autoplay muted loop playsinline preload="metadata"></video>
                       </figure>
                     )}
-                    {d.cover && (
+                    {d.cover && !d.hero && (
                       <figure class="cover"><img src={d.cover.src} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} /></figure>
                     )}
-                    {!d.cover && !d.showcase && <figure class="placeholder">Case study in progress</figure>}
-                    {d.gallery.map((g) => (
-                      <figure class:list={{ tall: g.tall, screens: g.screens }} style={g.tall && g.width && g.height ? `--r:${(g.width / g.height).toFixed(4)}` : undefined} tabindex={g.tall ? 0 : undefined} data-tall={g.tall ? '' : undefined}>
+                    {!d.cover && !d.showcase && !d.hero && <figure class="placeholder">Case study in progress</figure>}
+                    {d.gallery.map((g) => g.beats ? (
+                      <figure class="story">
+                        <div class="story-head"><h4>{g.label}</h4><h3>{g.title}</h3></div>
+                        <div class="beats">
+                          {g.beats.map((b) => (
+                            <section class:list={['beat', { wide: b.wide }]}>
+                              <div class="beat-name"><span class="beat-letter" aria-hidden="true">{b.letter}</span><h4>{b.name}</h4></div>
+                              {b.text && <p>{b.text}</p>}
+                              {b.points.length > 0 && (
+                                <ul class="beat-points">{b.points.map((pt) => <li><strong>{pt.title}</strong><span>{pt.text}</span></li>)}</ul>
+                              )}
+                              {b.stats.length > 0 && (
+                                <ul class="beat-stats">{b.stats.map((st) => <li><strong>{st.value}</strong><span>{st.label}</span></li>)}</ul>
+                              )}
+                              {b.quote && <blockquote>{b.quote}</blockquote>}
+                            </section>
+                          ))}
+                        </div>
+                      </figure>
+                    ) : (
+                      <figure class:list={{ tall: g.tall, screens: g.screens, devices: g.device }} style={g.tall && g.width && g.height ? `--r:${(g.width / g.height).toFixed(4)}` : undefined} tabindex={g.tall ? 0 : undefined} data-tall={g.tall ? '' : undefined}>
                         <div class="board">
                           <div><h4>{g.label}</h4><h3>{g.title}</h3></div>
                           <div class="board-shots">
                             {(g.items ?? [{ src: g.src!, alt: g.alt ?? '', width: g.width, height: g.height }]).map((m) =>
                               m.src.endsWith('.mp4') ? (
                                 <video class="shot-video" src={m.src} width={m.width} height={m.height} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video>
+                              ) : g.device && g.items ? (
+                                <div class="device"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
                               ) : g.tall && g.items ? (
                                 <div class="screen-window"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
                               ) : (
@@ -252,13 +305,14 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <div class="pill"><h3>Time</h3><h3>{d.year}</h3></div>
                       {tools && <div class="pill"><h3>Tools</h3><h3>{tools}</h3></div>}
                       {platform && <div class="pill"><h3>Platform</h3><h3>{platform.split(' · ')[0]}</h3></div>}
-                      {(d.link || d.seeMore) && (
+                      {(d.link || d.seeMore || d.page || d.details.length > 0) && (
                         <div class="links">
-                          {d.link ? (
-                            <a class="link" href={d.link.href} target="_blank" rel="noopener noreferrer"><h3>App Store</h3><Fragment set:html={arrow} /></a>
+                          {d.link && <a class="link" href={d.link.href} target="_blank" rel="noopener noreferrer"><h3>App Store</h3><Fragment set:html={arrow} /></a>}
+                          {d.link && !d.page && d.details.length === 0 ? null : d.page ? (
+                            <a class="link" href={d.page}><h3>See more</h3><Fragment set:html={arrow} /></a>
                           ) : d.details.length > 0 ? (
                             <button class="link" type="button" aria-expanded="false" aria-controls={`${p.id}-details`} data-details-open><h3>See more</h3><Fragment set:html={arrow} /></button>
-                          ) : (
+                          ) : d.link || !d.seeMore ? null : (
                             <a class="link" href={`mailto:n.yagmur.simsek@gmail.com?subject=${encodeURIComponent(`${d.title} — see more`)}`}><h3>See more</h3><Fragment set:html={arrow} /></a>
                           )}
                         </div>
@@ -280,11 +334,14 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                           <h4>{sec.label}</h4>
                           {sec.title && <h3>{sec.title}</h3>}
                           {sec.text && <p>{sec.text}</p>}
+                          {sec.images.length > 0 && (
+                            <div class="details-images">{sec.images.map((im) => <img src={im.src} alt={im.alt} width={im.width} height={im.height} loading="lazy" decoding="async" />)}</div>
+                          )}
                           {sec.points.length > 0 && <ul class="details-points">{sec.points.map((pt) => <li>{pt}</li>)}</ul>}
                           {sec.stats.length > 0 && (
                             <ul class="details-stats">
                               {sec.stats.map((st) => (
-                                <li><strong>{st.value}</strong><span>{st.issue}</span><em>→ {st.fix}</em></li>
+                                <li><strong>{st.value}</strong><span>{st.issue}</span>{st.fix && <em>→ {st.fix}</em>}</li>
                               ))}
                             </ul>
                           )}

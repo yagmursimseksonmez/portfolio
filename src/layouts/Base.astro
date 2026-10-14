@@ -8,8 +8,13 @@ interface Props {
   noindex?: boolean;
   jsonLd?: object[];
   intro?: boolean;
+  /** Long-read pages scroll; the folder homepage is one fixed screen. */
+  scroll?: boolean;
+  /** Extra Google Fonts families for this page, e.g. 'Epilogue:wght@800'. */
+  fonts?: string[];
 }
-const { title, description = '', image = '/og.png', noindex = false, jsonLd = [], intro = false } = Astro.props;
+const { title, description = '', image = '/og.png', noindex = false, jsonLd = [], intro = false, scroll = false, fonts = [] } = Astro.props;
+const fontQuery = ['Inter:wght@400;500;700', ...fonts].map((f) => `family=${f.replace(/ /g, '+')}`).join('&');
 
 // While the site is staged on a preview host, the deploy sets PUBLIC_NOINDEX=true so it never competes with the live site.
 const stagedOnly = import.meta.env.PUBLIC_NOINDEX === 'true';
@@ -45,7 +50,7 @@ const ogImage = new URL(image, Astro.site).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+      href={`https://fonts.googleapis.com/css2?${fontQuery}&display=swap`}
     />
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
     {intro && (
@@ -54,7 +59,7 @@ const ogImage = new URL(image, Astro.site).href;
       </script>
     )}
   </head>
-  <body>
+  <body class:list={{ 'is-scroll': scroll }}>
     <slot />
     <script>
       import '../scripts/site.js';

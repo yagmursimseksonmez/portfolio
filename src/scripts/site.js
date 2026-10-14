@@ -448,7 +448,19 @@ function startGallery() {
 function startTallBoards() {
   document.querySelectorAll('[data-tall]').forEach((fig) => {
     const shots = fig.querySelector('.board-shots');
-    const imgs = [...shots.querySelectorAll('img')];
+    const wins = [...shots.querySelectorAll('.screen-window')];
+    const imgs = wins.map((w) => w.querySelector('img'));
+    const pans = imgs.map(() => 0);
+    let travels = imgs.map(() => 0);
+    const setPan = (i, px, ms) => {
+      pans[i] = px;
+      imgs[i].style.setProperty('--pan-dur', `${reduceMotion.matches ? 0 : ms}ms`);
+      imgs[i].style.setProperty('--pan', `${-px}px`);
+    };
+    const measure = () => {
+      const winH = shots.getBoundingClientRect().height;
+      travels = imgs.map((img) => Math.max(0, img.getBoundingClientRect().height - winH));
+    };
     const open = () => {
       if (!fig.closest('.card.is-active') || fig.classList.contains('is-open')) return;
       const content = fig.closest('.card-content');
@@ -461,33 +473,48 @@ function startTallBoards() {
       fig.style.height = `${figRect.height + grow}px`;
       fig.classList.add('is-open');
       shots.style.setProperty('--win-h', `${winH}px`);
-      // Each screen scrolls to its own end; longer screens take longer, at the same pace.
-      imgs.forEach((img) => {
-        const travel = Math.max(0, img.getBoundingClientRect().height - winH);
-        const ms = reduceMotion.matches ? 0 : Math.min(4200, Math.max(900, travel * 3.2));
-        img.style.setProperty('--pan-dur', `${ms}ms`);
-        img.style.setProperty('--pan', `${-travel}px`);
-      });
+      travels = imgs.map((img) => Math.max(0, img.getBoundingClientRect().height - winH));
     };
     const close = () => {
       if (!fig.classList.contains('is-open')) return;
-      imgs.forEach((img) => {
-        img.style.setProperty('--pan-dur', reduceMotion.matches ? '0ms' : '600ms');
-        img.style.setProperty('--pan', '0px');
-      });
+      imgs.forEach((_, i) => setPan(i, 0, 600));
       shots.style.removeProperty('--win-h');
       fig.style.removeProperty('height');
       fig.classList.remove('is-open');
       gallery.classList.remove('is-peeking');
     };
+    // The wheel scrolls the screen under the pointer, like scrolling on the phone. A gesture that
+    // reaches the end of a screen stops there; a fresh gesture at the end moves the folder sideways.
+    let lastScreenWheel = 0;
+    wins.forEach((win, i) => {
+      win.addEventListener('wheel', (e) => {
+        if (!fig.closest('.card.is-active')) return;
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        if (!fig.classList.contains('is-open')) open();
+        if (!travels[i]) measure();
+        const next = Math.min(travels[i], Math.max(0, pans[i] + e.deltaY));
+        const now = e.timeStamp;
+        if (next === pans[i]) {
+          if (now - lastScreenWheel < 400) { e.preventDefault(); e.stopPropagation(); lastScreenWheel = now; }
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        lastScreenWheel = now;
+        setPan(i, next, 90);
+      }, { passive: false });
+    });
+    // Keyboard and touch have no wheel over a screen, so every screen scrolls to its end.
+    const revealAll = () => imgs.forEach((_, i) => setPan(i, travels[i], Math.min(4200, Math.max(900, travels[i] * 3.2))));
     fig.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') open(); });
     fig.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') close(); });
-    fig.addEventListener('focus', open);
+    fig.addEventListener('focus', () => { if (fig.matches(':focus-visible')) { open(); revealAll(); } });
     fig.addEventListener('blur', close);
     // Touch: tap toggles.
     fig.addEventListener('click', (e) => {
       if (e.pointerType === 'mouse') return;
-      fig.classList.contains('is-open') ? close() : open();
+      if (fig.classList.contains('is-open')) close();
+      else { open(); revealAll(); }
     });
   });
 }

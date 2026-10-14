@@ -8,6 +8,7 @@ status: complete
 cover: { src: /images/playmate-cover-v6.png, alt: PlayMate app screens, width: 1920, height: 1149 }
 description: 'PlayMate: a community-driven sports matchmaking iOS app. Case study with user interviews, moderated usability testing and information architecture.'
 ogImage: /og/playmate.jpg
+page: /projects/playmate/
 facts:
   - { label: Platform, value: iOS }
   - { label: Role, value: 'Product Designer (end-to-end UX/UI, solo)' }
@@ -36,46 +37,23 @@ gallery:
     screens: true
     tall: true
     items:
-      - { src: /images/playmate-final-home-1.webp, alt: 'PlayMate — Rate the game and past games', width: 283, height: 848 }
-      - { src: /images/playmate-final-home-2.webp, alt: 'PlayMate — Home dashboard', width: 284, height: 1039 }
-      - { src: /images/playmate-final-home-3.webp, alt: 'PlayMate — Game details', width: 284, height: 1294 }
-      - { src: /images/playmate-final-home-4.webp, alt: 'PlayMate — Find a match, list view', width: 284, height: 1199 }
-      - { src: /images/playmate-final-home-5.webp, alt: 'PlayMate — Find a match, map view', width: 284, height: 821 }
+      - { src: /images/playmate-final-home-1.webp, alt: 'PlayMate — Rate the game and past games', width: 283, height: 828 }
+      - { src: /images/playmate-final-home-2.webp, alt: 'PlayMate — Home dashboard', width: 284, height: 1018 }
+      - { src: /images/playmate-final-home-3.webp, alt: 'PlayMate — Game details', width: 284, height: 1282 }
+      - { src: /images/playmate-final-home-4.webp, alt: 'PlayMate — Find a match, list view', width: 284, height: 1187 }
+      - { src: /images/playmate-final-home-5.webp, alt: 'PlayMate — Find a match, map view', width: 284, height: 810 }
       - { src: /images/playmate-final-home-6.webp, alt: 'PlayMate — Create a game', width: 283, height: 1226 }
   - label: Final screens
     title: 'Friends, ratings and profile'
     screens: true
     tall: true
     items:
-      - { src: /images/playmate-final-profile-1.webp, alt: 'PlayMate — Friends and recent chats', width: 279, height: 1001 }
-      - { src: /images/playmate-final-profile-2.webp, alt: 'PlayMate — Post-game feedback', width: 279, height: 1498 }
-      - { src: /images/playmate-final-profile-3.webp, alt: 'PlayMate — Another player’s profile', width: 280, height: 1590 }
-      - { src: /images/playmate-final-profile-4.webp, alt: 'PlayMate — Your profile', width: 280, height: 1590 }
-      - { src: /images/playmate-final-profile-5.webp, alt: 'PlayMate — Settings', width: 279, height: 752 }
-      - { src: /images/playmate-final-profile-6.webp, alt: 'PlayMate — No-show penalty', width: 279, height: 1013 }
-details:
-  - label: Problem
-    text: People organise sports in WhatsApp threads and Facebook groups that weren’t built for it. Finding a partner, agreeing on a time and trusting a stranger to show up all break down.
-  - label: Hypothesis
-    text: The barrier isn’t motivation. It’s the friction of finding the right person and trusting them enough to show up.
-  - label: Research
-    title: 4 interviews · Berlin
-    points:
-      - 'Summer, the social performer: plays to find a tribe. The primary persona.'
-      - 'Daisy, the efficiency seeker: tired of logistics, cancellations and skill gaps.'
-  - label: Solution
-    text: Game rooms replace group chats. Profiles work as reputations, scheduling, cost-splitting and waitlists run themselves, and a no-show penalty keeps everyone accountable.
-  - label: Usability testing
-    title: 4 rounds · 20 participants each
-    stats:
-      - { value: 80%, issue: 'Round 1: didn’t know when to rate teammates', fix: The rating screen now opens when a game ends }
-      - { value: 75%, issue: 'Round 2: landed on Home with no context', fix: Added an onboarding flow }
-      - { value: 45%, issue: 'Round 3: wanted to try before signing up', fix: Added “Continue as guest” }
-  - label: Next
-    points:
-      - Filters for a growing list of unrated games
-      - Native iOS scroll cues instead of a custom one
-      - A header that collapses on scroll
+      - { src: /images/playmate-final-profile-1.webp, alt: 'PlayMate — Friends and recent chats', width: 279, height: 989 }
+      - { src: /images/playmate-final-profile-2.webp, alt: 'PlayMate — Post-game feedback', width: 279, height: 1478 }
+      - { src: /images/playmate-final-profile-3.webp, alt: 'PlayMate — Another player’s profile', width: 280, height: 1579 }
+      - { src: /images/playmate-final-profile-4.webp, alt: 'PlayMate — Your profile', width: 280, height: 1570 }
+      - { src: /images/playmate-final-profile-5.webp, alt: 'PlayMate — Settings', width: 279, height: 732 }
+      - { src: /images/playmate-final-profile-6.webp, alt: 'PlayMate — No-show penalty', width: 279, height: 993 }
 ---
 
 I designed PlayMate end to end, a community app that matches people for sports through game rooms instead of group chats.

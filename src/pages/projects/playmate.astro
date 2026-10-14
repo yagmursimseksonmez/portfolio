@@ -1,0 +1,446 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { person } from '../../data/person';
+
+const entry = await getEntry('projects', 'playmate');
+if (!entry) throw new Error('PlayMate entry missing');
+const d = entry.data;
+const url = 'https://yagmursimseksonmez.com/projects/playmate/';
+
+const meta = [
+  ['Role', 'Product Designer · solo'],
+  ['Time', '2026 · 3 months'],
+  ['Platform', 'iOS'],
+  ['Tools', 'Figma · Claude · Stitch'],
+];
+
+const personas = [
+  {
+    tag: 'Primary persona',
+    name: 'Summer',
+    kind: 'The social performer',
+    text: 'Plays to find her tribe and to fight social isolation. She wants a community she can rely on, not just a court booking.',
+    need: 'Needs a group that expects her to show up.',
+  },
+  {
+    tag: 'Secondary persona',
+    name: 'Daisy',
+    kind: 'The efficiency seeker',
+    text: 'Already plays regularly, but loses patience with logistics, last-minute cancellations and skill gaps.',
+    need: 'Needs games that run themselves.',
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: 'Set up your profile',
+    text: 'Pick your sports, set a skill level and say how you play. The profile is your reputation: reliability score and peer reviews build over time.',
+    img: { src: '/images/playmate-proto-1.webp', alt: 'PlayMate sign-up screen', w: 661, h: 1367 },
+  },
+  {
+    n: '02',
+    title: 'Find or create a game',
+    text: 'Browse open game rooms nearby by sport, level, time and cost. Join in one tap, or create a session. Scheduling, cost-splitting and waitlists run automatically.',
+    img: { src: '/images/playmate-proto-3.webp', alt: 'PlayMate discover screen with nearby games', w: 661, h: 1367 },
+  },
+  {
+    n: '03',
+    title: 'Play, rate, repeat',
+    text: 'After the game, rate teammates on reliability, passion, respect and communication. The better you show up, the easier it gets into the next game.',
+    img: { src: '/images/playmate-proto-4.webp', alt: 'PlayMate friends and playmates screen', w: 661, h: 1367 },
+  },
+];
+
+const palette = [
+  { name: 'Light blue', hex: '#AEC8FB', share: 35, role: 'Backgrounds' },
+  { name: 'Yellow', hex: '#FFE145', share: 30, role: 'Primary · CTA' },
+  { name: 'White', hex: '#FFFFFF', share: 15, role: 'Surfaces' },
+  { name: 'Blue', hex: '#3D57F5', share: 11, role: 'Navigation' },
+  { name: 'Pink', hex: '#F5A0C0', share: 6, role: 'Badges · alerts' },
+  { name: 'Dark navy', hex: '#1A1A3A', share: 3, role: 'Text · UI' },
+];
+
+const rounds = [
+  {
+    n: 'Round 1',
+    stage: 'Low-fidelity wireframes',
+    strip: [
+      { src: '/images/playmate-r1-01.webp', alt: 'PlayMate low-fidelity wireframe 1', w: 203, h: 526 },
+      { src: '/images/playmate-r1-02.webp', alt: 'PlayMate low-fidelity wireframe 2', w: 203, h: 570 },
+      { src: '/images/playmate-r1-03.webp', alt: 'PlayMate low-fidelity wireframe 3', w: 134, h: 557 },
+      { src: '/images/playmate-r1-04.webp', alt: 'PlayMate low-fidelity wireframe 4', w: 203, h: 557 },
+      { src: '/images/playmate-r1-05.webp', alt: 'PlayMate low-fidelity wireframe 5', w: 203, h: 594 },
+      { src: '/images/playmate-r1-06.webp', alt: 'PlayMate low-fidelity wireframe 6', w: 203, h: 731 },
+      { src: '/images/playmate-r1-07.webp', alt: 'PlayMate low-fidelity wireframe 7', w: 203, h: 648 },
+      { src: '/images/playmate-r1-08.webp', alt: 'PlayMate low-fidelity wireframe 8', w: 203, h: 977 },
+      { src: '/images/playmate-r1-09.webp', alt: 'PlayMate low-fidelity wireframe 9', w: 212, h: 522 },
+    ],
+    findings: [
+      [80, 'Didn’t know when or how to rate teammates after a game', 'The rating screen now opens automatically when a game ends'],
+      [70, 'Cost-splitting was unclear before joining a paid game', 'Costs split automatically and show up front; cash or PayPal'],
+      [60, 'Missed the Create action in the tab bar', 'Create button enlarged and raised above the bar'],
+      [55, 'Unclear whether a game needed a minimum headcount', 'Creators can set a minimum and maximum player count'],
+      [50, 'Expected some consequence for a no-show', 'Automatic 1-star reliability penalty, shown on the profile'],
+      [45, 'Wanted to book the venue, not just see its name', 'Tapping a venue opens its own booking app'],
+      [40, 'Asked for a back-up plan for last-minute cancellations', 'Waitlist added; extra players fill cancellations automatically'],
+    ],
+    insight: '80% had no clear moment to rate a teammate. The loudest signal of round one, so the rating screen now finds the player.',
+  },
+  {
+    n: 'Round 2',
+    stage: 'High fidelity, version 1',
+    strip: [
+      { src: '/images/playmate-r2-01.webp', alt: 'PlayMate high-fidelity version 1 screen 1', w: 163, h: 617 },
+      { src: '/images/playmate-r2-02.webp', alt: 'PlayMate high-fidelity version 1 screen 2', w: 164, h: 747 },
+      { src: '/images/playmate-r2-03.webp', alt: 'PlayMate high-fidelity version 1 screen 3', w: 164, h: 691 },
+      { src: '/images/playmate-r2-04.webp', alt: 'PlayMate high-fidelity version 1 screen 4', w: 160, h: 374 },
+      { src: '/images/playmate-r2-05.webp', alt: 'PlayMate high-fidelity version 1 screen 5', w: 161, h: 717 },
+      { src: '/images/playmate-r2-06.webp', alt: 'PlayMate high-fidelity version 1 screen 6', w: 159, h: 495 },
+      { src: '/images/playmate-r2-07.webp', alt: 'PlayMate high-fidelity version 1 screen 7', w: 158, h: 698 },
+      { src: '/images/playmate-r2-08.webp', alt: 'PlayMate high-fidelity version 1 screen 8', w: 161, h: 611 },
+      { src: '/images/playmate-r2-09.webp', alt: 'PlayMate high-fidelity version 1 screen 9', w: 160, h: 906 },
+      { src: '/images/playmate-r2-10.webp', alt: 'PlayMate high-fidelity version 1 screen 10', w: 160, h: 940 },
+      { src: '/images/playmate-r2-11.webp', alt: 'PlayMate high-fidelity version 1 screen 11', w: 159, h: 940 },
+    ],
+    findings: [
+      [75, 'Landed on Home with no first-time context', 'Onboarding flow designed and added'],
+      [65, 'Cards blended into the background', 'Contrast between cards and background increased'],
+      [60, 'The map scrolled away with the list', 'Map stays fixed while the list scrolls'],
+      [55, 'Couldn’t find where a no-show would appear', 'Clear entry point added; incident log recoloured from yellow to red'],
+      [50, 'Map pins were hard to read at a glance', 'Pins redrawn for readability'],
+      [45, 'Wanted actions when tapping another player', 'Add friend, message and invite in one menu'],
+      [45, 'Button sizes were inconsistent', 'Button heights standardised across the app'],
+      [40, 'The hot pink read as visual noise', 'Palette reduced for consistency'],
+      [35, 'Square corners felt dated and off-brand', 'Rounded corners across components'],
+      [30, 'Expected Settings inside Profile', 'Settings moved into a profile overlay'],
+      [25, 'Confused by “Shooter”-style position tags', 'Position tags removed from player cards'],
+    ],
+    insight: '75% dropped into Home with zero context. A first-time flow wasn’t optional; it led round three.',
+  },
+  {
+    n: 'Round 3',
+    stage: 'High fidelity, version 2',
+    screens: [
+      { src: '/images/playmate-r3-1.webp', alt: 'PlayMate round 3 screen', w: 579, h: 1198 },
+      { src: '/images/playmate-r3-2.webp', alt: 'PlayMate round 3 screen', w: 579, h: 1198 },
+      { src: '/videos/playmate-r3-video.mp4', alt: 'PlayMate round 3 walkthrough', w: 450, h: 942 },
+      { src: '/images/playmate-r3-3.webp', alt: 'PlayMate round 3 screen', w: 579, h: 1198 },
+      { src: '/images/playmate-r3-4.webp', alt: 'PlayMate round 3 screen', w: 579, h: 1198 },
+    ],
+    findings: [
+      [60, 'Bright background caused visible eye strain', 'Background toned down across all screens'],
+      [50, 'Couldn’t tell past games from active ones', 'Past game cards restyled in greyscale'],
+      [45, 'Wanted to try the app before signing up', '“Continue as guest” added to onboarding'],
+      [40, 'Create Game felt like a jarring full-page jump', 'Create Game now opens as an overlay'],
+      [40, 'Couldn’t go back to a previous onboarding step', 'Circular pagination to move freely between steps'],
+      [35, 'The “Welcome” text felt repetitive and oversized', 'Welcome text scaled down'],
+      [35, 'Missed the social-proof number on sign-up', 'Social-proof number enlarged'],
+      [30, 'Scanned onboarding copy without reading it', 'Copy cut to short, slogan-style lines'],
+      [30, 'Bright yellow was tiring over a longer session', 'After a colour-accessibility test, the yellow was softened'],
+      [25, 'Assumed an empty input was already active', 'Inactive inputs now use a very light grey stroke'],
+      [25, 'Grouped “Past Games” with the wrong card', 'Spacing corrected so Past Games sits with its section'],
+    ],
+    insight: '45% asked to try before signing up. Sign-up friction was blocking discovery, so guests can now look around first.',
+  },
+];
+
+// Screens in a strip are sized relative to the typical screen, so a narrow drawer stays narrow.
+const medianWidth = (items: { w: number }[]) => [...items].map((m) => m.w).sort((a, b) => a - b)[Math.floor(items.length / 2)];
+
+const finalSets = [
+  ['Onboarding', 'onboarding', ['More than just a game', 'Find your sports circle', 'Explore the neighbourhood', 'Play with the right match', 'Sign up', 'Log in']],
+  ['Home and game flow', 'home', ['Rate the game and past games', 'Home dashboard', 'Game details', 'Find a match, list', 'Find a match, map', 'Create a game']],
+  ['Friends, ratings and profile', 'profile', ['Friends and chats', 'Post-game feedback', 'Another player’s profile', 'Your profile', 'Settings', 'No-show penalty']],
+].map(([title, key, alts]) => ({
+  title,
+  screens: (alts as string[]).map((alt, i) => ({ src: `/images/playmate-final-${key}-${i + 1}.webp`, alt: `PlayMate — ${alt}` })),
+}));
+
+const ia = [
+  {
+    tag: 'Before sign-up',
+    title: 'Value first',
+    items: ['More than just a game', 'Find your sports circle', 'Explore the neighbourhood', 'Play with the right match', 'Sign up, log in or continue as a guest'],
+  },
+  {
+    tag: 'After sign-up',
+    title: 'Five routes',
+    items: ['Home: upcoming matches and unrated games', 'Discover: map-based search with filters', 'Create Game: opens as an overlay', 'Friends: chats, friend list, teammate feedback', 'Profile: trophies, ratings, history, no-show log'],
+  },
+];
+
+const next = [
+  [50, 'Lost track of past games once the unrated list grew', 'Explore filters, “rate later” swipes and a completion badge, then track task success as the list grows.'],
+  [35, 'Called the scroll cue “webby”, not native', 'Swap the custom indicator for iOS patterns like peeking cards or pagination dots.'],
+  [30, 'Questioned why the logo took space on Home', 'Test a header that collapses on scroll and measure how people rate the extra room.'],
+];
+---
+<Base
+  title="PlayMate case study — Yagmur Şimşek Sönmez"
+  description={d.description}
+  image={d.ogImage}
+  scroll
+  fonts={['Epilogue:wght@800']}
+  jsonLd={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: 'PlayMate',
+      description: d.description,
+      url,
+      inLanguage: 'en',
+      author: { '@id': person['@id'] },
+    },
+  ]}
+>
+  <div class="case-bar">
+    <a class="case-back" href="/#playmate">← PlayMate folder</a>
+    <span class="case-bar-title">PlayMate · case study</span>
+    <a class="case-back" href="mailto:n.yagmur.simsek@gmail.com">Contact</a>
+    <span class="case-progress" data-progress aria-hidden="true"></span>
+  </div>
+
+  <main class="case">
+    <header class="case-hero">
+      <p class="case-kicker">Case study · iOS</p>
+      <h1>PlayMate</h1>
+      <p class="case-lede">Organising sport shouldn’t feel like a second job. A community app that turns scattered group chats into game rooms people can trust.</p>
+      <dl class="case-meta">
+        {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+      </dl>
+      {d.cover && <img class="case-cover" src={d.cover.src} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} />}
+    </header>
+
+    <section class="case-sec" aria-labelledby="problem">
+      <p class="case-num">01</p>
+      <h2 id="problem">The problem</h2>
+      <div class="case-split">
+        <div class="case-prose">
+          <p class="case-big">People want to play sport regularly, but the tools they use to organise it weren’t built for it.</p>
+          <p>WhatsApp threads and Facebook groups break down at every step: finding a partner, agreeing on a time and place, and trusting a stranger enough to show up.</p>
+        </div>
+        <blockquote class="case-quote">
+          <p>“The organiser always ends up spending hours managing polls, chasing confirmations, handling last-minute cancellations. It kills the fun.”</p>
+          <footer>Bajo · interview participant</footer>
+        </blockquote>
+      </div>
+      <div class="case-callout">
+        <span>Hypothesis</span>
+        <p>The barrier isn’t motivation. It’s the friction of finding the right person and trusting them enough to show up.</p>
+      </div>
+    </section>
+
+    <section class="case-sec" aria-labelledby="research">
+      <p class="case-num">02</p>
+      <h2 id="research">Research</h2>
+      <p class="case-intro"><strong>4 semi-structured interviews</strong> with active players in Berlin. Everyone already had a routine; everyone struggled with coordination, skill matching or trust.</p>
+      <div class="case-personas">
+        {personas.map((p) => (
+          <article class="case-persona">
+            <span class="case-tag">{p.tag}</span>
+            <h3>{p.name}<small>{p.kind}</small></h3>
+            <p>{p.text}</p>
+            <p class="case-need">{p.need}</p>
+          </article>
+        ))}
+      </div>
+      <div class="case-callout">
+        <span>Key insight</span>
+        <p>Newcomers play more regularly when they feel committed to a group, yet hesitate because they don’t trust strangers. A map-based game room removes more friction than any group chat.</p>
+      </div>
+    </section>
+
+    <section class="case-sec" aria-labelledby="solution">
+      <p class="case-num">03</p>
+      <h2 id="solution">The solution</h2>
+      <p class="case-intro">Scattered chats become <strong>structured game rooms</strong>: profiles double as reputations, logistics run themselves, and a no-show penalty keeps everyone accountable.</p>
+      <ol class="case-steps">
+        {steps.map((s) => (
+          <li class="case-step">
+            <img src={s.img.src} alt={s.img.alt} width={s.img.w} height={s.img.h} loading="lazy" decoding="async" />
+            <div>
+              <span class="case-step-n">{s.n}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="case-sec" aria-labelledby="design">
+      <p class="case-num">04</p>
+      <h2 id="design">Design decisions</h2>
+      <p class="case-intro">A <strong>vibrant neo-brutalist</strong> look for an energetic, community-driven product.</p>
+      <div class="case-cards3">
+        <article><span class="case-tag">Visual style</span><p>High contrast, thick black strokes and zero-blur drop shadows for a retro pop-art feel.</p></article>
+        <article><span class="case-tag">UX strategy</span><p>Gamified interactions and playful isometric illustrations keep the energy up.</p></article>
+        <article><span class="case-tag">Layout</span><p>Modular cards for fast scanning and a clear visual hierarchy.</p></article>
+      </div>
+
+      <h3 class="case-h3">Colour, by share of the interface</h3>
+      <div class="case-palette" role="list">
+        {palette.map((c) => (
+          <div role="listitem" style={`--c:${c.hex};flex:${c.share}`} class:list={['case-swatch', { light: ['#FFFFFF', '#FFE145', '#AEC8FB', '#F5A0C0'].includes(c.hex) }]}>
+            <strong>{c.share}%</strong>
+            <span>{c.name}<br />{c.hex}</span>
+          </div>
+        ))}
+      </div>
+      <ul class="case-palette-legend">
+        {palette.map((c) => <li><i style={`--c:${c.hex}`}></i>{c.name}<span>{c.role}</span></li>)}
+      </ul>
+
+      <h3 class="case-h3">Type</h3>
+      <div class="case-type">
+        <div class="case-type-card">
+          <span class="case-tag">Epilogue · titles</span>
+          <p class="case-epilogue">Welcome back, Alex!</p>
+          <p class="case-type-note">700 · 800 · 900 — app name, screen headings, section titles</p>
+        </div>
+        <div class="case-type-card">
+          <span class="case-tag">Inter · body and UI</span>
+          <p class="case-inter">Sunset Park Courts · Sat 7pm · 6 players joined</p>
+          <p class="case-type-note">400 · 500 · 600 · 700 — body, buttons, labels, captions</p>
+        </div>
+        <div class="case-type-card case-brand">
+          <img src="/images/playmate-logo.webp" alt="PlayMate logo" width="198" height="198" loading="lazy" />
+          <img src="/images/playmate-nav.webp" alt="PlayMate app icon in the iOS dock" width="1053" height="349" loading="lazy" />
+          <img src="/images/playmate-buttons.webp" alt="PlayMate button styles" width="390" height="172" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section class="case-sec" aria-labelledby="testing">
+      <p class="case-num">05</p>
+      <h2 id="testing">Usability testing</h2>
+      <div class="case-stats">
+        <div><strong>4</strong><span>moderated rounds</span></div>
+        <div><strong>20</strong><span>participants per round</span></div>
+        <div><strong>4</strong><span>core tasks: create, join, rate, review</span></div>
+      </div>
+      <p class="case-intro">Findings were clustered after every round and fed straight into the next build. Here are the four strongest signals from each.</p>
+
+      {rounds.map((r) => (
+        <article class="case-round">
+          <header><span class="case-tag">{r.n} · participants=20</span><h3>{r.stage}</h3></header>
+          {r.strip && (
+            <div class="case-strip" data-strip>
+              <div class="case-strip-track" data-strip-track>
+                {r.strip.map((m) => (
+                  <img class="case-shot" style={`--k:${(m.w / medianWidth(r.strip)).toFixed(3)}`} src={m.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" />
+                ))}
+              </div>
+              <button class="case-strip-btn prev" type="button" aria-label="Previous screens" data-strip-prev>←</button>
+              <button class="case-strip-btn next" type="button" aria-label="Next screens" data-strip-next>→</button>
+            </div>
+          )}
+          {r.screens && (
+            <div class="case-phones">
+              {r.screens.map((m) =>
+                m.src.endsWith('.mp4') ? (
+                  <video src={m.src} width={m.w} height={m.h} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video>
+                ) : (
+                  <img src={m.src} alt={m.alt} width={m.w} height={m.h} loading="lazy" decoding="async" />
+                ),
+              )}
+            </div>
+          )}
+          <p class="case-findings-head">{r.findings.length} findings, strongest first</p>
+          <ul class="case-findings">
+            {r.findings.map(([pct, issue, fix]) => (
+              <li>
+                <span class="case-pct">{pct}%</span>
+                <span class="case-bar-track"><span style={`width:${pct}%`}></span></span>
+                <p class="case-issue">{issue}</p>
+                <p class="case-fix">{fix}</p>
+              </li>
+            ))}
+          </ul>
+          <p class="case-insight">{r.insight}</p>
+        </article>
+      ))}
+
+      <article class="case-round">
+        <header><span class="case-tag">Round 4 · final · participants=20</span><h3>Task tests plus a heuristic pass</h3></header>
+        <p class="case-intro">The last round paired task-based testing with a structured heuristic review across four themes. These are the final screens.</p>
+        {finalSets.map((set) => (
+          <div class="case-final-set">
+            <p class="case-findings-head">{set.title}</p>
+            <div class="case-final-row">
+              {set.screens.map((m) => <img class="case-shot" src={m.src} alt={m.alt} loading="lazy" decoding="async" />)}
+            </div>
+          </div>
+        ))}
+      </article>
+    </section>
+
+    <section class="case-sec" aria-labelledby="ia">
+      <p class="case-num">06</p>
+      <h2 id="ia">Information architecture</h2>
+      <div class="case-ia">
+        {ia.map((col) => (
+          <article>
+            <span class="case-tag">{col.tag}</span>
+            <h3>{col.title}</h3>
+            <ol>{col.items.map((it) => <li>{it}</li>)}</ol>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="case-sec" aria-labelledby="next">
+      <p class="case-num">07</p>
+      <h2 id="next">What I’d do differently</h2>
+      <p class="case-intro">The test rounds fixed the biggest blockers. Three smaller signals kept coming back; each deserves its own sprint.</p>
+      <div class="case-cards3">
+        {next.map(([pct, finding, idea]) => (
+          <article>
+            <strong class="case-card-pct">{pct}%</strong>
+            <p class="case-card-finding">{finding}</p>
+            <p>{idea}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="case-sec case-end" aria-labelledby="end">
+      <h2 id="end" class="sr-only">Conclusion</h2>
+      <p class="case-big">PlayMate answers three human problems: finding the right partner, coordinating without chaos, and trusting a stranger before the game.</p>
+      <p class="case-closing">The result makes playing feel like playing again.</p>
+      <div class="case-endlinks">
+        <a class="link" href="/#playmate"><h3>Back to the folder</h3></a>
+        <a class="link primary" href="mailto:n.yagmur.simsek@gmail.com"><h3>Get in touch</h3></a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Reading progress in the sticky bar.
+    const bar = document.querySelector<HTMLElement>('[data-progress]');
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (bar) bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    };
+    addEventListener('scroll', update, { passive: true });
+    update();
+
+    // Screen strips: arrows page through the screens; they fade out at either end.
+    document.querySelectorAll<HTMLElement>('[data-strip]').forEach((strip) => {
+      const track = strip.querySelector<HTMLElement>('[data-strip-track]')!;
+      const prev = strip.querySelector<HTMLButtonElement>('[data-strip-prev]')!;
+      const next = strip.querySelector<HTMLButtonElement>('[data-strip-next]')!;
+      const sync = () => {
+        prev.disabled = track.scrollLeft < 4;
+        next.disabled = track.scrollLeft > track.scrollWidth - track.clientWidth - 4;
+      };
+      const page = (dir: number) => track.scrollBy({ left: dir * track.clientWidth * 0.8, behavior: 'smooth' });
+      prev.addEventListener('click', () => page(-1));
+      next.addEventListener('click', () => page(1));
+      track.addEventListener('scroll', sync, { passive: true });
+      sync();
+    });
+  </script>
+</Base>
