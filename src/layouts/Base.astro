@@ -16,7 +16,7 @@ interface Props {
 const { title, description = '', image = '/og.png', noindex = false, jsonLd = [], intro = false, scroll = false, fonts = [] } = Astro.props;
 const fontQuery = ['Inter:wght@400;500;700', ...fonts].map((f) => `family=${f.replace(/ /g, '+')}`).join('&');
 
-// While the site is staged on a preview host, the deploy sets PUBLIC_NOINDEX=true so it never competes with the live site.
+// For a preview host, build with PUBLIC_NOINDEX=true so it never competes with the live site.
 const stagedOnly = import.meta.env.PUBLIC_NOINDEX === 'true';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(image, Astro.site).href;
