@@ -375,7 +375,8 @@ nav h3 { white-space: nowrap; }
   padding-inline: var(--pad);
   transition: transform var(--time-cards) var(--ease);
 }
-.gallery:not(.is-focused) .card:hover .work { transform: translateY(-20px); }
+.gallery:not(.is-focused) .work { transform: translateY(var(--rest-shift, 0px)); }
+.gallery:not(.is-focused) .card:hover .work { transform: translateY(calc(var(--rest-shift, 0px) - 20px)); }
 .card.is-active .work { transform: none; }
 .card.is-back .work { transform: translateY(var(--tab)); }
 .work figure {

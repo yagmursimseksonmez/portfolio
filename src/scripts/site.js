@@ -258,11 +258,45 @@ let hero = null;
 
 const tabSize = () => parseFloat(getComputedStyle(gallery).getPropertyValue('--tab')) || 60;
 
+// Folder pitch in the resting stack is the tab plus this much. A sheet's content starts 40px
+// below its top edge, so only a thin sliver of each strip shows between the folders.
+const SLIVER = 16;
+const REST_TOP = 40; // padding above a sheet's content
+const REVEAL = 36; // strip of content shown in each band
+
+// The resting folders are tilted back (CSS: rotateX(-20deg) about the top edge) and seen through the
+// stage's 1400px perspective, so a point v px below a folder's top edge lands at this screen y, and back.
+const PERSPECTIVE = 1400;
+const TILT = (20 * Math.PI) / 180;
+const restingY = (cardY, v) => {
+  const cy = innerHeight / 2;
+  return cy + ((cardY + v * Math.cos(TILT) - cy) * PERSPECTIVE) / (PERSPECTIVE + v * Math.sin(TILT));
+};
+const restingV = (cardY, y) => {
+  const cy = innerHeight / 2;
+  const c = cardY - cy;
+  const d = y - cy;
+  return (PERSPECTIVE * (d - c)) / (PERSPECTIVE * Math.cos(TILT) - d * Math.sin(TILT));
+};
+
 function measureGallery() {
   const origin = header.getBoundingClientRect().bottom;
-  const peek = Math.max(tabSize(), (innerHeight - origin) / count);
+  const tab = tabSize();
+  const peek = Math.max(tab, Math.min((innerHeight - origin) / count, tab + SLIVER));
   gallery.style.setProperty('--origin', `${origin}px`);
   gallery.style.setProperty('--peek', `${peek}px`);
+  // In the resting stack every folder shows the same thin strip of its content: its top edge ends
+  // REVEAL px above the folder in front, or above the bottom of the screen for the front folder.
+  cards.forEach((card, k) => {
+    const work = card.querySelector('.work');
+    const fig = work?.querySelector('figure');
+    // Where the strip starts inside its sheet. `.work` is transformed, so it is its own offset parent.
+    const top = work && fig ? work.offsetTop + fig.offsetTop : REST_TOP;
+    const target = k === count - 1 ? innerHeight - REVEAL : restingY(origin + (k + 1) * peek, tab) - REVEAL;
+    // Negative when a tall window centres the strip lower than the band: pull it up, but never past the sheet's top edge.
+    const shift = Math.max(8 - top, restingV(origin + k * peek, target) - tab - top);
+    card.style.setProperty('--rest-shift', `${shift}px`);
+  });
 }
 
 function cardY(k, next) {
