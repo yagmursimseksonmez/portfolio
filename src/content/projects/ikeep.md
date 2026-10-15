@@ -16,6 +16,17 @@ facts:
   - { label: Tools, value: Figma · Claude Design }
 link: { label: View on the App Store, href: 'https://apps.apple.com/app/id6502346775' }
 kicker: Everything you copy, one tap away.
+hero:
+  kicker: iKeep · iOS · live on the App Store
+  title: Everything you copy, one tap away.
+  lede: iKeep is a vault for the values you type again and again, like Wi-Fi passwords, door codes and ID numbers. Save them once, keep them hidden, copy them when you need them.
+  points:
+    - { title: One card per value, text: 'Every item is a colour-coded card with its value ready to copy or share.' }
+    - { title: Hidden until you need it, text: 'Values show as dots. Tap the eye to reveal one, or hide them all with one setting.' }
+    - { title: Yours to organise, text: 'Create categories with your own icon and colour, favourite what you use most, sort and search.' }
+    - { title: Private by default, text: 'Biometric lock, values kept in the iOS Keychain, and iCloud sync only if you turn it on.' }
+  chips: [iOS, Light and dark, iCloud sync]
+  video: { src: /videos/ikeep-demo.mp4, width: 786, height: 1704, label: 'iKeep walkthrough: values hidden as dots and revealed with the eye, adding a new item from the plus button, then switching to dark mode in settings' }
 compare:
   before: { src: /images/ikeep-before-v4.png, alt: iKeep — previous design, width: 1920, height: 1440 }
   after: { src: /images/ikeep-after-v6.webp, alt: iKeep — redesigned, width: 1920, height: 1440 }
