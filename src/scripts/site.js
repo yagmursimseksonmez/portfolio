@@ -553,6 +553,22 @@ function startTallBoards() {
   });
 }
 
+// ------------------------------------------------------- scrolling screens
+// A wheel over a phone scrolls that screen. Once it reaches an end, a fresh gesture moves the folder sideways again.
+function startScrollScreens() {
+  document.querySelectorAll('.device-scroll').forEach((win) => {
+    let last = 0;
+    win.addEventListener('wheel', (e) => {
+      if (!win.closest('.card.is-active')) return;
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = win.scrollHeight - win.clientHeight;
+      const canScroll = (e.deltaY > 0 && win.scrollTop < max - 0.5) || (e.deltaY < 0 && win.scrollTop > 0.5);
+      if (canScroll) { last = e.timeStamp; e.stopPropagation(); return; }
+      if (e.timeStamp - last < 400) { e.preventDefault(); e.stopPropagation(); last = e.timeStamp; }
+    }, { passive: false });
+  });
+}
+
 // --------------------------------------------------------- "See more" panel
 function setDetails(panel, open) {
   if (!panel) return;
@@ -724,6 +740,7 @@ startContact();
 startGallery();
 startCompare();
 startTallBoards();
+startScrollScreens();
 startDetails();
 startTimeline();
 playIntro();

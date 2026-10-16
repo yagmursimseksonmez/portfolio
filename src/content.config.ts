@@ -79,6 +79,8 @@ const projects = defineCollection({
           screens: z.boolean().default(false),
           // Like `screens`, but every screen sits inside an iPhone frame.
           device: z.boolean().default(false),
+          // With `device`: screens taller than the frame scroll inside it, under the visitor's own wheel or finger.
+          scroll: z.boolean().default(false),
           // A text board told in STAR beats (Situation, Task, Action, Result) instead of images.
           beats: z
             .array(

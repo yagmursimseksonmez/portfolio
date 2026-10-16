@@ -23,37 +23,38 @@ gallery:
       - { src: /images/playmate-proto-3.webp, alt: PlayMate discover, width: 661, height: 1367 }
       - { src: /images/playmate-proto-4.webp, alt: PlayMate friends, width: 661, height: 1367 }
   - label: Final screens
-    title: 'Onboarding'
-    screens: true
+    title: 'Onboarding and sign in'
+    device: true
+    scroll: true
     items:
-      - { src: /images/playmate-final-onboarding-1.webp, alt: 'PlayMate — Onboarding: More than just a game', width: 283, height: 615 }
-      - { src: /images/playmate-final-onboarding-2.webp, alt: 'PlayMate — Onboarding: Find your sports circle', width: 284, height: 615 }
-      - { src: /images/playmate-final-onboarding-3.webp, alt: 'PlayMate — Onboarding: Explore the neighbourhood', width: 284, height: 615 }
-      - { src: /images/playmate-final-onboarding-4.webp, alt: 'PlayMate — Onboarding: Play with the right match', width: 284, height: 615 }
-      - { src: /images/playmate-final-onboarding-5.webp, alt: 'PlayMate — Sign up', width: 284, height: 615 }
-      - { src: /images/playmate-final-onboarding-6.webp, alt: 'PlayMate — Log in', width: 283, height: 615 }
+      - { src: /images/playmate-app-onboarding-1.webp, alt: 'PlayMate onboarding: More than just a game', width: 402, height: 874 }
+      - { src: /images/playmate-app-onboarding-2.webp, alt: 'PlayMate onboarding: Find your sports circle', width: 402, height: 874 }
+      - { src: /images/playmate-app-onboarding-3.webp, alt: 'PlayMate onboarding: Explore the neighborhood', width: 402, height: 874 }
+      - { src: /images/playmate-app-onboarding-4.webp, alt: 'PlayMate onboarding: Play with the right match', width: 402, height: 874 }
+      - { src: /images/playmate-app-onboarding-5.webp, alt: 'PlayMate sign up', width: 402, height: 874 }
+      - { src: /images/playmate-app-onboarding-6.webp, alt: 'PlayMate log in', width: 402, height: 874 }
   - label: Final screens
     title: 'Home and game flow'
-    screens: true
-    tall: true
+    device: true
+    scroll: true
     items:
-      - { src: /images/playmate-final-home-1.webp, alt: 'PlayMate — Rate the game and past games', width: 283, height: 828 }
-      - { src: /images/playmate-final-home-2.webp, alt: 'PlayMate — Home dashboard', width: 284, height: 1018 }
-      - { src: /images/playmate-final-home-3.webp, alt: 'PlayMate — Game details', width: 284, height: 1282 }
-      - { src: /images/playmate-final-home-4.webp, alt: 'PlayMate — Find a match, list view', width: 284, height: 1187 }
-      - { src: /images/playmate-final-home-5.webp, alt: 'PlayMate — Find a match, map view', width: 284, height: 810 }
-      - { src: /images/playmate-final-home-6.webp, alt: 'PlayMate — Create a game', width: 283, height: 1226 }
+      - { src: /images/playmate-app-home-1.webp, alt: 'PlayMate home dashboard', width: 402, height: 1466 }
+      - { src: /images/playmate-app-home-2.webp, alt: 'PlayMate Find a Match, list view', width: 402, height: 1704 }
+      - { src: /images/playmate-app-home-3.webp, alt: 'PlayMate Find a Match, map view', width: 402, height: 1167 }
+      - { src: /images/playmate-app-home-4.webp, alt: 'PlayMate game details', width: 402, height: 1990 }
+      - { src: /images/playmate-app-home-5.webp, alt: 'PlayMate create a game', width: 402, height: 1742 }
+      - { src: /images/playmate-app-home-6.webp, alt: 'PlayMate past games and games to rate', width: 402, height: 1205 }
   - label: Final screens
     title: 'Friends, ratings and profile'
-    screens: true
-    tall: true
+    device: true
+    scroll: true
     items:
-      - { src: /images/playmate-final-profile-1.webp, alt: 'PlayMate — Friends and recent chats', width: 279, height: 989 }
-      - { src: /images/playmate-final-profile-2.webp, alt: 'PlayMate — Post-game feedback', width: 279, height: 1478 }
-      - { src: /images/playmate-final-profile-3.webp, alt: 'PlayMate — Another player’s profile', width: 280, height: 1579 }
-      - { src: /images/playmate-final-profile-4.webp, alt: 'PlayMate — Your profile', width: 280, height: 1570 }
-      - { src: /images/playmate-final-profile-5.webp, alt: 'PlayMate — Settings', width: 279, height: 732 }
-      - { src: /images/playmate-final-profile-6.webp, alt: 'PlayMate — No-show penalty', width: 279, height: 993 }
+      - { src: /images/playmate-app-social-1.webp, alt: 'PlayMate friends and recent chats', width: 402, height: 1442 }
+      - { src: /images/playmate-app-social-2.webp, alt: 'PlayMate post-game feedback', width: 402, height: 1968 }
+      - { src: /images/playmate-app-social-3.webp, alt: 'PlayMate another player’s profile', width: 351, height: 2000 }
+      - { src: /images/playmate-app-social-4.webp, alt: 'PlayMate your profile', width: 351, height: 2000 }
+      - { src: /images/playmate-app-social-5.webp, alt: 'PlayMate settings', width: 402, height: 1084 }
+      - { src: /images/playmate-app-social-6.webp, alt: 'PlayMate no-show penalty', width: 402, height: 1136 }
 ---
 
 I designed PlayMate end to end, a community app that matches people for sports through game rooms instead of group chats.
