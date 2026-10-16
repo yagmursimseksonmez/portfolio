@@ -16,12 +16,9 @@ facts:
 gallery:
   - label: Prototype
     title: Onboarding to game room
+    device: true
     items:
-      - { src: /images/playmate-proto-1.webp, alt: PlayMate onboarding, width: 661, height: 1367 }
-      - { src: /images/playmate-proto-2.webp, alt: PlayMate dashboard, width: 661, height: 1367 }
-      - { src: /videos/playmate-proto-ss.mp4, alt: PlayMate prototype walkthrough, width: 450, height: 942 }
-      - { src: /images/playmate-proto-3.webp, alt: PlayMate discover, width: 661, height: 1367 }
-      - { src: /images/playmate-proto-4.webp, alt: PlayMate friends, width: 661, height: 1367 }
+      - { src: /videos/playmate-prototype.mp4, alt: 'PlayMate prototype walkthrough: onboarding, sign up, finding and joining a game, creating a game, friends, profile, settings and the no-show penalty', width: 804, height: 1748 }
   - label: Final screens
     title: 'Onboarding and sign in'
     device: true

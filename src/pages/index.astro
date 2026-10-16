@@ -241,7 +241,9 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                           <div><h4>{g.label}</h4><h3>{g.title}</h3></div>
                           <div class="board-shots">
                             {(g.items ?? [{ src: g.src!, alt: g.alt ?? '', width: g.width, height: g.height }]).map((m) =>
-                              m.src.endsWith('.mp4') ? (
+                              m.src.endsWith('.mp4') && g.device ? (
+                                <div class="device"><video src={m.src} width={m.width} height={m.height} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video></div>
+                              ) : m.src.endsWith('.mp4') ? (
                                 <video class="shot-video" src={m.src} width={m.width} height={m.height} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video>
                               ) : g.device && g.items ? (
                                 g.scroll ? (
