@@ -16,9 +16,12 @@ facts:
 gallery:
   - label: Prototype
     title: Onboarding to game room
-    device: true
     items:
-      - { src: /videos/playmate-prototype.mp4, alt: 'PlayMate prototype walkthrough: onboarding, sign up, finding and joining a game, creating a game, friends, profile, settings and the no-show penalty', width: 804, height: 1748 }
+      - { src: /images/playmate-proto-1.webp, alt: PlayMate onboarding, width: 661, height: 1367 }
+      - { src: /images/playmate-proto-2.webp, alt: PlayMate dashboard, width: 661, height: 1367 }
+      - { src: /videos/playmate-proto-ss.mp4, alt: PlayMate prototype walkthrough, width: 450, height: 942 }
+      - { src: /images/playmate-proto-3.webp, alt: PlayMate discover, width: 661, height: 1367 }
+      - { src: /images/playmate-proto-4.webp, alt: PlayMate friends, width: 661, height: 1367 }
   - label: Final screens
     title: 'Onboarding and sign in'
     device: true
@@ -37,7 +40,7 @@ gallery:
     items:
       - { src: /images/playmate-app-home-1.webp, alt: 'PlayMate home dashboard', width: 402, height: 1285, head: { src: /images/playmate-app-home-1-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-1-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
       - { src: /images/playmate-app-home-2.webp, alt: 'PlayMate Find a Match, list view', width: 402, height: 1523, head: { src: /images/playmate-app-home-2-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-2-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
-      - { src: /images/playmate-app-home-3.webp, alt: 'PlayMate Find a Match, map view', width: 402, height: 988, head: { src: /images/playmate-app-home-3-head.webp, alt: '', width: 402, height: 100 }, foot: { src: /images/playmate-app-home-3-foot.webp, alt: '', width: 402, height: 116, nav: 79 } }
+      - { src: /images/playmate-app-home-3.webp, alt: 'PlayMate Find a Match, map view', width: 402, height: 874 }
       - { src: /images/playmate-app-home-4.webp, alt: 'PlayMate game details', width: 402, height: 1658, head: { src: /images/playmate-app-home-4-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-4-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
       - { src: /images/playmate-app-home-5.webp, alt: 'PlayMate create a game', width: 402, height: 1742 }
       - { src: /images/playmate-app-home-6.webp, alt: 'PlayMate past games and games to rate', width: 402, height: 1024, head: { src: /images/playmate-app-home-6-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-6-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
