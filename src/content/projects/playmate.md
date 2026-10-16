@@ -13,7 +13,24 @@ facts:
   - { label: Platform, value: iOS }
   - { label: Role, value: 'Product Designer (end-to-end UX/UI, solo)' }
   - { label: Tools, value: Figma · Claude · Stitch }
+hero:
+  kicker: PlayMate · iOS · community sports app
+  title: Find the right people to play with.
+  lede: PlayMate is a community-driven app that matches people for sports. Join a game room instead of a group chat, see who is playing, and know they will show up.
+  points:
+    - { title: Game rooms, not group chats, text: 'Find a match, join it, and plan the game in one place, from schedule to cost split.' }
+    - { title: Players you can trust, text: 'Reliability scores and peer reviews show who is dependable before you play.' }
+    - { title: Matches near you, text: 'Filter by sport, skill and time, and browse games as a list or on the map.' }
+    - { title: No-shows have consequences, text: 'A no-show penalty and a clear policy keep games fair for everyone.' }
+  chips: [iOS, User research, Usability testing]
+  video: { src: /videos/playmate-hero.mp4, width: 406, height: 898, label: 'PlayMate walkthrough: onboarding, finding a match, joining a game, creating one, friends, profiles and settings' }
 gallery:
+  - label: Concept
+    title: A community-driven mobile app that connects people through sport
+    src: /images/playmate-concept.webp
+    alt: 'PlayMate concept: a phone showing Find a Match, surrounded by the words community-driven, mobile app, that connects, people, through sport'
+    width: 1178
+    height: 728
   - label: Prototype
     title: Onboarding to game room
     items:
