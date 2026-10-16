@@ -39,7 +39,7 @@ gallery:
     scroll: true
     items:
       - { src: /images/playmate-app-home-1.webp, alt: 'PlayMate home dashboard', width: 402, height: 1285, head: { src: /images/playmate-app-home-1-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-1-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
-      - { src: /images/playmate-app-home-2.webp, alt: 'PlayMate Find a Match, list view', width: 402, height: 1523, head: { src: /images/playmate-app-home-2-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-2-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
+      - { src: /images/playmate-app-home-2.webp, alt: 'PlayMate Find a Match, list view', width: 402, height: 1375, head: { src: /images/playmate-app-home-2-head.webp, alt: '', width: 402, height: 249 }, foot: { src: /images/playmate-app-home-2-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
       - { src: /images/playmate-app-home-3.webp, alt: 'PlayMate Find a Match, map view', width: 402, height: 874 }
       - { src: /images/playmate-app-home-4.webp, alt: 'PlayMate game details', width: 402, height: 1658, head: { src: /images/playmate-app-home-4-head.webp, alt: '', width: 402, height: 101 }, foot: { src: /images/playmate-app-home-4-foot.webp, alt: '', width: 402, height: 116, nav: 80 } }
       - { src: /images/playmate-app-home-5.webp, alt: 'PlayMate create a game', width: 402, height: 1742 }
