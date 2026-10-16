@@ -247,8 +247,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                                 g.scroll ? (
                                   <div class="device"><div class="device-clip">
                                     {m.head && <img class="pin" src={m.head.src} alt="" width={m.head.width} height={m.head.height} loading="lazy" decoding="async" />}
-                                    <div class="device-scroll" tabindex="0" role="group" aria-label={m.alt}><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
-                                    {m.foot && <img class="pin" src={m.foot.src} alt="" width={m.foot.width} height={m.foot.height} loading="lazy" decoding="async" />}
+                                    <div class="device-scroll" tabindex="0" role="group" aria-label={m.alt}>
+                                      <div class="scroll-body" style={m.foot ? `padding-bottom:${((m.foot.nav / m.foot.width!) * 100).toFixed(3)}%` : undefined}><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
+                                    </div>
+                                    {m.foot && <img class="pin pin-foot" src={m.foot.src} alt="" width={m.foot.width} height={m.foot.height} loading="lazy" decoding="async" />}
                                   </div></div>
                                 ) : (
                                   <div class="device"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>

@@ -10,7 +10,9 @@ const image = z.object({
 });
 
 // A screen whose top banner and bottom nav stay put while the middle scrolls.
-const pinnedImage = image.extend({ head: image.optional(), foot: image.optional() });
+// `foot` is the nav bar plus its round button on a transparent background; it floats over the scrolling
+// content, and `nav` is the height of the bar itself (in source pixels), used to leave room at the end.
+const pinnedImage = image.extend({ head: image.optional(), foot: image.extend({ nav: z.number() }).optional() });
 
 const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/projects' }),

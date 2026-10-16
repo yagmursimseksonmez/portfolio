@@ -1146,7 +1146,7 @@ body.is-scroll { overflow-x: clip; }
 }
 
 /* Scrolling screens: a long app screen scrolls inside its phone, under the visitor's own wheel or finger. */
-.device-clip { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; border-radius: calc(var(--dh) * 0.064); background: #000; }
+.device-clip { position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; border-radius: calc(var(--dh) * 0.064); background: #000; }
 .work .device-clip > .pin { flex: 0 0 auto; display: block; width: 100%; height: auto; border-radius: 0; box-shadow: none !important; }
 .device-scroll {
   flex: 1 1 0;
@@ -1160,5 +1160,6 @@ body.is-scroll { overflow-x: clip; }
   outline-offset: -3px;
 }
 .device-scroll::-webkit-scrollbar { display: none; }
-.work .device-scroll > img { display: block; width: 100%; height: auto; border-radius: 0; box-shadow: none !important; }
+.work .device-scroll img { display: block; width: 100%; height: auto; border-radius: 0; box-shadow: none !important; }
+.work .device-clip > .pin-foot { position: absolute; left: 0; bottom: 0; pointer-events: none; }
 .scrolls .board > div:first-child h4::after { content: ' · scroll a screen'; color: var(--tertiary); text-transform: none; letter-spacing: 0; }
