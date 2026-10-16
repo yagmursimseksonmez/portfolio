@@ -9,6 +9,9 @@ const image = z.object({
   height: z.number().optional(),
 });
 
+// A screen whose top banner and bottom nav stay put while the middle scrolls.
+const pinnedImage = image.extend({ head: image.optional(), foot: image.optional() });
+
 const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/projects' }),
   schema: z.object({
@@ -72,7 +75,7 @@ const projects = defineCollection({
           alt: z.string().optional(),
           width: z.number().optional(),
           height: z.number().optional(),
-          items: z.array(image).optional(),
+          items: z.array(pinnedImage).optional(),
           // Long scrolling screens: shown larger and cropped, they open downward and pan on hover.
           tall: z.boolean().default(false),
           // Bare app screens: equal width, phone proportions, rounded corners.
