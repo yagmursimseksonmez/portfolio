@@ -1167,3 +1167,46 @@ body.is-scroll { overflow-x: clip; }
 /* A showcase (video over a still) inside a hero page: a rounded panel as tall as the page content. */
 .work figure.hero .hero-stage { flex: 0 0 auto; align-self: center; height: var(--img-h); border-radius: 16px; overflow: hidden; }
 .work figure.hero .hero-stage > img { border-radius: 0; }
+
+/* Concept panel: a yellow stage with a tilted phone playing the video and words floating around it. */
+.work figure.hero .concept-stage {
+  position: relative;
+  flex: 0 0 auto;
+  align-self: center;
+  height: var(--img-h);
+  aspect-ratio: 1.5 / 1;
+  container-type: size;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #f7e14c;
+}
+.concept-back {
+  position: absolute;
+  left: 52%;
+  top: 54%;
+  width: 33cqh;
+  height: 64cqh;
+  border: 0.9cqh solid #14161a;
+  border-radius: 6cqh;
+  background: #dbe6ff;
+  transform: translate(-22%, -47%) rotate(-3deg);
+}
+.concept-phone { position: absolute; left: 49%; top: 56%; transform: translate(-50%, -50%) rotate(-9deg) perspective(140cqh) rotateY(-9deg); filter: drop-shadow(0 2.4cqh 3cqh rgba(0, 0, 0, 0.22)); }
+.concept-phone .device { --dh: 66cqh; }
+.concept-word {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--rot));
+  padding: 0 3.6cqh;
+  height: 8.4cqh;
+  display: flex;
+  align-items: center;
+  border-radius: 8.4cqh;
+  font-size: 4.5cqh;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+.concept-word.tone-green { background: #3f9b6e; color: #f7e14c; }
+.concept-word.tone-sky { background: #b4c8f5; color: #1b36a8; }
+.concept-word.tone-pink { background: #f3c6e3; color: #111; }
+.concept-word.tone-navy { background: #1631b8; color: #fff; }

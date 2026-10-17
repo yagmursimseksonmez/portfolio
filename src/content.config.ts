@@ -61,6 +61,14 @@ const projects = defineCollection({
         hp: z.object({ value: z.number().min(0).max(10), label: z.string() }).optional(),
         points: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
         chips: z.array(z.string()).default([]),
+        // A yellow concept panel instead of a plain phone: a tilted phone playing the video, with words floating around it.
+        concept: z
+          .object({
+            video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }),
+            // x and y are percentages of the panel; rotate is in degrees.
+            words: z.array(z.object({ text: z.string(), tone: z.enum(['green', 'sky', 'pink', 'navy']), x: z.number(), y: z.number(), rotate: z.number().default(0) })),
+          })
+          .optional(),
         // Omit when the folder also has a `showcase`: the hero then shows that (video over a still) instead.
         video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }).optional(),
       })

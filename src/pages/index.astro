@@ -169,7 +169,17 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                   <div class="work">
                     {d.hero && (
                       <figure class="hero">
-                        {d.showcase ? (
+                        {d.hero.concept ? (
+                          <div class="concept-stage" role="img" aria-label={d.hero.concept.video.label}>
+                            <div class="concept-back" aria-hidden="true"></div>
+                            <div class="concept-phone">
+                              <div class="device"><video src={d.hero.concept.video.src} width={d.hero.concept.video.width} height={d.hero.concept.video.height} autoplay muted loop playsinline preload="metadata"></video></div>
+                            </div>
+                            {d.hero.concept.words.map((w) => (
+                              <span class={`concept-word tone-${w.tone}`} style={`left:${w.x}%;top:${w.y}%;--rot:${w.rotate}deg`}>{w.text}</span>
+                            ))}
+                          </div>
+                        ) : d.showcase ? (
                           <div class="showcase-stage hero-stage">
                             <img src={d.showcase.image.src} alt={d.showcase.image.alt} width={d.showcase.image.width} height={d.showcase.image.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} />
                             <video src={d.showcase.video.src} width={d.showcase.video.width} height={d.showcase.video.height} aria-label={d.showcase.video.label} autoplay muted loop playsinline preload="metadata"></video>
