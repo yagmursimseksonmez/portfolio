@@ -169,9 +169,16 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                   <div class="work">
                     {d.hero && (
                       <figure class="hero">
-                        <div class="device">
-                          <video src={d.hero.video.src} width={d.hero.video.width} height={d.hero.video.height} aria-label={d.hero.video.label} autoplay muted loop playsinline preload="metadata"></video>
-                        </div>
+                        {d.showcase ? (
+                          <div class="showcase-stage hero-stage">
+                            <img src={d.showcase.image.src} alt={d.showcase.image.alt} width={d.showcase.image.width} height={d.showcase.image.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} />
+                            <video src={d.showcase.video.src} width={d.showcase.video.width} height={d.showcase.video.height} aria-label={d.showcase.video.label} autoplay muted loop playsinline preload="metadata"></video>
+                          </div>
+                        ) : d.hero.video && (
+                          <div class="device">
+                            <video src={d.hero.video.src} width={d.hero.video.width} height={d.hero.video.height} aria-label={d.hero.video.label} autoplay muted loop playsinline preload="metadata"></video>
+                          </div>
+                        )}
                         <div class="hero-copy">
                           <div class="hero-top">
                             <h4>{d.hero.kicker}</h4>
@@ -199,7 +206,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         </div>
                       </figure>
                     )}
-                    {d.showcase && (
+                    {d.showcase && !d.hero && (
                       <figure class="showcase">
                         <div class="showcase-stage">
                           <img src={d.showcase.image.src} alt={d.showcase.image.alt} width={d.showcase.image.width} height={d.showcase.image.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} />

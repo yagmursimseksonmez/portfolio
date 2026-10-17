@@ -61,7 +61,8 @@ const projects = defineCollection({
         hp: z.object({ value: z.number().min(0).max(10), label: z.string() }).optional(),
         points: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
         chips: z.array(z.string()).default([]),
-        video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }),
+        // Omit when the folder also has a `showcase`: the hero then shows that (video over a still) instead.
+        video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }).optional(),
       })
       .optional(),
     // Plays first in the folder strip, muted and looping.

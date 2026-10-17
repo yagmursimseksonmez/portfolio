@@ -12,18 +12,20 @@ facts:
   - { label: Platform, value: iOS }
   - { label: Role, value: 'Product Designer (end-to-end UX/UI, solo)' }
   - { label: Tools, value: Figma · Claude · Stitch }
+hero:
+  kicker: PlayMate · iOS · community sports app
+  title: Find the right people to play with.
+  lede: PlayMate is a community-driven app that matches people for sports. Join a game room instead of a group chat, see who is playing, and know they will show up.
+  points:
+    - { title: Game rooms, not group chats, text: 'Find a match, join it, and plan the game in one place, from schedule to cost split.' }
+    - { title: Players you can trust, text: 'Reliability scores and peer reviews show who is dependable before you play.' }
+    - { title: Matches near you, text: 'Filter by sport, skill and time, and browse games as a list or on the map.' }
+    - { title: No-shows have consequences, text: 'A no-show penalty and a clear policy keep games fair for everyone.' }
+  chips: [iOS, User research, Usability testing]
 showcase:
   image: { src: /images/playmate-showcase.webp, alt: 'PlayMate concept: a phone showing Find a Match, surrounded by the words community-driven, mobile app, that connects, people, through sport', width: 2000, height: 1354 }
   video: { src: /videos/playmate-hero.mp4, width: 406, height: 898, label: 'PlayMate walkthrough: onboarding, finding a match, joining a game, creating one, friends, profiles and settings' }
 gallery:
-  - label: Prototype
-    title: Onboarding to game room
-    items:
-      - { src: /images/playmate-proto-1.webp, alt: PlayMate onboarding, width: 661, height: 1367 }
-      - { src: /images/playmate-proto-2.webp, alt: PlayMate dashboard, width: 661, height: 1367 }
-      - { src: /videos/playmate-proto-ss.mp4, alt: PlayMate prototype walkthrough, width: 450, height: 942 }
-      - { src: /images/playmate-proto-3.webp, alt: PlayMate discover, width: 661, height: 1367 }
-      - { src: /images/playmate-proto-4.webp, alt: PlayMate friends, width: 661, height: 1367 }
   - label: Final screens
     title: 'Onboarding and sign in'
     device: true
