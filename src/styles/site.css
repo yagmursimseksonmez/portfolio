@@ -769,8 +769,6 @@ nav h3 { white-space: nowrap; }
   padding: calc(var(--pad) * 2) calc(var(--pad) * 2) 0;
   isolation: isolate;
 }
-/* Portrait sticker in the site palette, sitting where a signature would. */
-.bio-avatar { display: block; width: 132px; height: 132px; border-radius: 50%; background: var(--accent); object-fit: cover; object-position: center 20%; }
 .bio h2 { text-indent: calc(var(--size-title) * 2); text-wrap: wrap; }
 /* Justified body copy stays readable: smaller size, generous leading, hyphenation to avoid rivers. */
 .bio p {
