@@ -627,7 +627,7 @@ nav h3 { white-space: nowrap; }
 .hero-points li:nth-child(2) { border-top-right-radius: 22px; }
 .hero-points li:nth-child(3) { border-bottom-left-radius: 22px; }
 .hero-points li:last-child { border-bottom-right-radius: 22px; }
-.hero-points span { color: var(--accent); font-size: 12px; letter-spacing: 0.06em; }
+.hero-points span { color: var(--accent); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
 .hero-points h3 { font-size: clamp(14px, calc(var(--frame-h) * 0.023), 16px); line-height: 1.2; font-weight: 600; color: var(--foreground); }
 .hero-points p { font-size: clamp(11.5px, calc(var(--frame-h) * 0.019), 13.5px); line-height: 1.4; color: var(--secondary); }
 .hero-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
@@ -981,7 +981,6 @@ body.is-scroll { overflow-x: clip; }
 .case-cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 32px; }
 .case-cards3 article { padding: 24px; background: var(--card); border-radius: var(--radius-card); }
 .case-cards3 p { margin-top: 10px; font-size: 16px; line-height: 1.55; color: var(--secondary); }
-.case-card-pct { display: block; color: var(--accent) !important; font-size: 44px; font-weight: 700 !important; line-height: 1; letter-spacing: -0.03em; }
 .case-card-finding { color: var(--primary) !important; }
 
 .case-h3 { margin: 56px 0 16px; }
@@ -1018,10 +1017,7 @@ body.is-scroll { overflow-x: clip; }
 .case-phones-flat img { height: min(380px, 52vh); border-radius: 22px; }
 
 .case-findings { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
-.case-findings li { display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto auto; column-gap: 16px; padding: 18px; background: hsla(0, 0%, 100%, 0.04); border-radius: 14px; }
-.case-pct { grid-row: 1 / span 3; color: var(--accent); font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-.case-bar-track { display: block; height: 4px; margin: 4px 0 10px; background: hsla(0, 0%, 100%, 0.08); border-radius: 2px; overflow: hidden; }
-.case-bar-track span { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
+.case-findings li { padding: 18px; background: hsla(0, 0%, 100%, 0.04); border-radius: 14px; }
 .case-issue { font-size: 16px; line-height: 1.4; color: var(--foreground); }
 .case-fix { margin-top: 4px; font-size: 15px; line-height: 1.45; color: var(--secondary); }
 .case-fix::before { content: '→ '; color: var(--accent); }

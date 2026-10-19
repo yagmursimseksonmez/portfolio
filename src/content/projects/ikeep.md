@@ -19,12 +19,12 @@ kicker: Everything you copy, one tap away.
 hero:
   kicker: iKeep · iOS · live on the App Store
   title: Everything you copy, one tap away.
-  lede: iKeep is a vault for the values you type again and again, like Wi-Fi passwords, door codes and ID numbers. Save them once, keep them hidden, copy them when you need them.
+  lede: A vault for the values you type again and again, like Wi-Fi passwords and door codes. I was asked to rebrand it, and in one week I redesigned how it works too.
   points:
-    - { title: One card per value, text: 'Every item is a colour-coded card with its value ready to copy or share.' }
-    - { title: Hidden until you need it, text: 'Values show as dots. Tap the eye to reveal one, or hide them all with one setting.' }
-    - { title: Yours to organise, text: 'Create categories with your own icon and colour, favourite what you use most, sort and search.' }
-    - { title: Private by default, text: 'Biometric lock, values kept in the iOS Keychain, and iCloud sync only if you turn it on.' }
+    - { label: Role, title: 'Rebrand and redesign, solo', text: 'The brief was a new look. I took the app end to end, from structure to light and dark UI.' }
+    - { label: Problem, title: Every item looked the same, text: 'You had to read each row to find the one to copy, and Add sat out of thumb reach.' }
+    - { label: Solution, title: Cards you can spot at a glance, text: 'Colour-coded cards, Add in thumb reach, categories you can reorder, sorting and dark mode.' }
+    - { label: Impact, title: 'Find it by colour, not by reading', text: 'The new version shipped within the week and is live on the App Store.' }
   chips: [iOS, Light and dark, iCloud sync]
   video: { src: /videos/ikeep-demo.mp4, width: 786, height: 1704, label: 'iKeep walkthrough: values hidden as dots and revealed with the eye, adding a new item from the plus button, then switching to dark mode in settings' }
 compare:
@@ -82,7 +82,7 @@ features:
   - { title: Edit details, src: /images/ikeep-feature-4-3.webp, alt: iKeep — Edit details, width: 587, height: 1270 }
 ---
 
-I designed iKeep in one week: an iOS vault for the values people copy again and again, now live on the App Store.
+I was asked to rebrand iKeep, an iOS vault for the values people copy again and again. In one week I redesigned how it works too, and it is now live on the App Store.
 
 - **Recognisable items** Turned identical list rows into colour-coded cards, in light and dark mode.
 - **Thumb-first actions** Moved item creation into thumb reach and added search, edit and delete.

@@ -59,7 +59,8 @@ const projects = defineCollection({
         lede: z.string(),
         // The pixel HP bar under the lede: how many of its 10 segments are filled.
         hp: z.object({ value: z.number().min(0).max(10), label: z.string() }).optional(),
-        points: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
+        // `label` replaces the running number, e.g. Role, Problem, Solution, Impact.
+        points: z.array(z.object({ label: z.string().optional(), title: z.string(), text: z.string() })).default([]),
         chips: z.array(z.string()).default([]),
         // A yellow concept panel instead of a plain phone: a tilted phone playing the video, with words floating around it.
         concept: z

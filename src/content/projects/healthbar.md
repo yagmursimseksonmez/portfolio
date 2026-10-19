@@ -14,15 +14,15 @@ facts:
   - { label: Tools, value: Stitch · Claude Design · Figma · Codex }
 link: { label: View on the App Store, href: 'https://apps.apple.com/de/app/healthbar-daily-hp-tracker/id6773367246?l=en-GB' }
 hero:
-  kicker: HealthBar · iOS, Apple Watch, widgets
+  kicker: HealthBar · iOS, Apple Watch · live on the App Store
   title: Your health, turned into a health bar.
-  lede: HealthBar reads Apple Health and turns steps, sleep, water and mood into one simple bar. Master Ronnie, a pixel-art mentor, explains what it means and what to do next.
+  lede: An Apple Health companion I designed and shipped on my own. It turns steps, sleep, water and mood into one HP bar, and a pixel-art mentor tells you what to do next.
   hp: { value: 6, label: HP today }
   points:
-    - { title: Every habit hits your HP, text: 'Skip water and a dehydration debuff appears. Stay active and you earn a buff. Instantly.' }
-    - { title: One clear next move, text: 'Master Ronnie reads your day and gives you a single goal to do next.' }
-    - { title: Level up by living well, text: 'Healthy choices earn XP and grow your character. Achievements and goals add up.' }
-    - { title: Always in sight, text: 'Home Screen, Lock Screen and Apple Watch widgets. No need to open the app.' }
+    - { label: Role, title: 'Solo, from survey to App Store', text: 'I did the research, UX/UI, usability tests and the release myself.' }
+    - { label: Problem, title: 'Health data, but no next step', text: '8 of the 13 people I surveyed had muted a health app because it made them feel guilty.' }
+    - { label: Solution, title: One score and one suggestion, text: 'All the Health data becomes one HP bar, and Master Ronnie suggests one small thing to do next.' }
+    - { label: Impact, title: 'Read in 4 seconds, not 13', text: 'After the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9.' }
   chips: [iOS, Apple Watch, Widgets]
   video: { src: /videos/healthbar-demo.mp4, width: 804, height: 1748, label: 'HealthBar walkthrough: the HP bar and Master Ronnie’s tip, quick actions for mood and water, then achievements, daily goals and the HP trend' }
 gallery:
@@ -33,7 +33,7 @@ gallery:
         name: Situation
         text: Most health apps hand you raw numbers and guilt-driven notifications. Rings, graphs and streaks never say what to do next, and the tone often reads like a scolding instead of a suggestion.
         stats:
-          - { value: 62%, label: of 18 surveyed users muted a health app because its notifications felt guilt-inducing }
+          - { value: 62%, label: of 13 people I surveyed had muted a health app because its notifications felt guilt-inducing }
           - { value: 54%, label: 'could not act on charts without context: “I see the line drop, I don’t know why.”' }
       - letter: T
         name: Task
@@ -107,7 +107,7 @@ details:
   - label: Hypothesis
     text: People will check in more often, and act on what they see, if their data is framed as a story with a mentor instead of a spreadsheet with a verdict.
   - label: Research
-    title: 18 people surveyed · ages 21–45
+    title: 13 people surveyed · ages 21–45
     stats:
       - { value: 62%, issue: have muted health-app notifications that felt guilt-inducing or repetitive }
       - { value: 54%, issue: find charts and trend graphs hard to act on without context }
@@ -138,8 +138,8 @@ details:
     text: 'The structure was built straight into Google Stitch. A custom styleset (colour tokens, the Space Mono type scale and the pixel-heart component) came first, so every generated screen spoke the same visual language from the first draft.'
 ---
 
-I lead design for HealthBar, an RPG-style Apple Health companion for iOS, Apple Watch and widgets.
+I designed and shipped HealthBar on my own, an RPG-style Apple Health companion for iOS, Apple Watch and widgets.
 
 - **Comprehension** Usability tests raised dashboard comprehension from 44% to 89%.
 - **Speed** Cut the time to a correct read from 13 to 4 seconds.
-- **Iteration** I keep improving the app with regular A/B tests.
+- **Live** On the App Store, and I keep shipping updates.

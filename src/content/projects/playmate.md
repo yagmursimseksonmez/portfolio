@@ -5,7 +5,7 @@ year: '2026'
 summary: A community-driven sports matchmaking app.
 tags: [Case study, User interviews, Usability testing]
 status: complete
-description: 'PlayMate: a community-driven sports matchmaking mobile app. Case study with user interviews, moderated usability testing and information architecture.'
+description: 'PlayMate: a community-driven sports matchmaking mobile app. Case study with user interviews, usability testing and information architecture.'
 ogImage: /og/playmate.jpg
 page: /projects/playmate/
 facts:
@@ -68,6 +68,6 @@ gallery:
 
 I designed PlayMate end to end, a community app that matches people for sports through game rooms instead of group chats.
 
-- **Research** 4 interviews in Berlin shaped two personas and the core problem: trust, not motivation.
-- **Testing** 4 rounds of moderated usability testing, 20 participants each, from wireframes to final screens.
+- **Research** 5 interviews with players in Berlin shaped two personas and the core problem: trust, not motivation.
+- **Testing** I tested 4 rounds of designs, from wireframes to final screens, with the same 5 people.
 - **Accountability** Reliability scores, peer reviews and a no-show penalty make strangers safe to play with.

@@ -204,7 +204,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                           {d.hero.points.length > 0 && (
                             <ul class="hero-points">
                               {d.hero.points.map((pt, n) => (
-                                <li><span>{String(n + 1).padStart(2, '0')}</span><h3>{pt.title}</h3><p>{pt.text}</p></li>
+                                <li><span>{pt.label ?? String(n + 1).padStart(2, '0')}</span><h3>{pt.title}</h3><p>{pt.text}</p></li>
                               ))}
                             </ul>
                           )}
