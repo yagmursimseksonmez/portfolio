@@ -4,7 +4,7 @@ export const person = {
   name: 'Yagmur Şimşek Sönmez',
   alternateName: ['Nagehan Yagmur Şimşek Sönmez', 'Yagmur Simsek Sonmez'],
   jobTitle: 'Product Designer',
-  description: 'Berlin-based product designer and UX researcher with a PhD in the history and theory of architecture.',
+  description: 'Berlin-based product designer and UX researcher with a PhD in the history and theory of architecture, a master’s in visual communication design and a strong interest in visual identity.',
   url: 'https://yagmursimseksonmez.com/',
   image: 'https://yagmursimseksonmez.com/images/avatar-icon.webp',
   address: { '@type': 'PostalAddress', addressLocality: 'Berlin', addressCountry: 'DE' },
