@@ -556,7 +556,7 @@ function startTallBoards() {
 // ------------------------------------------------------- scrolling screens
 // A wheel over a phone scrolls that screen. Once it reaches an end, a fresh gesture moves the folder sideways again.
 function startScrollScreens() {
-  document.querySelectorAll('.device-scroll').forEach((win) => {
+  document.querySelectorAll('.device-scroll, .beat-shot, .pmid, .wmid').forEach((win) => {
     let last = 0;
     win.addEventListener('wheel', (e) => {
       if (!win.closest('.card.is-active')) return;
@@ -752,3 +752,17 @@ if (linked) {
   const target = linked === 'about' ? BOOK : k >= 0 ? k : null;
   if (target !== null) setTimeout(() => focusGallery(target), root.classList.contains('is-intro') ? 1400 : 0);
 }
+
+
+// ------------------------------------------------------- PlayMate pages
+// The finished pages in src/content/playmate-frames are designed 700px tall; scale each to the strip's frame height.
+function fitPlaymateFrames() {
+  const ro = new ResizeObserver((entries) => {
+    entries.forEach(({ target }) => {
+      const page = target.firstElementChild;
+      if (page && target.clientHeight > 0) page.style.setProperty('--pmz', String(target.clientHeight / 700));
+    });
+  });
+  document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
+}
+fitPlaymateFrames();

@@ -5,3 +5,4 @@ dist/
 # plaintext of the password-protected case study; only the encrypted bundle (public/crypto.enc.json) is published
 private/
 .claude/
+handoff/

@@ -7,12 +7,15 @@ const image = z.object({
   alt: z.string(),
   width: z.number().optional(),
   height: z.number().optional(),
+  // A short label and line under a phone in a `device` board: what this screen is for.
+  caption: z.object({ title: z.string(), text: z.string() }).optional(),
 });
 
 // A screen whose top banner and bottom nav stay put while the middle scrolls.
 // `foot` is the nav bar plus its round button on a transparent background; it floats over the scrolling
 // content, and `nav` is the height of the bar itself (in source pixels), used to leave room at the end.
-const pinnedImage = image.extend({ head: image.optional(), foot: image.extend({ nav: z.number() }).optional() });
+// `open`: the image is a link that opens the full-size file in a new tab, for boards too small to read in the strip.
+const pinnedImage = image.extend({ open: z.boolean().default(false), head: image.optional(), foot: image.extend({ nav: z.number() }).optional() });
 
 const projects = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/projects' }),
@@ -56,6 +59,8 @@ const projects = defineCollection({
       .object({
         kicker: z.string(),
         title: z.string(),
+        // A long title (three lines or more) gets a smaller size so the pitch still fits the page.
+        compact: z.boolean().default(false),
         lede: z.string(),
         // The pixel HP bar under the lede: how many of its 10 segments are filled.
         hp: z.object({ value: z.number().min(0).max(10), label: z.string() }).optional(),
@@ -67,7 +72,9 @@ const projects = defineCollection({
           .object({
             video: z.object({ src: z.string(), width: z.number(), height: z.number(), label: z.string() }),
             // x and y are percentages of the panel; rotate is in degrees.
-            words: z.array(z.object({ text: z.string(), tone: z.enum(['green', 'sky', 'pink', 'navy']), x: z.number(), y: z.number(), rotate: z.number().default(0) })),
+            words: z.array(z.object({ text: z.string(), tone: z.enum(['green', 'sky', 'pink', 'navy']), x: z.number(), y: z.number(), rotate: z.number().default(0) })).default([]),
+            // The whole panel (yellow, phone and words) is already one finished video: just play it, 3:2.
+            flat: z.boolean().default(false),
           })
           .optional(),
         // Omit when the folder also has a `showcase`: the hero then shows that (video over a still) instead.
@@ -82,7 +89,34 @@ const projects = defineCollection({
       .array(
         z.object({
           label: z.string(),
-          title: z.string(),
+          title: z.string().optional(),
+          // A finished page of its own, in `src/content/playmate-frames/<name>.html` (designed at 700px tall, scaled to fit).
+          frame: z.string().optional(),
+          // A numbered step heading instead of label and title: a big number, a name and one line of text.
+          step: z.object({ n: z.string(), name: z.string().optional(), text: z.string().optional() }).optional(),
+          // With `beats`: show them in the folder's last column, above the facts, instead of as a page of the strip.
+          info: z.boolean().default(false),
+          // With `beats`: lay them out as a 2 × 2 grid of cards.
+          grid: z.boolean().default(false),
+          // With `beats`: stack them in one narrow column, each with a big heading.
+          stack: z.boolean().default(false),
+          // With `src`: short notes beside the picture, each tied to a numbered dashed box on it.
+          // x, y, w and h place the box, in percentages of the picture; the first half of the notes sits on the left, the rest on the right.
+          notes: z.array(z.object({ n: z.string(), title: z.string(), text: z.string(), x: z.number(), y: z.number(), w: z.number(), h: z.number() })).optional(),
+          // Columns of cards and pictures, laid out side by side under the heading. A column holds stacked
+          // `cards`, one `image` (as tall as the frame, with an optional tag), or `rows` of cards side by side.
+          // `grow` sets how much room a card takes next to its neighbours; `width` is the column's width in px.
+          panels: z
+            .array(
+              z.object({
+                title: z.string().optional(),
+                width: z.number().optional(),
+                cards: z.array(z.object({ title: z.string(), text: z.string().optional(), items: z.array(z.string()).default([]), grow: z.number().default(1) })).default([]),
+                image: image.extend({ label: z.string().optional() }).optional(),
+                rows: z.array(z.array(z.object({ title: z.string(), text: z.string().optional(), items: z.array(z.string()).default([]), grow: z.number().default(1) }))).default([]),
+              }),
+            )
+            .optional(),
           src: z.string().optional(),
           alt: z.string().optional(),
           width: z.number().optional(),
@@ -96,16 +130,26 @@ const projects = defineCollection({
           device: z.boolean().default(false),
           // With `device`: screens taller than the frame scroll inside it, under the visitor's own wheel or finger.
           scroll: z.boolean().default(false),
+          // With `beats`: stack them as full-width rows (big letter on the left, text on the right) instead of tall columns,
+          // for short text that would leave columns empty.
+          rows: z.boolean().default(false),
           // A text board told in STAR beats (Situation, Task, Action, Result) instead of images.
           beats: z
             .array(
               z.object({
-                letter: z.string(),
+                letter: z.string().default(''),
                 name: z.string(),
                 text: z.string().optional(),
                 points: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
                 stats: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
                 quote: z.string().optional(),
+                // A picture under the beat's text, filling the rest of its column, e.g. the real board it summarises.
+                // It keeps the picture's own proportions and scrolls inside its panel when taller than the column.
+                image: image.optional(),
+                // Several pictures under the beat's text, stacked in one scrolling panel; `label` is a line above a picture.
+                images: z.array(image.extend({ label: z.string().optional() })).default([]),
+                // More than 1: a wider column whose points sit side by side in this many columns, row by row.
+                columns: z.number().min(1).max(5).default(1),
                 // A wider column with its stats in two columns, for a beat that carries numbers.
                 wide: z.boolean().default(false),
               }),
@@ -114,6 +158,19 @@ const projects = defineCollection({
         }),
       )
       .default([]),
+    // Last page of the strip: a phone that runs the clickable prototype (`src`, an embed URL), or shows
+    // `poster` with the button disabled until the prototype is ready.
+    prototype: z
+      .object({
+        label: z.string().default('Prototype'),
+        title: z.string(),
+        text: z.string(),
+        poster: image.optional(),
+        src: z.string().optional(),
+        href: z.string().optional(),
+        cta: z.string().default('Open the prototype'),
+      })
+      .optional(),
     // "See more" opens these as a short read in a side panel: a label, then text, points or stats.
     details: z
       .array(

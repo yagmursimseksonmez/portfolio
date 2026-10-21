@@ -6,6 +6,7 @@ import { person } from '../data/person';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const count = projects.length;
+const frameHtml = import.meta.glob('../content/playmate-frames/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const rendered = await Promise.all(projects.map(async (p) => (await render(p)).Content));
 const isWide = (img: { width?: number; height?: number }) => !!img.width && !!img.height && img.width > img.height;
 
@@ -167,9 +168,12 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                 <article class="card-content">
                   <div class="work">
                     {d.hero && (
-                      <figure class="hero">
+                      <figure class:list={['hero', { compact: d.hero.compact }]}>
                         {d.hero.concept ? (
-                          <div class="concept-stage" role="img" aria-label={d.hero.concept.video.label}>
+                          <div class:list={['concept-stage', { flat: d.hero.concept.flat }]} role="img" aria-label={d.hero.concept.video.label}>
+                            {d.hero.concept.flat ? (
+                              <video src={d.hero.concept.video.src} width={d.hero.concept.video.width} height={d.hero.concept.video.height} autoplay muted loop playsinline preload="metadata"></video>
+                            ) : (<>
                             <div class="concept-back" aria-hidden="true"></div>
                             <div class="concept-phone">
                               <div class="device"><video src={d.hero.concept.video.src} width={d.hero.concept.video.width} height={d.hero.concept.video.height} autoplay muted loop playsinline preload="metadata"></video></div>
@@ -177,6 +181,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                             {d.hero.concept.words.map((w) => (
                               <span class={`concept-word tone-${w.tone}`} style={`left:${w.x}%;top:${w.y}%;--rot:${w.rotate}deg`}>{w.text}</span>
                             ))}
+                            </>)}
                           </div>
                         ) : d.showcase ? (
                           <div class="showcase-stage hero-stage">
@@ -232,13 +237,61 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <figure class="cover"><img src={d.cover.src} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} /></figure>
                     )}
                     {!d.cover && !d.showcase && !d.hero && <figure class="placeholder">Case study in progress</figure>}
-                    {d.gallery.map((g) => g.beats ? (
-                      <figure class="story">
-                        <div class="story-head"><h4>{g.label}</h4><h3>{g.title}</h3></div>
+                    {d.gallery.filter((g) => !g.info).map((g) => g.frame ? (
+                      <figure class="pmx" aria-label={g.label} set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
+                    ) : g.panels ? (
+                      <figure class="panels" aria-label={g.label}>
+                        {g.step ? (
+                          <div class="step-head"><span class="step-n">{g.step.n}</span>{g.step.name && <h4>{g.step.name}</h4>}{g.step.text && <p>{g.step.text}</p>}</div>
+                        ) : (
+                          <div class="story-head"><h4>{g.label}</h4>{g.title && <h3>{g.title}</h3>}</div>
+                        )}
+                        <div class="panel-row">
+                          {g.panels.map((col) => (
+                            <div class:list={['panel-col', { 'has-pic': !!col.image }]} style={col.width ? `width:${col.width}px` : undefined}>
+                              {col.title && <h4 class="panel-title">{col.title}</h4>}
+                              {col.image && (
+                                <div class="panel-pic" style={col.image.width && col.image.height ? `--ar:${col.image.width} / ${col.image.height}` : undefined}>
+                                  <img src={col.image.src} alt={col.image.alt} width={col.image.width} height={col.image.height} loading="lazy" decoding="async" />
+                                  {col.image.label && <span class="panel-pic-label">{col.image.label}</span>}
+                                </div>
+                              )}
+                              {col.cards.map((c) => <section class="panel-card" style={c.grow !== 1 ? `flex-grow:${c.grow}` : undefined}><h5>{c.title}</h5>{c.text && <p>{c.text}</p>}{c.items.length > 0 && <ol>{c.items.map((it) => <li>{it}</li>)}</ol>}</section>)}
+                              {col.rows.map((r) => <div class="panel-cards-row">{r.map((c) => <section class="panel-card" style={c.grow !== 1 ? `flex-grow:${c.grow}` : undefined}><h5>{c.title}</h5>{c.text && <p>{c.text}</p>}{c.items.length > 0 && <ol>{c.items.map((it) => <li>{it}</li>)}</ol>}</section>)}</div>)}
+                            </div>
+                          ))}
+                        </div>
+                      </figure>
+                    ) : g.notes && g.src ? (
+                      <figure class="annotated" aria-label={g.label}>
+                        {g.step ? (
+                          <div class="step-head"><span class="step-n">{g.step.n}</span>{g.step.name && <h4>{g.step.name}</h4>}{g.step.text && <p>{g.step.text}</p>}</div>
+                        ) : (
+                          <div class="story-head"><h4>{g.label}</h4>{g.title && <h3>{g.title}</h3>}</div>
+                        )}
+                        <div class="annot">
+                          {[g.notes.slice(0, Math.ceil(g.notes.length / 2)), g.notes.slice(Math.ceil(g.notes.length / 2))].map((side, i) => (<>
+                            {i === 1 && (
+                              <div class="annot-pic" style={g.width && g.height ? `--ar:${g.width} / ${g.height}` : undefined}>
+                                <img src={g.src} alt={g.alt ?? ''} width={g.width} height={g.height} loading="lazy" decoding="async" />
+                                {g.notes!.map((nt) => <span class="annot-box" style={`left:${nt.x}%;top:${nt.y}%;width:${nt.w}%;height:${nt.h}%`} aria-hidden="true"><b>{nt.n}</b></span>)}
+                              </div>
+                            )}
+                            <ol class="annot-notes">{side.map((nt) => <li><span class="annot-n" aria-hidden="true">{nt.n}</span><div><strong>{nt.title}</strong><span>{nt.text}</span></div></li>)}</ol>
+                          </>))}
+                        </div>
+                      </figure>
+                    ) : g.beats ? (
+                      <figure class:list={['story', { rows: g.rows, grid: g.grid, stack: g.stack }]} aria-label={g.label}>
+                        {g.step ? (
+                          <div class="step-head"><span class="step-n">{g.step.n}</span>{g.step.name && <h4>{g.step.name}</h4>}{g.step.text && <p>{g.step.text}</p>}</div>
+                        ) : (
+                          <div class="story-head"><h4>{g.label}</h4>{g.title && <h3>{g.title}</h3>}</div>
+                        )}
                         <div class="beats">
                           {g.beats.map((b) => (
-                            <section class:list={['beat', { wide: b.wide }]}>
-                              <div class="beat-name"><span class="beat-letter" aria-hidden="true">{b.letter}</span><h4>{b.name}</h4></div>
+                            <section class:list={['beat', { wide: b.wide, 'has-shot': !!b.image || b.images.length > 0, 'has-cols': b.columns > 1 }]} style={b.columns > 1 ? `--cols:${b.columns}` : undefined}>
+                              <div class="beat-name">{b.letter && <span class="beat-letter" aria-hidden="true">{b.letter}</span>}<h4>{b.name}</h4></div>
                               {b.text && <p>{b.text}</p>}
                               {b.points.length > 0 && (
                                 <ul class="beat-points">{b.points.map((pt) => <li><strong>{pt.title}</strong><span>{pt.text}</span></li>)}</ul>
@@ -247,12 +300,25 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                                 <ul class="beat-stats">{b.stats.map((st) => <li><strong>{st.value}</strong><span>{st.label}</span></li>)}</ul>
                               )}
                               {b.quote && <blockquote>{b.quote}</blockquote>}
+                              {b.image && (
+                                <div class="beat-shot" tabindex="0" role="group" aria-label={b.image.alt}>
+                                  <img src={b.image.src} alt={b.image.alt} width={b.image.width} height={b.image.height} loading="lazy" decoding="async" />
+                                </div>
+                              )}
+                              {b.images.length > 0 && (
+                                <div class="beat-shot stack" tabindex="0" role="group" aria-label={`${b.name}: ${b.images.map((m) => m.label ?? m.alt).join('; ')}`}>
+                                  {b.images.map((m) => (<>
+                                    {m.label && <p class="beat-shot-label">{m.label}</p>}
+                                    <img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" />
+                                  </>))}
+                                </div>
+                              )}
                             </section>
                           ))}
                         </div>
                       </figure>
                     ) : (
-                      <figure class:list={{ tall: g.tall, screens: g.screens, devices: g.device, scrolls: g.scroll }} style={g.tall && g.width && g.height ? `--r:${(g.width / g.height).toFixed(4)}` : undefined} tabindex={g.tall ? 0 : undefined} data-tall={g.tall ? '' : undefined}>
+                      <figure class:list={{ tall: g.tall, screens: g.screens, devices: g.device, scrolls: g.scroll, captioned: g.items?.some((m) => m.caption) }} style={g.tall && g.width && g.height ? `--r:${(g.width / g.height).toFixed(4)}` : undefined} tabindex={g.tall ? 0 : undefined} data-tall={g.tall ? '' : undefined}>
                         <div class="board">
                           <div><h4>{g.label}</h4><h3>{g.title}</h3></div>
                           <div class="board-shots">
@@ -262,19 +328,24 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                               ) : m.src.endsWith('.mp4') ? (
                                 <video class="shot-video" src={m.src} width={m.width} height={m.height} aria-label={m.alt} autoplay muted loop playsinline preload="metadata"></video>
                               ) : g.device && g.items ? (
-                                g.scroll ? (
-                                  <div class="device"><div class="device-clip">
-                                    {m.head && <img class="pin" src={m.head.src} alt="" width={m.head.width} height={m.head.height} loading="lazy" decoding="async" />}
-                                    <div class="device-scroll" tabindex="0" role="group" aria-label={m.alt}>
-                                      <div class="scroll-body" style={m.foot ? `padding-bottom:${((m.foot.nav / m.foot.width!) * 100).toFixed(3)}%` : undefined}><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
-                                    </div>
-                                    {m.foot && <img class="pin pin-foot" src={m.foot.src} alt="" width={m.foot.width} height={m.foot.height} loading="lazy" decoding="async" />}
-                                  </div></div>
-                                ) : (
-                                  <div class="device"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
-                                )
+                                <div class="shot">
+                                  {m.caption && <p class="shot-cap"><strong>{m.caption.title}</strong>{m.caption.text}</p>}
+                                  {g.scroll ? (
+                                    <div class="device"><div class="device-clip">
+                                      {m.head && <img class="pin" src={m.head.src} alt="" width={m.head.width} height={m.head.height} loading="lazy" decoding="async" />}
+                                      <div class="device-scroll" tabindex="0" role="group" aria-label={m.alt}>
+                                        <div class="scroll-body" style={m.foot ? `padding-bottom:${((m.foot.nav / m.foot.width!) * 100).toFixed(3)}%` : undefined}><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
+                                      </div>
+                                      {m.foot && <img class="pin pin-foot" src={m.foot.src} alt="" width={m.foot.width} height={m.foot.height} loading="lazy" decoding="async" />}
+                                    </div></div>
+                                  ) : (
+                                    <div class="device"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
+                                  )}
+                                </div>
                               ) : g.tall && g.items ? (
                                 <div class="screen-window"><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></div>
+                              ) : m.open ? (
+                                <a href={m.src} target="_blank" rel="noopener noreferrer" aria-label={`${m.alt} (opens full size)`}><img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" /></a>
                               ) : (
                                 <img src={m.src} alt={m.alt} width={m.width} height={m.height} loading="lazy" decoding="async" />
                               ),
@@ -324,11 +395,43 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         ))}
                       </figure>
                     )}
-                    <div class="info">
-                      <div class="info-scope">
-                        <h3>Scope</h3>
-                        <Content />
-                      </div>
+                    {d.prototype && (
+                      <figure class="prototype">
+                        <div class="device">
+                          {d.prototype.src ? (
+                            <iframe src={d.prototype.src} title={`${d.title} prototype`} loading="lazy" allowfullscreen></iframe>
+                          ) : d.prototype.poster && (
+                            <img src={d.prototype.poster.src} alt={d.prototype.poster.alt} width={d.prototype.poster.width} height={d.prototype.poster.height} loading="lazy" decoding="async" />
+                          )}
+                        </div>
+                        <div class="prototype-copy">
+                          <h4>{d.prototype.label}</h4>
+                          <h2>{d.prototype.title}</h2>
+                          <p>{d.prototype.text}</p>
+                          {d.prototype.href ? (
+                            <a class="link primary" href={d.prototype.href} target="_blank" rel="noopener noreferrer"><h3>{d.prototype.cta}</h3><Fragment set:html={arrow} /></a>
+                          ) : (
+                            <span class="link is-soon" aria-disabled="true"><h3>{d.prototype.cta}</h3></span>
+                          )}
+                        </div>
+                      </figure>
+                    )}
+                    <div class:list={['info', { 'no-scope': !p.body?.trim(), 'has-overview': d.gallery.some((g) => g.info) }]}>
+                      {d.gallery.filter((g) => g.info && g.beats).map((g) => (
+                        <div class="info-overview" aria-label={g.label}>
+                          {[0, 1].map((side) => (
+                            <div class="info-overview-col">
+                              {g.beats!.filter((_, n) => n % 2 === side).map((b) => <section><h4>{b.name}</h4>{b.text && <p>{b.text}</p>}</section>)}
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                      {p.body?.trim() && (
+                        <div class="info-scope">
+                          <h3>Scope</h3>
+                          <Content />
+                        </div>
+                      )}
                       {role && <div class="pill"><h3>Position</h3><h3>{role.replace(/\s*\(.*\)/, '')}</h3></div>}
                       <div class="pill"><h3>Time</h3><h3>{d.year}</h3></div>
                       {tools && <div class="pill"><h3>Tools</h3><h3>{tools}</h3></div>}

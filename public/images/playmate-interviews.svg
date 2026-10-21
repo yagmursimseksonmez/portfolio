@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" font-family="Inter, -apple-system, Helvetica, Arial, sans-serif">
+<defs><filter id="b" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter></defs>
+<rect width="1600" height="1000" rx="28" fill="#161616"/>
+<defs><linearGradient id="g0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a42"/><stop offset="1" stop-color="#2a2a30"/></linearGradient><clipPath id="c0"><rect x="24" y="24" width="764" height="464" rx="22"/></clipPath></defs>
+<g clip-path="url(#c0)"><rect x="24" y="24" width="764" height="464" fill="url(#g0)"/>
+<g filter="url(#b)">
+<path d="M156.0 498 C156.0 354 256.0 324 406.0 324 C556.0 324 656.0 354 656.0 498 Z" fill="#6d5fd0"/>
+<rect x="376.0" y="289" width="60" height="70" rx="26" fill="#d9b99b"/>
+<ellipse cx="406.0" cy="229" rx="68" ry="82" fill="#d9b99b"/>
+<path d="M334.0 221 C330.0 134 482.0 134 478.0 221 C456.0 179 356.0 179 334.0 221 Z" fill="#2b2118"/>
+</g>
+<rect x="42" y="422" width="331" height="46" rx="12" fill="#000" fill-opacity=".55"/>
+<text x="60" y="453" font-size="24" font-weight="600" fill="#fff">Bajo<tspan font-weight="400" fill="#cfcfcf" dx="12">iOS developer</tspan></text>
+<rect x="42" y="42" width="130" height="40" rx="20" fill="#000" fill-opacity=".55"/><text x="107" y="69" text-anchor="middle" font-size="21" fill="#ffd100" font-weight="600">Interview 1</text>
+</g>
+<defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#403b38"/><stop offset="1" stop-color="#2d2a28"/></linearGradient><clipPath id="c1"><rect x="812" y="24" width="764" height="464" rx="22"/></clipPath></defs>
+<g clip-path="url(#c1)"><rect x="812" y="24" width="764" height="464" fill="url(#g1)"/>
+<g filter="url(#b)">
+<path d="M944.0 498 C944.0 354 1044.0 324 1194.0 324 C1344.0 324 1444.0 354 1444.0 498 Z" fill="#6fa8d8"/>
+<path d="M 1070 219 C 1062 359 1067 419 1092 444 L 1296 444 C 1321 419 1326 359 1318 219 Z" fill="#1f1712"/>
+<rect x="1164.0" y="289" width="60" height="70" rx="26" fill="#b98a6a"/>
+<ellipse cx="1194.0" cy="229" rx="68" ry="82" fill="#b98a6a"/>
+<path d="M1122.0 221 C1114.0 129 1274.0 129 1266.0 221 C1234.0 174 1154.0 174 1122.0 221 Z" fill="#1f1712"/>
+</g>
+<rect x="830" y="422" width="300" height="46" rx="12" fill="#000" fill-opacity=".55"/>
+<text x="848" y="453" font-size="24" font-weight="600" fill="#fff">Andrea<tspan font-weight="400" fill="#cfcfcf" dx="12">Designer</tspan></text>
+<rect x="830" y="42" width="130" height="40" rx="20" fill="#000" fill-opacity=".55"/><text x="895" y="69" text-anchor="middle" font-size="21" fill="#ffd100" font-weight="600">Interview 2</text>
+</g>
+<defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3f3c"/><stop offset="1" stop-color="#2a2d2b"/></linearGradient><clipPath id="c2"><rect x="24" y="512" width="764" height="464" rx="22"/></clipPath></defs>
+<g clip-path="url(#c2)"><rect x="24" y="512" width="764" height="464" fill="url(#g2)"/>
+<g filter="url(#b)">
+<path d="M156.0 986 C156.0 842 256.0 812 406.0 812 C556.0 812 656.0 842 656.0 986 Z" fill="#c765a6"/>
+<rect x="376.0" y="777" width="60" height="70" rx="26" fill="#e0c2a8"/>
+<circle cx="406.0" cy="625" r="34" fill="#5a3b26"/>
+<ellipse cx="406.0" cy="717" rx="68" ry="82" fill="#e0c2a8"/>
+<path d="M334.0 709 C330.0 622 482.0 622 478.0 709 C456.0 667 356.0 667 334.0 709 Z" fill="#5a3b26"/>
+</g>
+<rect x="42" y="910" width="266" height="46" rx="12" fill="#000" fill-opacity=".55"/>
+<text x="60" y="941" font-size="24" font-weight="600" fill="#fff">Anna<tspan font-weight="400" fill="#cfcfcf" dx="12">Designer</tspan></text>
+<rect x="42" y="530" width="130" height="40" rx="20" fill="#000" fill-opacity=".55"/><text x="107" y="557" text-anchor="middle" font-size="21" fill="#ffd100" font-weight="600">Interview 3</text>
+</g>
+<defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d3a36"/><stop offset="1" stop-color="#2b2926"/></linearGradient><clipPath id="c3"><rect x="812" y="512" width="764" height="464" rx="22"/></clipPath></defs>
+<g clip-path="url(#c3)"><rect x="812" y="512" width="764" height="464" fill="url(#g3)"/>
+<g filter="url(#b)">
+<path d="M944.0 986 C944.0 842 1044.0 812 1194.0 812 C1344.0 812 1444.0 842 1444.0 986 Z" fill="#e08a3c"/>
+<rect x="1164.0" y="777" width="60" height="70" rx="26" fill="#a8765a"/>
+<ellipse cx="1194.0" cy="717" rx="68" ry="82" fill="#a8765a"/>
+<path d="M1122.0 709 C1118.0 622 1270.0 622 1266.0 709 C1244.0 667 1144.0 667 1122.0 709 Z" fill="#17120f"/>
+<path d="M1132.0 727 C1134.0 812 1254.0 812 1256.0 727 C1234.0 762 1154.0 762 1132.0 727 Z" fill="#17120f"/>
+</g>
+<rect x="830" y="910" width="318" height="46" rx="12" fill="#000" fill-opacity=".55"/>
+<text x="848" y="941" font-size="24" font-weight="600" fill="#fff">Mcan<tspan font-weight="400" fill="#cfcfcf" dx="12">White-collar</tspan></text>
+<rect x="830" y="530" width="130" height="40" rx="20" fill="#000" fill-opacity=".55"/><text x="895" y="557" text-anchor="middle" font-size="21" fill="#ffd100" font-weight="600">Interview 4</text>
+</g>
+</svg>
