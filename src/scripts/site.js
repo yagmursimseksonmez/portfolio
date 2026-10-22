@@ -775,3 +775,22 @@ function fitPlaymateFrames() {
   document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
 }
 fitPlaymateFrames();
+
+
+// ------------------------------------------------------- reading progress
+// A thin bar along the bottom of the open folder: how far through the case you have scrolled.
+function startProgress() {
+  document.querySelectorAll('[data-card]').forEach((card) => {
+    const content = card.querySelector('.card-content');
+    const bar = card.querySelector('.read-progress');
+    if (!content || !bar) return;
+    const update = () => {
+      const max = content.scrollWidth - content.clientWidth;
+      bar.style.setProperty('--p', max > 0 ? String(content.scrollLeft / max) : '0');
+    };
+    content.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(content);
+    update();
+  });
+}
+startProgress();

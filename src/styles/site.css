@@ -1375,3 +1375,8 @@ body.is-scroll { overflow-x: clip; }
 .email a h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .email button { flex: none; font-size: 13px; letter-spacing: 0.02em; padding: 0 2px; }
 .email a h3 { font-size: 15px; }
+
+/* Reading progress of the open folder */
+.read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6); height: 4px; border-radius: 4px; background: hsla(0, 0%, 100%, 0.1); overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+.read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 4px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
+.gallery.is-focused .card.is-active .read-progress { opacity: 1; }

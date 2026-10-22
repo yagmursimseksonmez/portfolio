@@ -49,8 +49,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 3h2v6h6v2h-6v6H9v-6H3V9h6z" /></svg>
         </button>
         <div class="contact-menu" id="contact-menu" aria-hidden="true">
-          <div class="contact-card" data-hours>
-            <div class="contact-status"><h3 data-open-label>Open</h3><h3 data-reopens hidden></h3></div>
+          <div class="contact-card">
             <div class="contact-time">
               <div class="clock avatar-wrap"><Avatar /></div>
             </div>
@@ -465,6 +464,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                     </div>}
                   </div>
                 </article>
+                <div class="read-progress" aria-hidden="true"><i></i></div>
                 {d.details.length > 0 && (
                   <aside class="details" id={`${p.id}-details`} aria-label={`${d.title} details`} aria-hidden="true" data-details>
                     <div class="details-head">
