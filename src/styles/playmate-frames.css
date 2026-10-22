@@ -556,3 +556,6 @@
 .work .pmx .pm-proto-live iframe{position:absolute;left:50%;top:50%;width:513px;height:869px;transform:translate(-50%,-50%)}
 .work .pmx .pm-f-proto{width:860px}
 .work .pmx .pm-proto-live iframe{width:420px;height:712px}
+.work .pmx .pm-emh{gap:14px;align-items:center}
+.work .pmx .pm-emh .pm-big{font-size:72px}
+.work .pmx .pm-emh h2{font-size:22px;margin-top:4px}

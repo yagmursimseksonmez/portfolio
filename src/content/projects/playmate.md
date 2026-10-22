@@ -36,32 +36,34 @@ gallery:
     frame: plan
   - label: People and interviews
     frame: people
+  - label: Synthesis
+    frame: synthesis
   - label: Empathy map
     frame: empathy
   - label: Personas and journey map
     frame: personas
-  - label: Synthesis
-    frame: synthesis
   - label: Concept
     frame: cycle
-  - label: User flow
-    frame: userflow
   - label: Information architecture
     frame: ia
+  - label: User flow
+    frame: userflow
   - label: Wireframes
     frame: wireframes
   - label: Testing round 1
     frame: testing-round-1
+  - label: Usability testing
+    frame: testing
+  - label: What changed most
+    frame: compare
   - label: Design system · Foundations
     frame: foundations
   - label: Design system · Components
     frame: components
-  - label: What changed most
-    frame: compare
-  - label: Usability testing
-    frame: testing
   - label: Final screens
     frame: final
+  - label: Try it
+    frame: prototype
   - label: Outcome
     frame: outcome
   - label: Overview
