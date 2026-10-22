@@ -552,3 +552,7 @@
 .work .pmx .pm-proto-live{width:340px;height:644px}
 .work .pmx .pm-proto-live iframe{display:block;width:340px;height:644px;border:0}
 .work .pmx .pm-f-proto{padding:28px 40px;gap:36px}
+.work .pmx .pm-proto-live{position:relative;width:380px;height:644px;overflow:hidden}
+.work .pmx .pm-proto-live iframe{position:absolute;left:50%;top:50%;width:513px;height:869px;transform:translate(-50%,-50%)}
+.work .pmx .pm-f-proto{width:860px}
+.work .pmx .pm-proto-live iframe{width:420px;height:712px}
