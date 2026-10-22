@@ -760,7 +760,16 @@ function fitPlaymateFrames() {
   const ro = new ResizeObserver((entries) => {
     entries.forEach(({ target }) => {
       const page = target.firstElementChild;
-      if (page && target.clientHeight > 0) page.style.setProperty('--pmz', String(target.clientHeight / 700));
+      if (!page || target.clientHeight <= 0) return;
+      const z = target.clientHeight / 700;
+      page.style.setProperty('--pmz', String(z));
+      // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
+      // undo the zoom on the frame and give it the zoomed size instead.
+      page.querySelectorAll('iframe[data-w]').forEach((f) => {
+        f.style.zoom = String(1 / z);
+        f.style.width = `${f.dataset.w * z}px`;
+        f.style.height = `${f.dataset.h * z}px`;
+      });
     });
   });
   document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
