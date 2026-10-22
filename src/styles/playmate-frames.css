@@ -530,10 +530,4 @@
 .work .pmx .pm-cmg.pm-organisms{width:2250px}
 .work .pmx .pm-cmg.pm-organisms .pm-cmb{columns:7 300px;column-gap:16px}
 .work .pmx .pm-cmg{background:#dee8fe}
-
-/* Phones and tablets: the pages are as tall as the folder allows, not as tall as the width suggests,
-   so their text stays readable and the visitor swipes sideways. */
-@media (max-width: 1100px), (max-height: 760px) {
-  .work:has(.pmx) { --img-h: min(800px, calc(100cqh - 2 * var(--pad) - var(--peek-offset, 0px) - 28px)); }
-}
-.work .scroll-body{background:#dee8fe}
+.work .pmx .pm-pbot.pm-foot{-webkit-mask:none;mask:none;background-size:100% auto;background-position:bottom;background-color:transparent;height:calc(113 * var(--s))}

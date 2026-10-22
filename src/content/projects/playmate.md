@@ -96,7 +96,7 @@ gallery:
     scroll: true
     items:
       - { src: /images/playmate-final-01.webp, alt: 'Onboarding: More than just a game', width: 402, height: 874 }
-      - { src: /images/playmate-screen-home-body.webp, alt: 'Home: upcoming matches, quick links to match history and ratings, and courts nearby', width: 402, height: 1278, head: { src: /images/playmate-screen-home-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-home-foot.webp, alt: '', width: 402, height: 116, nav: 84 } }
+      - { src: /images/playmate-screen-home-body.webp, alt: 'Home: upcoming matches, quick links to match history and ratings, and courts nearby', width: 402, height: 1278, head: { src: /images/playmate-screen-home-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-home-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
       - { src: /images/playmate-screen-map-body.webp, alt: 'Find a Match on the map, with a selected game card and Join Game', width: 402, height: 528, head: { src: /images/playmate-screen-map-head.webp, alt: '', width: 402, height: 252 }, foot: { src: /images/playmate-screen-map-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
       - { src: /images/playmate-screen-create.webp, alt: 'Create a game: title, sport, player limits, waitlist, schedule, cost split and venue', width: 402, height: 1742 }
       - { src: /images/playmate-screen-friends-body.webp, alt: 'Friends: favourite playmates, recent chats and all friends', width: 402, height: 1256, head: { src: /images/playmate-screen-friends-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-friends-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
