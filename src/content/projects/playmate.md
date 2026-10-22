@@ -63,33 +63,7 @@ gallery:
   - label: What changed most
     frame: compare
   - label: Usability testing
-    title: '4 testers, moderated, 30 minutes each, on every version. What each round changed:'
-    beats:
-      - letter: W
-        name: Wireframes
-        text: 'Cost split, venue booking, player limits and a waitlist (shown above), plus:'
-        points:
-          - { title: Rating flow, text: 'No clear moment to rate. A rating screen now opens when a game ends.' }
-          - { title: No-show penalty, text: 'A confirmed player who doesn’t come loses a reliability star.' }
-      - letter: '1'
-        name: Hi-fi 1
-        points:
-          - { title: Contrast, text: 'Cards blended into the background. Raised.' }
-          - { title: Map, text: 'Stays fixed while the list scrolls. Pins redrawn.' }
-          - { title: Settings, text: 'Lost its tab. Opens from the profile menu.' }
-          - { title: Onboarding, text: 'First-time users had none. Designed and added.' }
-      - letter: '2'
-        name: Hi-fi 2
-        points:
-          - { title: Guest mode, text: '“Continue as guest” added to onboarding.' }
-          - { title: Create, text: 'Opens as an overlay, not a separate screen.' }
-          - { title: Past games, text: 'Greyscale, so they read as not editable.' }
-      - letter: '3'
-        name: Hi-fi 3
-        points:
-          - { title: Onboarding, text: 'Copy shortened. Progress dots to go back.' }
-          - { title: “Welcome”, text: 'Repeated on almost every screen. Removed.' }
-          - { title: Inputs, text: 'Empty fields looked focused. Now clearly different.' }
+    frame: testing
   - label: Final screens
     title: 'Onboarding, home, the map, create a game, friends, a friend’s profile and the no-show penalty.'
     device: true

@@ -531,3 +531,15 @@
 .work .pmx .pm-cmg.pm-organisms .pm-cmb{columns:7 300px;column-gap:16px}
 .work .pmx .pm-cmg{background:#dee8fe}
 .work .pmx .pm-pbot.pm-foot{-webkit-mask:none;mask:none;background-size:100% auto;background-position:bottom;background-color:transparent;height:calc(113 * var(--s))}
+.work .pmx .pm-f-ut{flex-direction:column;gap:16px;width:1240px}
+.work .pmx .pm-f-ut h2{font-size:24px}
+.work .pmx .pm-ut{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0}
+.work .pmx .pm-ut-r{flex:1;display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center;background:var(--pm-card);border-radius:14px;padding:16px 22px}
+.work .pmx .pm-ut-h{display:flex;align-items:baseline;gap:10px}
+.work .pmx .pm-ut-n{color:var(--pm-ac);font-weight:700;font-size:48px;line-height:1}
+.work .pmx .pm-ut-nm{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--pm-hd);font-weight:500}
+.work .pmx .pm-ut-g{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+.work .pmx .pm-ut-i{display:flex;flex-direction:column;gap:4px;border-left:1px solid rgba(214,214,214,.2);padding-left:14px}
+.work .pmx .pm-ut-i b{color:var(--pm-ac);font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.work .pmx .pm-ut-i span{font-size:14.5px;line-height:1.42;color:var(--pm-tx)}
+.work .pmx .pm-ut-intro span{color:var(--pm-hd);font-size:15px}
