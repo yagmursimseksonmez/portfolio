@@ -25,6 +25,8 @@ const projects = defineCollection({
     year: z.string(),
     // One line under the title on the homepage card and the case page.
     summary: z.string(),
+    // A short hint on the folder tab, next to the title: what a recruiter will find inside.
+    tabNote: z.string().optional(),
     tags: z.array(z.string()),
     // complete: full case study. rewriting / in-progress: short stub page.
     status: z.enum(['complete', 'rewriting', 'in-progress']),

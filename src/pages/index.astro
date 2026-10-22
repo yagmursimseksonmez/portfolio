@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Avatar from '../components/Avatar.astro';
 import site from '../data/site.json';
 import { person } from '../data/person';
 
@@ -51,17 +52,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           <div class="contact-card" data-hours>
             <div class="contact-status"><h3 data-open-label>Open</h3><h3 data-reopens hidden></h3></div>
             <div class="contact-time">
-              <div class="clock" role="img" aria-label="Berlin time">
-                <svg viewBox="0 0 100 100" aria-hidden="true">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <line class="tick" x1="50" y1="6" x2="50" y2={i % 3 === 0 ? 14 : 10} stroke-width={i % 3 === 0 ? 2 : 1.2} stroke-linecap="round" transform={`rotate(${i * 30} 50 50)`} />
-                  ))}
-                  <line class="hand hand-h" data-hand="h" x1="50" y1="50" x2="50" y2="28" stroke-width="3.2" stroke-linecap="round" />
-                  <line class="hand hand-m" data-hand="m" x1="50" y1="50" x2="50" y2="16" stroke-width="2.2" stroke-linecap="round" />
-                  <line class="hand hand-s" data-hand="s" x1="50" y1="56" x2="50" y2="12" stroke-width="1" stroke-linecap="round" />
-                  <circle cx="50" cy="50" r="2" fill="var(--accent)" />
-                </svg>
-              </div>
+              <div class="clock avatar-wrap"><Avatar /></div>
             </div>
             <div class="contact-foot">
               <h3>Open to product design roles and selected freelance projects</h3>
@@ -177,7 +168,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           const tools = d.facts.find((f) => f.label === 'Tools')?.value;
           return (
             <section class="card" id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
-              <div class="card-tab"><h2>{d.title}</h2></div>
+              <div class="card-tab"><h2 class:list={{ "has-note": !!d.tabNote }}><span>{d.title}</span>{d.tabNote && <small class="tab-note">{d.tabNote}</small>}</h2></div>
               <div class="card-sheet">
                 <article class="card-content">
                   <div class="work">
@@ -254,7 +245,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       <figure class="cover"><img src={d.cover.src} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} decoding="async" loading={k < 2 ? 'eager' : 'lazy'} /></figure>
                     )}
                     {!d.cover && !d.showcase && !d.hero && <figure class="placeholder">Case study in progress</figure>}
-                    {d.gallery.filter((g) => !g.info && g.frame !== 'summary').map((g) => g.frame ? (
+                    {d.gallery.filter((g) => !g.info && !g.frame?.endsWith('summary')).map((g) => g.frame ? (
                       <figure class="pmx" aria-label={g.label} set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
                     ) : g.panels ? (
                       <figure class="panels" aria-label={g.label}>
@@ -436,10 +427,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         </div>
                       </figure>
                     )}
-                    {d.gallery.some((g) => g.frame === 'summary') && (
-                      <figure class="pmx" aria-label="Summary" set:html={frameHtml['../content/playmate-frames/summary.html']}></figure>
-                    )}
-                    {!d.gallery.some((g) => g.frame === 'summary') && <div class:list={['info', { 'no-scope': !p.body?.trim(), 'has-overview': d.gallery.some((g) => g.info) }]}>
+                    {d.gallery.filter((g) => g.frame?.endsWith('summary')).map((g) => (
+                      <figure class="pmx" aria-label="Summary" set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
+                    ))}
+                    {!d.gallery.some((g) => g.frame?.endsWith('summary')) && <div class:list={['info', { 'no-scope': !p.body?.trim(), 'has-overview': d.gallery.some((g) => g.info) }]}>
                       {d.gallery.filter((g) => g.info && g.beats).map((g) => (
                         <div class="info-overview" aria-label={g.label}>
                           {[0, 1].map((side) => (

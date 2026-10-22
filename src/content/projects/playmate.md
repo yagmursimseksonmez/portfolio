@@ -2,6 +2,7 @@
 title: PlayMate
 order: 3
 year: '2026'
+tabNote: 'Deepest UX research'
 summary: A community-driven sports matchmaking app.
 tags: [Case study, User interviews, Usability testing]
 status: complete
@@ -43,7 +44,7 @@ gallery:
   - label: Personas and journey map
     frame: personas
   - label: Concept
-    frame: cycle
+    frame: playmate-cycle
   - label: Information architecture
     frame: ia
   - label: User flow

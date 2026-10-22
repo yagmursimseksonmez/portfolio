@@ -1363,3 +1363,15 @@ body.is-scroll { overflow-x: clip; }
 .about-photo + .about-photo { margin-top: calc(var(--pad) * -1); }
 .about-photo img[src*="ecgbl"] { aspect-ratio: 4 / 3; object-fit: cover; object-position: center 45%; }
 @media (max-width: 700px) { .about-work li { flex-direction: row; align-items: flex-start; } }
+
+/* A short hint on each folder tab: what you will find inside. */
+.card-tab h2.has-note { flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; }
+.card-tab h2 .tab-note { font-size: 12.5px; line-height: 1.2; letter-spacing: 0.01em; color: var(--tertiary); white-space: nowrap; }
+@media (max-width: 1024px) { .card-tab h2 .tab-note { display: none; } .card-tab h2.has-note { flex-direction: row; align-items: center; } }
+.clock.avatar-wrap { background: none; overflow: hidden; }
+/* The email and its Copy button share one row: a smaller Copy, so the address never runs under it. */
+.email { gap: 10px; }
+.email a { min-width: 0; overflow: hidden; }
+.email a h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.email button { flex: none; font-size: 13px; letter-spacing: 0.02em; padding: 0 2px; }
+.email a h3 { font-size: 15px; }
