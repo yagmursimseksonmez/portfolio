@@ -398,7 +398,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         ))}
                       </figure>
                     )}
-                    {d.prototype && (
+                    {d.prototype?.frame && (
+                      <figure class="pmx" aria-label={d.prototype.label} set:html={frameHtml[`../content/playmate-frames/${d.prototype.frame}.html`]}></figure>
+                    )}
+                    {d.prototype && !d.prototype.frame && (
                       <figure class="prototype">
                         <div class="device">
                           {d.prototype.src ? (

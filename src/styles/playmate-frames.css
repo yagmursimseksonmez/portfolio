@@ -27,16 +27,16 @@
 .work .pmx .pm-grid2 .pm-card p{font-size:12px;line-height:1.42}
 .work .pmx .pm-chips{display:flex;gap:8px;flex-wrap:wrap}
 .work .pmx .pm-chips span{border:1px solid rgba(214,214,214,.3);border-radius:99px;padding:5px 12px;font-size:12px}
-.work .pmx .pm-f-result,.work .pmx .f-final,.work .pmx .pm-f-outcome{flex-direction:column;gap:20px}
-.work .pmx .pm-rrow,.work .pmx .prow{display:flex;gap:24px;justify-content:center;flex:1;align-items:center}
+.work .pmx .pm-f-result,.work .pmx .pm-f-final,.work .pmx .pm-f-outcome{flex-direction:column;gap:20px}
+.work .pmx .pm-rrow,.work .pmx .pm-prow{display:flex;gap:24px;justify-content:center;flex:1;align-items:center}
 .work .pmx .pm-rcol{display:flex;flex-direction:column;gap:14px;align-items:flex-start;width:254px}
 .work .pmx .pm-cap p{font-size:13px;line-height:1.4;margin-top:5px;min-height:55px}
 .work .pmx .pm-f-result{width:1190px}
-.work .pmx .f-final{width:2190px}
-.work .pmx .f-final h2{font-size:26px}
+.work .pmx .pm-f-final{width:2190px}
+.work .pmx .pm-f-final h2{font-size:26px}
 .work .pmx .pm-phone{--s:calc(var(--pw) / 402 * 1px);width:calc(var(--pw) * 1px + 14px);padding:7px;background:#0d0d0d;border-radius:36px;flex:none}
 .work .pmx .pm-scr{position:relative;width:calc(var(--pw) * 1px);height:calc(var(--pw) * 2.1px);border-radius:29px;overflow:hidden;background:#fff}
-.work .pmx .static .pm-scr img{width:100%;height:100%;object-fit:cover;display:block}
+.work .pmx .pm-static .pm-scr img{width:100%;height:100%;object-fit:cover;display:block}
 .work .pmx .pm-ptop,.work .pmx .pm-pbot{position:absolute;left:0;right:0;background-image:var(--src);background-size:100% auto;background-repeat:no-repeat;z-index:2}
 .work .pmx .pm-ptop{top:0;height:calc(var(--t) * var(--s));background-position:top}
 .work .pmx .pm-pbot{bottom:0;height:calc((var(--b) + var(--ov)) * var(--s));background-position:bottom;
@@ -77,9 +77,9 @@
 .work .pmx .pm-shot{position:relative;flex:1;min-width:0;align-self:center}
 .work .pmx .pm-shot img{width:100%;display:block;border-radius:14px}
 .work .pmx .pm-tag{position:absolute;left:14px;bottom:14px;background:var(--pm-on);color:var(--pm-hd);font-size:12px;padding:6px 12px;border-radius:99px}
-.work .pmx .f-board,.work .pmx .f-concept,.work .pmx .f-testing{flex-direction:column;gap:20px}
+.work .pmx .pm-f-board,.work .pmx .f-concept,.work .pmx .f-testing{flex-direction:column;gap:20px}
 .work .pmx .pm-bh{display:flex;flex-direction:column;gap:8px;flex:none}
-.work .pmx .f-board h2{font-size:25px;max-width:100%}
+.work .pmx .pm-f-board h2{font-size:25px;max-width:100%}
 .work .pmx .pm-bimg{display:block;border-radius:12px;object-fit:cover;background:#fff}
 .work .pmx .f-concept{width:900px}
 .work .pmx .steps{display:flex;gap:14px;flex:1}
@@ -107,10 +107,10 @@
 .work .pmx .outc li span{font-size:16.5px;line-height:1.5}
 .work .pmx .outc .intro{font-size:17px;margin:0}
 .work .pmx .outc .pm-lab{font-size:14px}
-.work .pmx .f-proto{width:800px;align-items:center;gap:56px;padding:28px 56px}
-.work .pmx .pwrap{flex:none}
-.work .pmx .ptxt{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
-.work .pmx .ptxt p{font-size:17px;max-width:340px}
+.work .pmx .pm-f-proto{width:800px;align-items:center;gap:56px;padding:28px 56px}
+.work .pmx .pm-pwrap{flex:none}
+.work .pmx .pm-ptxt{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.work .pmx .pm-ptxt p{font-size:17px;max-width:340px}
 .work .pmx button{margin-top:6px;background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx2);border-radius:99px;padding:12px 24px;font:500 14px Inter,sans-serif;cursor:not-allowed}
 .work .pmx .pm-f-sum{width:760px;flex-direction:column;gap:14px}
 .work .pmx .pm-sumtop{display:flex;gap:12px;flex:1}

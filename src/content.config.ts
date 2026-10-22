@@ -164,6 +164,8 @@ const projects = defineCollection({
     // `poster` with the button disabled until the prototype is ready.
     prototype: z
       .object({
+        // A finished page in `src/content/playmate-frames/<name>.html` instead of the built-in layout.
+        frame: z.string().optional(),
         label: z.string().default('Prototype'),
         title: z.string(),
         text: z.string(),

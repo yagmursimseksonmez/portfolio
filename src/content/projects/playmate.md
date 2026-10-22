@@ -53,11 +53,7 @@ gallery:
   - label: Testing round 1
     frame: testing-round-1
   - label: Design system · Foundations
-    title: 'Why it looks like this: vibrant neo-brutalism. Six colours, each with one job, and two typefaces.'
-    src: /images/playmate-ds-foundations.svg
-    alt: 'PlayMate foundations: light blue backgrounds 35%, yellow primary 30%, white cards 15%, blue actions 11%, pink badges 6%, dark navy text 3%. Why neo-brutalist: thick strokes and hard shadows for a retro pop-art look, game-like touches and isometric illustrations, modular cards that are quick to scan. Testing raised the contrast, cut back the hot pink and toned down the yellow. Epilogue for headings, Inter for the rest.'
-    width: 1800
-    height: 900
+    frame: foundations
   - label: Design system · Components
     frame: components
   - label: What changed most
@@ -65,22 +61,13 @@ gallery:
   - label: Usability testing
     frame: testing
   - label: Final screens
-    title: 'Onboarding, home, the map, create a game, friends, a friend’s profile and the no-show penalty.'
-    device: true
-    scroll: true
-    items:
-      - { src: /images/playmate-final-01.webp, alt: 'Onboarding: More than just a game', width: 402, height: 874 }
-      - { src: /images/playmate-screen-home-body.webp, alt: 'Home: upcoming matches, quick links to match history and ratings, and courts nearby', width: 402, height: 1278, head: { src: /images/playmate-screen-home-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-home-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
-      - { src: /images/playmate-screen-map-body.webp, alt: 'Find a Match on the map, with a selected game card and Join Game', width: 402, height: 528, head: { src: /images/playmate-screen-map-head.webp, alt: '', width: 402, height: 252 }, foot: { src: /images/playmate-screen-map-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
-      - { src: /images/playmate-screen-create.webp, alt: 'Create a game: title, sport, player limits, waitlist, schedule, cost split and venue', width: 402, height: 1742 }
-      - { src: /images/playmate-screen-friends-body.webp, alt: 'Friends: favourite playmates, recent chats and all friends', width: 402, height: 1256, head: { src: /images/playmate-screen-friends-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-friends-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
-      - { src: /images/playmate-screen-friend-profile-body.webp, alt: 'A friend’s profile: photo, skill rating, trophy case, performance metrics and teammate reviews, with Friends, Message and Invite to game buttons', width: 402, height: 2039, head: { src: /images/playmate-screen-friend-profile-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-friend-profile-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
-      - { src: /images/playmate-screen-no-show-body.webp, alt: 'No-show penalty: reliability impact, incident log, the policy and an appeal button', width: 402, height: 950, head: { src: /images/playmate-screen-no-show-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-no-show-foot.webp, alt: '', width: 402, height: 113, nav: 84 } }
+    frame: final
   - label: Outcome
     frame: outcome
   - label: Overview
     frame: summary
 prototype:
+  frame: prototype
   label: Try it
   title: Play with the prototype.
   text: Join a game, create one and rate your teammates, on the same screens as above.
