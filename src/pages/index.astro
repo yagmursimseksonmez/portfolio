@@ -12,12 +12,12 @@ const isWide = (img: { width?: number; height?: number }) => !!img.width && !!im
 
 // Newest first; `years` is how many year rows each role spans on the timeline.
 const jobs = [
-  { company: 'Konkret', title: 'Product Designer · freelance', years: 2 },
-  { company: 'Hergele Mobility', title: 'Product Designer', years: 1 },
-  { company: 'Kitbox', title: 'Product Designer', years: 1 },
-  { company: 'Bahçeşehir & Beykent', title: 'Design Lecturer', years: 2 },
-  { company: 'Beykent University', title: 'Lead Visual Designer', years: 2 },
-  { company: 'Valencia Tech · Beykent', title: 'UX Researcher', years: 3 },
+  { company: 'Konkret', title: 'Product Designer · freelance', years: 2, when: 'Feb 2025 – now' },
+  { company: 'Hergele Mobility', title: 'Product Designer', years: 1, when: 'Feb 2024 – Feb 2025' },
+  { company: 'Kitbox', title: 'Product Designer', years: 1, when: 'Sep 2023 – Jan 2024' },
+  { company: 'Bahçeşehir & Beykent', title: 'Design Lecturer', years: 2, when: 'Aug 2021 – Aug 2025' },
+  { company: 'Beykent University', title: 'Lead Visual Designer', years: 2, when: 'May 2019 – Jun 2021' },
+  { company: 'Valencia Tech · Beykent', title: 'UX Researcher', years: 3, when: 'Apr 2016 – May 2019' },
 ];
 const years = Array.from({ length: jobs.reduce((n, j) => n + j.years, 0) }, (_, i) => 2026 - i);
 
@@ -109,46 +109,60 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           <div class="book-stage">
             <div class="book-leaf">
               <div class="book-face book-cover"><h2>Hi</h2></div>
-              <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" width="1824" height="1273" loading="lazy" decoding="async" /></div>
+              <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" width="1824" height="1273" decoding="async" /></div>
             </div>
             <div class="book-right">
               <div class="book-scroll" data-book-scroll>
-                <div class="bio">
-                  <h2>I’m Yagmur</h2>
-                  <p>
-                    Four apps shipped to the App Store. Usability research. Design systems built from scratch. Before that: a PhD, a master’s and years of lecturing.
-                  </p>
-                  <p>
-                    Different fields, same thread: I’m interested in how people move through things; spaces, systems, screens.
-                  </p>
-                  <p>
-                    Four years of teaching design studios taught me to explain every decision. Today I take products from
-                    research and information architecture to interface and App Store release.
-                  </p>
-                  <img class="photo" src="/images/conference-dare.webp" alt="Yagmur presenting at the Digital Architecture Research conference" width="1920" height="1207" loading="lazy" decoding="async" />
-                  <p>
-                    I work best close to the people building the product: founders, developers and the users we test with.
-                    If you are making something people should find easy to move through, let’s talk.
-                  </p>
-                  <div class="bio-links">
-                    <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
-                    <a class="link" href="https://yildiz.academia.edu/NagehanYagmurSimsekSonmez" target="_blank" rel="noopener noreferrer"><h3>Academia</h3><Fragment set:html={arrow} /></a>
-                    <a class="link" href="https://www.flickr.com/people/126174140@N08/" target="_blank" rel="noopener noreferrer"><h3>Flickr</h3><Fragment set:html={arrow} /></a>
-                    <a class="link" href="mailto:n.yagmur.simsek@gmail.com"><h3>Email</h3><Fragment set:html={arrow} /></a>
+                <div class="about">
+                  <div class="about-head">
+                    <h2>Hi, I’m Yagmur.</h2>
+                    <p class="about-lede">I’m a product designer in Berlin. I design apps from the first user interview to the App Store.</p>
                   </div>
-                </div>
-                <div class="timeline" data-timeline>
-                  <h2 class="timeline-label">Experience</h2>
-                  <div class="timeline-dashes" data-dashes></div>
-                  <ul class="timeline-years">{years.map((y) => <li><h2>{y}</h2></li>)}</ul>
-                  <div class="timeline-jobs">
-                    {jobs.map((j) => (
-                      <div class="timeline-job" data-years={j.years}><h2>{j.company}</h2><h3>{j.title}</h3></div>
-                    ))}
-                  </div>
-                </div>
-                <div class="book-end">
-                  <img class="photo" src="/images/about-mirror-room.webp" alt="Yagmur taking a mirror selfie in a room of colourful projected patterns" width="1200" height="1600" loading="lazy" decoding="async" />
+                  <ul class="about-facts" aria-label="In short">
+                    <li><span>Based in</span>Berlin</li>
+                    <li><span>Speaks</span>English, German, Turkish</li>
+                    <li><span>PhD</span>History and theory of architecture</li>
+                    <li><span>Master’s</span>Visual communication design</li>
+                    <li><span>Shipped</span>4 apps on the App Store</li>
+                    <li><span>Outside work</span>I dance Lindy Hop</li>
+                  </ul>
+                  <section class="about-story">
+                    <h3>How I got here</h3>
+                    <p>I didn’t start in tech. I spent years with buildings: a PhD in architectural history, a master’s in visual communication, and four years teaching design students.</p>
+                    <p>What stayed with me is how people find their way through a place, and what makes them get lost. Apps are places too. So now I design those.</p>
+                  </section>
+                  <figure class="about-photo">
+                    <img src="/images/conference-dare.webp" alt="Yagmur presenting at the Digital Architecture Research conference" width="1920" height="1207" loading="lazy" decoding="async" />
+                    <figcaption>Presenting at the Digital Architecture Research conference · Bialystok, Poland, 2025</figcaption>
+                  </figure>
+                  <figure class="about-photo">
+                    <img src="/images/conference-ecgbl.webp" alt="Yagmur presenting her gamification research at the ECGBL conference" width="1500" height="2000" loading="lazy" decoding="async" />
+                    <figcaption>Presenting at the ECGBL Conference · Levanger, Norway, 2025</figcaption>
+                  </figure>
+                  <section class="about-how">
+                    <h3>How I work</h3>
+                    <ul>
+                      <li><strong>People first.</strong> I talk to users and test with them before and after I draw.</li>
+                      <li><strong>I explain my choices.</strong> Teaching made that a habit. Every screen has a reason I can say out loud.</li>
+                      <li><strong>Close to the team.</strong> I like working next to founders and developers, not handing files over a wall.</li>
+                    </ul>
+                  </section>
+                  <section class="about-work">
+                    <h3>Where I’ve worked</h3>
+                    <ol>
+                      {jobs.map((j) => <li><div><strong>{j.company}</strong><span>{j.title}</span></div><time>{j.when}</time></li>)}
+                    </ol>
+                  </section>
+                  <section class="about-hello">
+                    <h3>Say hello</h3>
+                    <p>If you’re building something people should find easy to use, I’d like to hear about it.</p>
+                    <div class="bio-links">
+                      <a class="link primary" href="mailto:n.yagmur.simsek@gmail.com"><h3>Email me</h3><Fragment set:html={arrow} /></a>
+                      <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
+                      <a class="link" href="https://yildiz.academia.edu/NagehanYagmurSimsekSonmez" target="_blank" rel="noopener noreferrer"><h3>Academia</h3><Fragment set:html={arrow} /></a>
+                      <a class="link" href="https://www.flickr.com/people/126174140@N08/" target="_blank" rel="noopener noreferrer"><h3>My photos</h3><Fragment set:html={arrow} /></a>
+                    </div>
+                  </section>
                 </div>
               </div>
             </div>
