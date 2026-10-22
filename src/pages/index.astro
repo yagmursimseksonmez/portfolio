@@ -167,7 +167,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
               <div class="card-sheet">
                 <article class="card-content">
                   <div class="work">
-                    {d.hero && (
+                    {d.hero?.frame && (
+                      <figure class="pmx" aria-label="Overview" set:html={frameHtml[`../content/playmate-frames/${d.hero.frame}.html`]}></figure>
+                    )}
+                    {d.hero && !d.hero.frame && (
                       <figure class:list={['hero', { compact: d.hero.compact }]}>
                         {d.hero.concept ? (
                           <div class:list={['concept-stage', { flat: d.hero.concept.flat }]} role="img" aria-label={d.hero.concept.video.label}>

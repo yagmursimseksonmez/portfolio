@@ -61,6 +61,8 @@ const projects = defineCollection({
         title: z.string(),
         // A long title (three lines or more) gets a smaller size so the pitch still fits the page.
         compact: z.boolean().default(false),
+        // The whole pitch page is a finished page in `src/content/playmate-frames/<name>.html`.
+        frame: z.string().optional(),
         lede: z.string(),
         // The pixel HP bar under the lede: how many of its 10 segments are filled.
         hp: z.object({ value: z.number().min(0).max(10), label: z.string() }).optional(),

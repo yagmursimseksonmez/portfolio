@@ -16,6 +16,7 @@ hero:
   kicker: PlayMate · case study · community sports app
   title: "Wanna do sports but don't have a team/partner? I have a solution!"
   compact: true
+  frame: hero
   lede: 'This is a mobile app that matches people for sport. Instead of a group chat, you join a game room: you see the time, the place, the cost, who’s playing. And the team members? You can check their profile to see skill levels, peer ratings and a no-show penalty, and build trust beforehand.'
   points:
     - { label: Role, title: 'Solo, from interviews to prototype', text: 'I ran the interviews and the usability tests, and designed every screen.' }
@@ -28,55 +29,13 @@ hero:
     video: { src: /videos/playmate-hero-final.mp4, width: 1400, height: 916, label: 'PlayMate walkthrough: onboarding, finding a match, joining a game, creating one, friends, profiles and settings, with the words “mobile app that connects people through sport” floating around the phone' }
 gallery:
   - label: The result
-    title: Find a game. Join it. Rate your teammates.
-    device: true
-    scroll: true
-    items:
-      - { src: /images/playmate-screen-find-body.webp, alt: 'Find a Match: filter chips for city, day, sport and skill above a list of games, each with spots left, price, time, level and a Join Game button', width: 402, height: 1368, head: { src: /images/playmate-screen-find-head.webp, alt: '', width: 402, height: 252 }, foot: { src: /images/playmate-screen-find-foot.webp, alt: '', width: 402, height: 116, nav: 84 }, caption: { title: Find a match, text: 'Filter by sport, skill and time. Each card shows spots left and the price.' } }
-      - { src: /images/playmate-screen-game-body.webp, alt: 'Game details: €15 per person, date, duration, skill level, 8 of 10 joined, the starting lineup with ratings and the venue on a map', width: 402, height: 1653, head: { src: /images/playmate-screen-game-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-game-foot.webp, alt: '', width: 402, height: 116, nav: 84 }, caption: { title: Game room, text: 'Price per person, level and who’s playing, before you join.' } }
-      - { src: /images/playmate-screen-feedback-body.webp, alt: 'Post-game feedback: rate the game, then for each teammate say if they attended and rate reliability, passion, respect and communication', width: 402, height: 1782, head: { src: /images/playmate-screen-feedback-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-feedback-foot.webp, alt: '', width: 402, height: 116, nav: 84 }, caption: { title: After the game, text: 'Did they show up? Rate each teammate on four things.' } }
-      - { src: /images/playmate-screen-my-profile-body.webp, alt: 'Your own profile: photo, skill rating 4.8, trophy case, preferred sports, reasons for doing sport, performance metrics and teammate reviews, with edit buttons', width: 402, height: 2013, head: { src: /images/playmate-screen-my-profile-head.webp, alt: '', width: 402, height: 102 }, foot: { src: /images/playmate-screen-my-profile-foot.webp, alt: '', width: 402, height: 116, nav: 84 }, caption: { title: Your profile, text: 'Skill, reliability and reviews add up to a reputation.' } }
+    frame: result
   - label: Problem
-    step: { n: '1', text: 'Playing sport regularly is easy to want and hard to organise.' }
-    stack: true
-    beats:
-      - name: Question
-        text: How can I make finding and organising a game easier, and build enough trust for people to play with strangers?
-      - name: Hypothesis
-        text: The barrier isn’t motivation. It’s the effort of finding the right person, and not trusting that person or the system.
-      - name: Confirmed
-        text: All 4 players I interviewed already had a sport routine. All of them struggled with coordination, skill matching or trusting someone new.
+    frame: problem
   - label: Plan
-    step: { n: '2', name: Plan, text: 'Before talking to anyone, I wanted to plan the research and decide how to move forward.' }
-    src: /images/playmate-research-plan-board.webp
-    alt: 'My research plan in FigJam, in nine numbered sections: project background, research goals, research methods, research questions, participant recruitment, constraints, data analysis, deliverables and timeline, and a research jam'
-    width: 2400
-    height: 1563
-    notes:
-      - { n: '1', title: Project background, text: 'What PlayMate is, and four hypotheses to test.', x: 0.9, y: 1.23, w: 38.6, h: 21.97 }
-      - { n: '2', title: Research goals, text: 'Frustrations, what makes a stranger feel safe, what keeps people playing.', x: 40.9, y: 1.23, w: 31.3, h: 16.28 }
-      - { n: '3', title: Research methods, text: 'Semi-structured interviews and desk research.', x: 73.6, y: 1.23, w: 25.3, h: 21.66 }
-      - { n: '4', title: Research questions, text: 'Seven questions the interviews had to answer.', x: 0.9, y: 25.35, w: 38.6, h: 24.58 }
-      - { n: '5', title: Participant recruitment, text: 'People with a sport routine, 30 minutes each, on Zoom or in person.', x: 40.9, y: 20.12, w: 28.4, h: 27.34 }
-      - { n: '6', title: Constraints, text: 'What could skew the results, like self-reported skill levels.', x: 73.6, y: 25.35, w: 25.3, h: 22.12 }
-      - { n: '7', title: Data analysis, text: 'How I would record, store and cluster the notes.', x: 0.9, y: 52.07, w: 31.4, h: 19.05 }
-      - { n: '8', title: Deliverables and timeline, text: 'What each phase hands over, from discovery to prototype.', x: 33.8, y: 52.07, w: 31.3, h: 30.72 }
-      - { n: '★', title: Research jam, text: 'Anchor topics stay fixed; the questions change with each person.', x: 66.6, y: 52.07, w: 32.3, h: 46.24 }
+    frame: plan
   - label: People and interviews
-    step: { n: '3', name: People and interviews, text: 'I interviewed 4 people who already have a sport routine, 30 minutes each, on Zoom.' }
-    panels:
-      - cards:
-          - { title: Method, text: 'Semi-structured interviews and desk research.' }
-          - { title: Found, text: 'At a few gyms, in my language course and around me.' }
-          - { title: Prepared, text: '16 open questions, cut down to fit 30 minutes.' }
-          - { title: Ran, text: 'Consent first. On Zoom I typed notes live and recorded the audio to fill the gaps.' }
-      - image: { label: The interviews on Zoom., src: /images/playmate-proof-sessions.webp, alt: 'Four screenshots of the Zoom interviews with the notes board shared on screen and the participants blurred', width: 2000, height: 1227 }
-      - title: Who
-        cards:
-          - { title: Bajo · 32, text: 'iOS developer, Berlin. Basketball and ice hockey, 4× a week.' }
-          - { title: Andrea · 34, text: 'Designer, Berlin. Jiu-jitsu, 2× a week.' }
-          - { title: Anna · 32, text: 'Designer, Berlin. Trains alone, needs team sports to stay motivated.' }
-          - { title: Mcan · 33, text: 'Office worker, Istanbul. Gym, padel, football, tennis.' }
+    frame: people
   - label: Empathy map
     frame: empathy
   - label: Personas and journey map
@@ -146,17 +105,7 @@ gallery:
   - label: Outcome
     frame: outcome
   - label: Overview
-    info: true
-    grid: true
-    beats:
-      - name: What I did
-        text: 'I designed PlayMate end to end: a community app that matches people for sport through game rooms instead of group chats.'
-      - name: How I did it
-        text: 'I planned the research, interviewed 4 people, sorted the notes into themes and turned them into features. Then I tested the wireframes and each hi-fi version.'
-      - name: Why I did it
-        text: 'You want to do sport regularly. Deciding is easy, but the hard part is finding a partner, trusting them and finally organising the game. I wanted to solve that problem.'
-      - name: Who was involved
-        text: 'It is a bootcamp project. 10 mentors, 5 classmates, 4 interviewees, 4 testers and me.'
+    frame: summary
 prototype:
   label: Try it
   title: Play with the prototype.
