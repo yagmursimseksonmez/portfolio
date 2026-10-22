@@ -100,11 +100,7 @@ gallery:
     width: 1800
     height: 900
   - label: Design system · Components
-    title: 'Built with atomic design: atoms form molecules, molecules form the sections of every screen.'
-    src: /images/playmate-ds-components.svg
-    alt: 'PlayMate components cut from the final screens. Atoms: sport badge, primary button, segmented switch, toggle, achievement icons. Molecules: filter chips, stepper, input field, quick link, rating bar. Organisms: game card, skill rating card, tab bar with a raised Create button, teammate rating card.'
-    width: 2000
-    height: 940
+    frame: components
   - label: What changed most
     frame: compare
   - label: Usability testing
