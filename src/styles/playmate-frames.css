@@ -693,3 +693,5 @@
 .work .pmx .pm-hero-proof2 img{display:block;width:220px;height:auto;border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
 .work .pmx .pm-hfoot.pm-wp .pm-pbtn{margin-left:auto}
 .work .pmx .pm-f-hero.pm-narrow{width:930px}
+.work .pmx .pm-f-hero.pm-narrow .pm-hero-t{justify-content:center;padding-top:0}
+.work .pmx .pm-hfoot.pm-wp{margin-top:6px}
