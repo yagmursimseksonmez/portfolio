@@ -695,3 +695,6 @@
 .work .pmx .pm-f-hero.pm-narrow{width:930px}
 .work .pmx .pm-f-hero.pm-narrow .pm-hero-t{justify-content:center;padding-top:0}
 .work .pmx .pm-hfoot.pm-wp{margin-top:6px}
+.work .pmx .pm-f-outcome.pm-tight.pm-side .pm-oc2{grid-template-columns:1fr 1fr;grid-auto-rows:auto;align-items:stretch;align-content:center}
+.work .pmx .pm-f-outcome.pm-tight.pm-side .pm-oc-col{justify-content:center}
+.work .pmx .pm-cgi:has(>.pm-cgc){flex-wrap:nowrap;gap:14px}

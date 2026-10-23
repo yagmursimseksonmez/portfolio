@@ -60,13 +60,13 @@ gallery:
   - label: Design system · Foundations
     frame: foundations
   - label: Design system · Components
-    frame: components
+    frame: playmate-components
   - label: Final screens
     frame: final
   - label: Try it
     frame: prototype
   - label: Outcome
-    frame: outcome
+    frame: playmate-outcome
   - label: Overview
     frame: summary
 prototype:
