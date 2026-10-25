@@ -787,6 +787,7 @@ function fitFramesToWidth() {
     content.querySelectorAll('figure.pmx').forEach((fig) => {
       const page = fig.firstElementChild;
       if (!page) return;
+      if (page.classList.contains('pm-f-sum')) { fig.classList.add('is-sum'); page.style.setProperty('--pmz', '1'); return; }
       page.style.setProperty('--pmz', '1');
       const w = page.getBoundingClientRect().width || page.scrollWidth;
       const s = Math.min(1, Math.max(0.7, avail / w));
