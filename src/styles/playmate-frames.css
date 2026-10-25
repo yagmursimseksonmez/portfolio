@@ -734,17 +734,17 @@
 .work .pmx .pm-dcard h4{font-size:17px;margin:0}
 .work .pmx .pm-dcard p{font-size:14.5px;line-height:1.45}
 .work .pmx .dsee{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--pm-ac);font-weight:600;margin-top:2px}
-.work .pmx .pm-f-ut2{gap:26px;width:1000px;align-items:stretch}
-.work .pmx .pm-utl{flex:1.4;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.work .pmx .pm-utl h2{font-size:28px}
-.work .pmx .pm-planned{align-self:flex-start;border:1.5px dashed var(--pm-ac);color:var(--pm-ac);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.work .pmx .pm-utb{background:var(--pm-card);border-radius:12px;padding:12px 16px}
-.work .pmx .pm-utb b{display:block;color:var(--pm-hd);font-size:14px;margin-bottom:3px}
-.work .pmx .pm-utb p{font-size:14.5px;line-height:1.45}
-.work .pmx .pm-utr{flex:1;background:var(--pm-card);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;justify-content:center;gap:14px}
-.work .pmx .pm-tasks{display:flex;flex-direction:column;gap:14px}
-.work .pmx .pm-tasks li{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.4}
-.work .pmx .pm-tasks i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--pm-ac);color:var(--pm-on);font:700 13px/26px Inter,sans-serif;text-align:center;font-style:normal}
+.work .pmx .f-ut2{gap:26px;width:1000px;align-items:stretch}
+.work .pmx .utl{flex:1.4;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.work .pmx .utl h2{font-size:28px}
+.work .pmx .planned{align-self:flex-start;border:1.5px dashed var(--pm-ac);color:var(--pm-ac);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.work .pmx .utb{background:var(--pm-card);border-radius:12px;padding:12px 16px}
+.work .pmx .utb b{display:block;color:var(--pm-hd);font-size:14px;margin-bottom:3px}
+.work .pmx .utb p{font-size:14.5px;line-height:1.45}
+.work .pmx .utr{flex:1;background:var(--pm-card);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.work .pmx .tasks{display:flex;flex-direction:column;gap:14px}
+.work .pmx .tasks li{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.4}
+.work .pmx .tasks i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--pm-ac);color:var(--pm-on);font:700 13px/26px Inter,sans-serif;text-align:center;font-style:normal}
 .work .pmx .f-crit{flex-direction:column;gap:20px;width:1000px}
 .work .pmx .critg{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:12px;flex:1;min-height:0}
 .work .pmx .critg .pm-card{display:flex;flex-direction:column;justify-content:center}
@@ -772,9 +772,9 @@
 .work .pmx .pm-solt h2{font-size:28px}
 .work .pmx .pm-solp li{font-size:18px}
 .work .pmx .pm-solt{width:320px}
-.work .pmx .pm-utb p{font-size:16px}
-.work .pmx .pm-utb b{font-size:15px}
-.work .pmx .pm-tasks li{font-size:17px}
+.work .pmx .utb p{font-size:16px}
+.work .pmx .utb b{font-size:15px}
+.work .pmx .tasks li{font-size:17px}
 .work .pmx .pm-f-problem.pm-tight .pm-stack .pm-card{padding:12px 20px}
 .work .pmx .pm-f-problem.pm-tight .pm-big-h h3{font-size:20px;margin-bottom:5px}
 .work .pmx .pm-f-problem.pm-tight .pm-big-h p{font-size:17px;line-height:1.4}

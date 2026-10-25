@@ -1380,3 +1380,12 @@ body.is-scroll { overflow-x: clip; }
 .read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6); height: 4px; border-radius: 4px; background: hsla(0, 0%, 100%, 0.1); overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
 .read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 4px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
 .gallery.is-focused .card.is-active .read-progress { opacity: 1; }
+/* Start, numbered steps and End under the bar: each scrolls the folder to that place */
+.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 9px); height: 22px; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+.read-stop { position: absolute; top: 0; transform: translateX(-50%); font: 600 11px/1 var(--sans, inherit); letter-spacing: 0.04em; color: hsla(0, 0%, 100%, 0.6); background: none; border: 0; padding: 5px 6px; border-radius: 99px; cursor: pointer; }
+.read-stop.start { transform: none; padding-left: 0; }
+.read-stop.end { transform: translateX(-100%); padding-right: 0; }
+.read-stop:hover, .read-stop.is-on { color: var(--accent); }
+.gallery.is-focused .card.is-active .read-nav { opacity: 1; }
+.gallery.is-focused .card.is-active .read-stop { pointer-events: auto; }
+@media (max-width: 700px) { .read-stop { font-size: 10px; padding: 5px 3px; } }

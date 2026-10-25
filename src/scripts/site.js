@@ -778,18 +778,67 @@ fitPlaymateFrames();
 
 
 // ------------------------------------------------------- reading progress
-// A thin bar along the bottom of the open folder: how far through the case you have scrolled.
+// A thin bar along the top of the open folder: how far through the case you have scrolled.
+// Under it: Start, the numbered research steps and End. Each one is a button that scrolls there.
 function startProgress() {
   document.querySelectorAll('[data-card]').forEach((card) => {
     const content = card.querySelector('.card-content');
     const bar = card.querySelector('.read-progress');
     if (!content || !bar) return;
+
+    const nav = document.createElement('div');
+    nav.className = 'read-nav';
+    bar.after(nav);
+    let stops = [];
+    const targets = () => {
+      const figs = [...content.querySelectorAll('figure.pmx')];
+      const base = content.getBoundingClientRect().left - content.scrollLeft;
+      const first = figs.length ? figs[0].getBoundingClientRect().left - base : 0;
+      const list = [{ label: 'Start', left: 0, kind: 'start' }];
+      figs.forEach((fig) => {
+        const n = fig.querySelector('.pm-hd > .pm-big');
+        if (n && /^\d+$/.test(n.textContent.trim())) list.push({ label: n.textContent.trim(), left: fig.getBoundingClientRect().left - base - first, kind: 'num' });
+      });
+      list.push({ label: 'End', left: Infinity, kind: 'end' });
+      return list;
+    };
+    const place = () => {
+      const max = Math.max(content.scrollWidth - content.clientWidth, 0);
+      const t = targets();
+      if (nav.children.length !== t.length) {
+        nav.textContent = '';
+        t.forEach((x, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = x.label;
+          b.className = `read-stop ${x.kind}`;
+          b.setAttribute('aria-label', x.kind === 'num' ? `Go to step ${x.label}` : `Go to the ${x.label.toLowerCase()}`);
+          b.addEventListener('click', () => content.scrollTo({ left: Math.min(stops[i].left, max), behavior: 'smooth' }));
+          nav.append(b);
+        });
+      }
+      stops = t;
+      // Where each stop sits along the bar, nudged apart so neighbouring labels never overlap.
+      const w = nav.clientWidth;
+      const px = t.map((x) => (max > 0 ? (Math.min(x.left, max) / max) * w : 0));
+      const gap = (i) => (i === 1 ? 44 : 26);
+      for (let i = 1; i < px.length - 1; i++) px[i] = Math.max(px[i], px[i - 1] + gap(i));
+      for (let i = px.length - 2; i >= 1; i--) px[i] = Math.min(px[i], px[i + 1] - (i === px.length - 2 ? 44 : 26));
+      t.forEach((x, i) => { nav.children[i].style.left = `${px[i]}px`; });
+    };
     const update = () => {
       const max = content.scrollWidth - content.clientWidth;
       bar.style.setProperty('--p', max > 0 ? String(content.scrollLeft / max) : '0');
+      if (max > 0 && stops.length) {
+        let cur = 0;
+        stops.forEach((x, i) => { if (Math.min(x.left, max) <= content.scrollLeft + 40) cur = i; });
+        [...nav.children].forEach((b, i) => b.classList.toggle('is-on', i === cur));
+      }
     };
     content.addEventListener('scroll', update, { passive: true });
-    new ResizeObserver(update).observe(content);
+    new ResizeObserver(() => { place(); update(); }).observe(content);
+    window.addEventListener('resize', () => { place(); update(); });
+    place();
     update();
   });
 }

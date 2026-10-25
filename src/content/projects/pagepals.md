@@ -17,7 +17,7 @@ hero:
   title: Find your next book through your friends.
   lede: I redesigned a three-year-old survey project. The shelf is the home, and friends' reading drives discovery.
   points:
-    - { label: Role, title: 'Research synthesis, UX, UI', text: 'I re-read the research, re-framed the problem and built the screens, the design system and the components.' }
+    - { label: Role, title: 'Research synthesis, UX, UI', text: 'I re-read the research, re-framed the problem and built the screens and the design system.' }
     - { label: Problem, title: 'Friends drive discovery, tools don’t', text: '73.3% of 15 readers find books through friends and family, but only 13.3% like the social side of today’s platforms.' }
     - { label: Solution, title: The shelf is the home, text: 'Four reading states make up Home. Friends’ activity leads, and every recommendation says why.' }
     - { label: Impact, title: Usability test planned, text: 'The five-person test is not yet run. I will add the results when I have them.' }
@@ -27,20 +27,24 @@ gallery:
     frame: pagepals-result
   - label: Problem
     frame: pagepals-problem
-  - label: The first design
-    frame: pagepals-critique
+  - label: Validation
+    frame: pagepals-validation
   - label: Process
     frame: pagepals-process
+  - label: UX decisions
+    frame: pagepals-decisions
   - label: On paper first
     frame: pagepals-sitemap
   - label: Information architecture
     frame: pagepals-ia
   - label: Wireframes
     frame: pagepals-wireframes
-  - label: Validation
-    frame: pagepals-validation
-  - label: UX decisions
-    frame: pagepals-decisions
+  - label: Design system · colour
+    frame: pagepals-ds-colour
+  - label: Design system · type
+    frame: pagepals-ds-type
+  - label: Design system · spacing
+    frame: pagepals-ds-space
   - label: Sign up
     frame: pagepals-auth
   - label: Home
@@ -53,18 +57,6 @@ gallery:
     frame: pagepals-groups
   - label: Profile
     frame: pagepals-profile
-  - label: Design system
-    frame: pagepals-ds-colour
-  - label: Tokens and contrast
-    frame: pagepals-ds-tokens
-  - label: Typography
-    frame: pagepals-ds-type
-  - label: Spacing and radius
-    frame: pagepals-ds-space
-  - label: Components
-    frame: pagepals-components
-  - label: Usability test
-    frame: pagepals-usability
   - label: Next
     frame: pagepals-next
   - label: Overview
