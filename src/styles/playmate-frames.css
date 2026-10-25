@@ -880,3 +880,7 @@
 .work .pmx .pm-vk h4{font-size:19px;margin-bottom:12px}
 .work .pmx .pm-vk ul{list-style:disc;gap:10px}
 .work .pmx .pm-vk li{font-size:15px}
+.work .pmx .pm-f-empathy{flex-direction:row-reverse}
+.work .pmx .pm-bhn{flex-direction:row;align-items:center;gap:16px}
+.work .pmx .pm-bhn .pm-big{font-size:64px;flex:none}
+.work .pmx .pm-bhn>div:last-child{display:flex;flex-direction:column;gap:8px}

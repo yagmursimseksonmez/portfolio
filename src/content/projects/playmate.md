@@ -33,9 +33,9 @@ gallery:
     frame: result
   - label: Problem
     frame: problem
-  - label: Plan
+  - label: Planning
     frame: plan
-  - label: People and interviews
+  - label: Interviews
     frame: people
   - label: Synthesis
     frame: synthesis
@@ -47,19 +47,19 @@ gallery:
     frame: playmate-cycle
   - label: Information architecture
     frame: playmate-ia
-  - label: User flow
+  - label: User flows
     frame: playmate-userflow
-  - label: Wireframes
+  - label: Low fidelity wireframes
     frame: wireframes
-  - label: Testing round 1
-    frame: testing-round-1
   - label: Usability testing
     frame: testing
-  - label: What changed most
+  - label: Testing round 1
+    frame: testing-round-1
+  - label: Iterations
     frame: compare
-  - label: Design system · Foundations
+  - label: Design system and components
     frame: foundations
-  - label: Design system · Components
+  - label: Components
     frame: playmate-components
   - label: Final screens
     frame: final

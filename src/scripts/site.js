@@ -796,7 +796,7 @@ function startProgress() {
       const first = figs.length ? figs[0].getBoundingClientRect().left - base : 0;
       const list = [{ label: 'Start', left: 0, kind: 'start' }];
       figs.forEach((fig) => {
-        const n = fig.querySelector('.pm-hd > .pm-big');
+        const n = fig.querySelector('.pm-hd > .pm-big, .pm-bh > .pm-big, .pm-ph > .pm-big');
         if (n && /^\d+$/.test(n.textContent.trim())) list.push({ label: n.textContent.trim(), left: fig.getBoundingClientRect().left - base - first, kind: 'num' });
       });
       list.push({ label: 'End', left: Infinity, kind: 'end' });
