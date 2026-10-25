@@ -556,7 +556,7 @@ function startTallBoards() {
 // ------------------------------------------------------- scrolling screens
 // A wheel over a phone scrolls that screen. Once it reaches an end, a fresh gesture moves the folder sideways again.
 function startScrollScreens() {
-  document.querySelectorAll('.device-scroll, .beat-shot, .pm-pmid, .pm-wmid').forEach((win) => {
+  document.querySelectorAll('.device-scroll, .beat-shot, .pm-pmid, .pm-wmid, .pm-bscroll').forEach((win) => {
     let last = 0;
     win.addEventListener('wheel', (e) => {
       if (!win.closest('.card.is-active')) return;

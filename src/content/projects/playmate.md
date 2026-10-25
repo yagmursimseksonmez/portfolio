@@ -46,9 +46,9 @@ gallery:
   - label: Concept
     frame: playmate-cycle
   - label: Information architecture
-    frame: ia
+    frame: playmate-ia
   - label: User flow
-    frame: userflow
+    frame: playmate-userflow
   - label: Wireframes
     frame: wireframes
   - label: Testing round 1
