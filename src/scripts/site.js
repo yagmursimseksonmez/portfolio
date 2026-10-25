@@ -559,7 +559,7 @@ function startScrollScreens() {
   document.querySelectorAll('.device-scroll, .beat-shot, .pm-pmid, .pm-wmid, .pm-bscroll').forEach((win) => {
     let last = 0;
     win.addEventListener('wheel', (e) => {
-      if (!win.closest('.card.is-active')) return;
+      if (!win.closest('.card.is-active') || !win.classList.contains('is-live')) return;
       if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
       const max = win.scrollHeight - win.clientHeight;
       const canScroll = (e.deltaY > 0 && win.scrollTop < max - 0.5) || (e.deltaY < 0 && win.scrollTop > 0.5);
@@ -777,6 +777,31 @@ function fitPlaymateFrames() {
 fitPlaymateFrames();
 
 
+// Phone: a folder opens as one long page. Every designed frame is scaled to the screen width (never below 70%);
+// a frame still wider than the screen scrolls sideways inside its own box.
+function fitFramesToWidth() {
+  if (!mobile.matches) return;
+  document.querySelectorAll('.card.is-active .card-content').forEach((content) => {
+    const avail = content.clientWidth - 24;
+    if (avail <= 0) return;
+    content.querySelectorAll('figure.pmx').forEach((fig) => {
+      const page = fig.firstElementChild;
+      if (!page) return;
+      page.style.setProperty('--pmz', '1');
+      const w = page.getBoundingClientRect().width || page.scrollWidth;
+      const s = Math.min(1, Math.max(0.7, avail / w));
+      fig.style.setProperty('--pm-h', `${700 * s}px`);
+      page.style.setProperty('--pmz', String(s));
+      fig.classList.toggle('is-wide', w * s > avail + 4);
+    });
+  });
+}
+mobile.addEventListener('change', fitFramesToWidth);
+window.addEventListener('resize', fitFramesToWidth);
+new MutationObserver(() => requestAnimationFrame(fitFramesToWidth)).observe(document.querySelector('.gallery') ?? document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+window.addEventListener('load', fitFramesToWidth);
+fitFramesToWidth();
+
 // ------------------------------------------------------- reading progress
 // A thin bar along the top of the open folder: how far through the case you have scrolled.
 // Under it: Start, the numbered research steps and End. Each one is a button that scrolls there.
@@ -789,21 +814,27 @@ function startProgress() {
     const nav = document.createElement('div');
     nav.className = 'read-nav';
     bar.after(nav);
+    // On a phone the folder is one long page (scrolls down); on a screen it is a strip (scrolls sideways).
+    const vert = () => mobile.matches;
+    const maxOf = () => Math.max(vert() ? content.scrollHeight - content.clientHeight : content.scrollWidth - content.clientWidth, 0);
+    const posOf = () => (vert() ? content.scrollTop : content.scrollLeft);
     let stops = [];
     const targets = () => {
       const figs = [...content.querySelectorAll('figure.pmx')];
-      const base = content.getBoundingClientRect().left - content.scrollLeft;
-      const first = figs.length ? figs[0].getBoundingClientRect().left - base : 0;
+      const cr = content.getBoundingClientRect();
+      const at = (el) => { const r = el.getBoundingClientRect(); return vert() ? r.top - cr.top + content.scrollTop : r.left - cr.left + content.scrollLeft; };
+      const first = figs.length ? at(figs[0]) : 0;
+      const gap = vert() ? 56 : 0;
       const list = [{ label: 'Start', left: 0, kind: 'start' }];
       figs.forEach((fig) => {
-        const n = fig.querySelector('.pm-hd > .pm-big, .pm-bh > .pm-big, .pm-ph > .pm-big');
-        if (n && /^\d+$/.test(n.textContent.trim())) list.push({ label: n.textContent.trim(), left: fig.getBoundingClientRect().left - base - first, kind: 'num' });
+        const n = fig.querySelector('.pm-hd > .pm-big, .pm-bhn > .pm-big, .pm-ph > .pm-big');
+        if (n && /^\d+$/.test(n.textContent.trim())) list.push({ label: n.textContent.trim(), left: at(fig) - (vert() ? gap : first), kind: 'num' });
       });
       list.push({ label: 'End', left: Infinity, kind: 'end' });
       return list;
     };
     const place = () => {
-      const max = Math.max(content.scrollWidth - content.clientWidth, 0);
+      const max = maxOf();
       const t = targets();
       if (nav.children.length !== t.length) {
         nav.textContent = '';
@@ -813,11 +844,15 @@ function startProgress() {
           b.textContent = x.label;
           b.className = `read-stop ${x.kind}`;
           b.setAttribute('aria-label', x.kind === 'num' ? `Go to step ${x.label}` : `Go to the ${x.label.toLowerCase()}`);
-          b.addEventListener('click', () => content.scrollTo({ left: Math.min(stops[i].left, max), behavior: 'smooth' }));
+          b.addEventListener('click', () => {
+            const to = Math.max(0, Math.min(targets()[i].left, maxOf()));
+            content.scrollTo(vert() ? { top: to, behavior: 'smooth' } : { left: to, behavior: 'smooth' });
+          });
           nav.append(b);
         });
       }
       stops = t;
+      if (vert()) { [...nav.children].forEach((b) => { b.style.left = ''; }); return; }
       // Where each stop sits along the bar, nudged apart so neighbouring labels never overlap.
       const w = nav.clientWidth;
       const px = t.map((x) => (max > 0 ? (Math.min(x.left, max) / max) * w : 0));
@@ -826,20 +861,49 @@ function startProgress() {
       for (let i = px.length - 2; i >= 1; i--) px[i] = Math.min(px[i], px[i + 1] - (i === px.length - 2 ? 44 : 26));
       t.forEach((x, i) => { nav.children[i].style.left = `${px[i]}px`; });
     };
+    let last = -1;
     const update = () => {
-      const max = content.scrollWidth - content.clientWidth;
-      bar.style.setProperty('--p', max > 0 ? String(content.scrollLeft / max) : '0');
+      const max = maxOf();
+      bar.style.setProperty('--p', max > 0 ? String(posOf() / max) : '0');
       if (max > 0 && stops.length) {
         let cur = 0;
-        stops.forEach((x, i) => { if (Math.min(x.left, max) <= content.scrollLeft + 40) cur = i; });
+        stops.forEach((x, i) => { if (Math.min(x.left, max) <= posOf() + 40) cur = i; });
         [...nav.children].forEach((b, i) => b.classList.toggle('is-on', i === cur));
+        if (vert() && cur !== last) nav.scrollTo({ left: Math.max(0, nav.children[cur].offsetLeft - 40), behavior: 'smooth' });
+        last = cur;
       }
     };
     content.addEventListener('scroll', update, { passive: true });
     new ResizeObserver(() => { place(); update(); }).observe(content);
+    new MutationObserver(() => { place(); update(); }).observe(content, { subtree: true, attributes: true, attributeFilter: ['style'] });
     window.addEventListener('resize', () => { place(); update(); });
     place();
     update();
   });
 }
 startProgress();
+
+
+// A screen inside a frame only scrolls after you click (or tap) it, and a yellow outline shows it is live. Until then the wheel
+// (or a swipe) moves the folder. Click outside to let go. On a mouse, a small hint says so while you hover a scrollable screen.
+const liveScreens = '.pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll, .device-scroll';
+const scrollable = (el) => el.scrollHeight - el.clientHeight > 4;
+const hint = document.createElement('div');
+hint.className = 'scroll-hint';
+hint.textContent = 'Click to scroll';
+document.body.append(hint);
+const hideHint = () => hint.classList.remove('is-on');
+document.addEventListener('click', (e) => {
+  const hit = e.target.closest?.(liveScreens);
+  document.querySelectorAll('.is-live').forEach((el) => { if (el !== hit) el.classList.remove('is-live'); });
+  if (hit) { hit.classList.add('is-live'); hideHint(); }
+});
+document.addEventListener('mouseover', (e) => {
+  const hit = e.target.closest?.(liveScreens);
+  if (!hit || hit.classList.contains('is-live') || !scrollable(hit) || !hit.closest('.card.is-active')) { hideHint(); return; }
+  const r = hit.getBoundingClientRect();
+  hint.style.left = `${r.left + r.width / 2}px`;
+  hint.style.top = `${Math.max(r.top, 0) + 10}px`;
+  hint.classList.add('is-on');
+});
+document.addEventListener('wheel', hideHint, { passive: true });

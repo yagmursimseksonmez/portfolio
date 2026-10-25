@@ -1377,15 +1377,43 @@ body.is-scroll { overflow-x: clip; }
 .email a h3 { font-size: 15px; }
 
 /* Reading progress of the open folder */
-.read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6); height: 4px; border-radius: 4px; background: hsla(0, 0%, 100%, 0.1); overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+.read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 4px; border-radius: 4px; background: hsla(0, 0%, 100%, 0.1); overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
 .read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 4px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
 .gallery.is-focused .card.is-active .read-progress { opacity: 1; }
 /* Start, numbered steps and End under the bar: each scrolls the folder to that place */
-.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 9px); height: 22px; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); height: 24px; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
 .read-stop { position: absolute; top: 0; transform: translateX(-50%); font: 600 11px/1 var(--sans, inherit); letter-spacing: 0.04em; color: hsla(0, 0%, 100%, 0.6); background: none; border: 0; padding: 5px 6px; border-radius: 99px; cursor: pointer; }
 .read-stop.start { transform: none; padding-left: 0; }
 .read-stop.end { transform: translateX(-100%); padding-right: 0; }
 .read-stop:hover, .read-stop.is-on { color: var(--accent); }
 .gallery.is-focused .card.is-active .read-nav { opacity: 1; }
 .gallery.is-focused .card.is-active .read-stop { pointer-events: auto; }
-@media (max-width: 700px) { .read-stop { font-size: 10px; padding: 5px 3px; } }
+
+
+/* ------------------------------------------------------------ phone: a folder opens as one long page you scroll down */
+@media (max-width: 700px) {
+  .read-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; pointer-events: none; }
+  .read-nav::-webkit-scrollbar { display: none; }
+  .read-stop { position: static; flex: none; transform: none !important; font-size: 12px; padding: 5px 9px; }
+  .read-stop.start { padding-left: 0; }
+  .gallery.is-focused .card.is-active .card-content {
+    overflow: hidden auto;
+    touch-action: pan-y;
+    align-items: flex-start;
+    padding: calc(var(--pad) * 0.6 + 42px) 0 calc(var(--pad) * 2 + var(--peek-offset) + 40px);
+  }
+  .card.is-active .work { flex-direction: column; align-items: stretch; align-self: flex-start; width: 100%; height: auto; gap: 14px; padding-inline: var(--pad); }
+  .card.is-active .work figure.pmx { width: 100%; height: var(--pm-h, 440px); max-height: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; border-radius: 14px; position: relative; }
+  .card.is-active .work figure.pmx::-webkit-scrollbar { display: none; }
+  .work figure.pmx .pmf { width: max-content; }
+  .work figure.pmx.is-wide::after { content: 'swipe →'; position: sticky; left: calc(100% - 70px); bottom: 6px; display: block; width: 62px; margin-top: -22px; padding: 3px 7px; border-radius: 99px; background: rgba(0, 0, 0, 0.55); color: #d6d6d6; font: 600 10px/1.4 var(--sans, inherit); text-align: center; pointer-events: none; }
+}
+@media (max-width: 700px) {
+  .gallery.is-focused .card.is-active .card-sheet::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--pad) * 0.6 + 36px); background: var(--fill); border-radius: 12px 12px 0 0; z-index: 5; pointer-events: none; }
+}
+
+.work .pmx .pm-pmid:not(.is-live), .work .pmx .pm-wsc:not(.is-live), .work .pmx .pm-wmid:not(.is-live), .work .pmx .pm-bscroll:not(.is-live), .work .device-scroll:not(.is-live) { overflow-y: hidden !important; }
+.work .is-live { overflow-y: auto !important; overscroll-behavior: contain; outline: 2px solid var(--accent); outline-offset: -2px; }
+.scroll-hint { position: fixed; z-index: 200; transform: translateX(-50%); padding: 5px 11px; border-radius: 99px; background: rgba(0, 0, 0, 0.72); color: #f4f4f2; font: 600 12px/1.2 var(--sans, inherit); letter-spacing: 0.02em; pointer-events: none; opacity: 0; transition: opacity 120ms var(--ease); }
+.scroll-hint.is-on { opacity: 1; }
+@media (hover: none) { .scroll-hint { display: none; } }

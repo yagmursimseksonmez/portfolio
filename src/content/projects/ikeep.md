@@ -38,6 +38,10 @@ gallery:
     frame: ikeep-cycle
   - label: Information architecture
     frame: ikeep-ia
+  - label: User flow example
+    frame: ikeep-userflow
+  - label: User flow example · second flow
+    frame: ikeep-userflow2
   - label: Before and after
     frame: ikeep-compare
   - label: What I added

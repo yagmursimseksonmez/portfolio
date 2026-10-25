@@ -47,8 +47,10 @@ gallery:
     frame: playmate-cycle
   - label: Information architecture
     frame: playmate-ia
-  - label: User flows
+  - label: User flow example
     frame: playmate-userflow
+  - label: User flow example · second flow
+    frame: playmate-userflow2
   - label: Low fidelity wireframes
     frame: wireframes
   - label: Usability testing

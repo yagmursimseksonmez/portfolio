@@ -38,6 +38,10 @@ gallery:
     frame: healthbar-cycle
   - label: Information architecture
     frame: healthbar-ia
+  - label: User flow example
+    frame: healthbar-userflow
+  - label: User flow example · second flow
+    frame: healthbar-userflow2
   - label: Onboarding
     frame: healthbar-onboarding
   - label: Daily loop
