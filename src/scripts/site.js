@@ -175,7 +175,7 @@ function startHero() {
   }
 
   function sync() {
-    const go = onScreen && !covered && !reduceMotion.matches && document.visibilityState === 'visible';
+    const go = onScreen && !covered && !reduceMotion.matches && !mobile.matches && document.visibilityState === 'visible';
     if (go && !running) { running = true; raf = requestAnimationFrame(step); }
     if (!go) { running = false; cancelAnimationFrame(raf); draw(); }
   }

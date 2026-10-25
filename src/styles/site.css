@@ -1417,3 +1417,33 @@ body.is-scroll { overflow-x: clip; }
 .scroll-hint { position: fixed; z-index: 200; transform: translateX(-50%); padding: 5px 11px; border-radius: 99px; background: rgba(0, 0, 0, 0.72); color: #f4f4f2; font: 600 12px/1.2 var(--sans, inherit); letter-spacing: 0.02em; pointer-events: none; opacity: 0; transition: opacity 120ms var(--ease); }
 .scroll-hint.is-on { opacity: 1; }
 @media (hover: none) { .scroll-hint { display: none; } }
+
+/* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
+.hero-static { display: none; }
+@media (max-width: 700px) {
+  /* The moving lettering stays off on a phone: a still headline instead. */
+  .build { display: none; }
+  .hero-static { display: block; padding: 0 var(--pad); color: #fafaf8; font-weight: 700; font-size: 21.5vw; line-height: 0.86; letter-spacing: -0.045em; }
+  .hero-static span { display: block; }
+
+  .gallery { --hh: 48px; --row: 54px; --hw: 168px; --list-top: calc(100dvh - var(--count) * var(--row) - 124px); }
+  .gallery, .gallery.has-front { --peek-offset: 0px !important; }
+  .card {
+    --hy: calc(var(--list-top) + (var(--count) - 1 - var(--i)) * var(--row));
+    transform: none !important;
+    clip-path: inset(var(--hy) 0 calc(100dvh - var(--hy) - var(--hh)) calc(100% - var(--hw)) round 16px 0 0 16px);
+    transition: clip-path 380ms var(--ease);
+  }
+  .gallery.is-focused .card.is-active { clip-path: inset(0 0 0 0 round 0); }
+  .gallery.is-focused .card:not(.is-active), .gallery.is-book .card { visibility: hidden; }
+  .card-tab { flex: 0 0 var(--hh); height: var(--hh); }
+  .card-tab h2 {
+    left: auto; right: 0; top: var(--hy); bottom: auto; width: var(--hw); height: var(--hh);
+    padding: 0 18px; border-radius: 16px 0 0 16px; font-size: 22px;
+    transition: top 380ms var(--ease), width 380ms var(--ease), border-radius 380ms var(--ease), padding 380ms var(--ease), background 150ms var(--ease);
+  }
+  .card-tab h2::before, .card-tab h2::after, .card-tab h2 .tab-note { display: none; }
+  .gallery.is-focused .card.is-active .card-tab h2 { top: 0; width: 100%; border-radius: 0; padding-left: 58px; }
+  .gallery:not(.is-focused) .card-sheet { display: none; }
+  .card-sheet { border-radius: 0; }
+}
