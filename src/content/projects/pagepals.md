@@ -54,7 +54,13 @@ gallery:
   - label: Profile
     frame: pagepals-profile
   - label: Design system
-    frame: pagepals-system
+    frame: pagepals-ds-colour
+  - label: Tokens and contrast
+    frame: pagepals-ds-tokens
+  - label: Typography
+    frame: pagepals-ds-type
+  - label: Spacing and radius
+    frame: pagepals-ds-space
   - label: Components
     frame: pagepals-components
   - label: Usability test
