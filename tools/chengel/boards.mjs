@@ -140,9 +140,4 @@ await draw('icons', 1760, 600, `
     '</div>';
 `);
 
-// ------------------------------------------------------------------ app icon stand-in: Cengo on the sky colour
-await draw('icon', 512, 512, `
-  var V=${J(vars('light'))};
-  b.innerHTML='<div style="'+V+';width:512px;height:512px;background:linear-gradient(160deg,#b6cffb,#94b7f8);display:grid;place-items:center">'+W.Mascot({pose:'hello',size:400})+'</div>';
-`);
 await c.close();

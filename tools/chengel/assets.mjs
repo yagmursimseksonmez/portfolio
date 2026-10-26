@@ -29,6 +29,7 @@ await sharp(`${shots}/dark-puzzle-4.png`).resize({ width: 780 }).extract({ left:
 for (const b of ['colour', 'type', 'components', 'icons'])
   await sharp(`${boards}/${b}.png`).webp({ quality: 90, alphaQuality: 100 }).toFile(`${OUT}/chengel-ds-${b}.webp`);
 await sharp(`${boards}/hand.png`).webp({ quality: 92, alphaQuality: 100 }).toFile(`${OUT}/chengel-hand-specimen.webp`);
-await sharp(`${boards}/icon.png`).resize({ width: 512 }).webp({ quality: 92 }).toFile(`${OUT}/chengel-icon.webp`);
+// the app icon: her logo file (chengel-logo-tight-2048.png), not a render
+await sharp('tools/chengel/logo.png').resize({ width: 512 }).webp({ quality: 92, alphaQuality: 100 }).toFile(`${OUT}/chengel-icon.webp`);
 await sharp(`${zipScreens}/options-compared.png`).webp({ quality: 90 }).toFile(`${OUT}/chengel-kb-options.webp`);
 console.log('done');

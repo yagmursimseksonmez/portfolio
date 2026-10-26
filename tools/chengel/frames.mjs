@@ -267,7 +267,7 @@ write('getit', `
 <div class="pmf" style="width:1370px;align-items:center;gap:44px;padding:28px 48px">
   <div style="width:340px;flex:none;display:flex;flex-direction:column;gap:16px">
     <div class="pm-lab">Download from the App Store</div>
-    <div style="display:flex;align-items:center;gap:18px"><img src="/images/chengel-icon.webp" alt="Chengel app icon" style="width:112px;height:112px;border-radius:26px;box-shadow:0 0 0 1px rgba(255,255,255,.12)"><div><h2 style="font-size:34px;line-height:1.05">Chengel</h2><p style="font-size:14px;margin-top:4px">Learn words by solving crosswords</p></div></div>
+    <div style="display:flex;align-items:center;gap:18px"><img src="/images/chengel-icon.webp" alt="Chengel app icon" style="width:112px;height:112px;border-radius:0;box-shadow:none"><div><h2 style="font-size:34px;line-height:1.05">Chengel</h2><p style="font-size:14px;margin-top:4px">Learn words by solving crosswords</p></div></div>
     <p style="font-size:15px;line-height:1.5">I sent Chengel to the App Store. It is <strong>waiting for Apple’s review</strong> and should be out soon. I will put the link here.</p>
     <span class="pm-pbtn" style="align-self:flex-start;background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin:0">In App Store review</span>
   </div>
