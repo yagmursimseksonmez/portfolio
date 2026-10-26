@@ -776,6 +776,19 @@ function fitPlaymateFrames() {
 }
 fitPlaymateFrames();
 
+// Chengel prototype: the button on the page flips the prototype between light and dark.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-chengel-theme]');
+  if (!btn) return;
+  const frame = btn.closest('.pmf')?.querySelector('iframe');
+  const win = frame?.contentWindow;
+  const toggle = win?.document.getElementById('themebtn')?.querySelector('button');
+  if (!toggle) return;
+  toggle.click();
+  const label = win.document.querySelector('#themebtn button')?.textContent.trim() || '';
+  btn.textContent = /^Light/.test(label) ? 'Switch to light' : 'Switch to dark';
+});
+
 
 // Phone: a folder opens as one long page. Every designed frame is scaled to the screen width (never below 70%);
 // a frame still wider than the screen scrolls sideways inside its own box.

@@ -1,6 +1,6 @@
 ---
 title: HealthBar
-order: 2
+order: 3
 year: '2025 → now'
 tabNote: 'Most complex work · research to App Store'
 summary: An RPG-style companion that turns Apple Health data into a game.

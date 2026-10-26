@@ -1,6 +1,6 @@
 ---
 title: PlayMate
-order: 3
+order: 4
 year: '2026'
 tabNote: 'Deepest UX research'
 summary: A community-driven sports matchmaking app.

@@ -905,3 +905,11 @@
 .work .pmx .pm-n-ok{fill:#1f4a35;stroke:#2fcf7e}
 .work .pmx .pm-n-err{fill:#4d2a2d;stroke:#ee5a63}
 .work .pmx .pm-bhn{display:flex}
+
+/* ---- Chengel: the same header on every numbered page ---- */
+.work .pmx .pm-ch .pm-bh h2{font-size:25px;line-height:1.18;letter-spacing:-.01em;max-width:none}
+.work .pmx .pm-ch .pm-bhn .pm-big{font-size:44px;line-height:.85}
+.work .pmx .pm-ch .pm-bh .pm-lab{font-size:12px}
+.work .pmx .pm-f-proto .pm-proto-live{width:auto;height:auto;overflow:visible;position:static}
+.work .pmx .pm-f-proto .pm-proto-live .pm-phone iframe{position:static;transform:none}
+.work .pmx .pm-bimg.pm-tr{box-shadow:none!important;border-radius:0}

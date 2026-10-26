@@ -1,8 +1,8 @@
 ---
 title: iKeep
-order: 1
+order: 2
 year: '2026'
-tabNote: 'Latest work · redesign shipped in a week'
+tabNote: 'Redesign shipped in a week'
 summary: A copy and paste vault for the values you type again and again.
 tags: [iOS, Product design, Live on App Store]
 status: complete
