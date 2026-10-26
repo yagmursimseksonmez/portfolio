@@ -33,10 +33,8 @@ gallery:
     frame: chengel-cycle
   - label: Information architecture
     frame: chengel-ia
-  - label: User flow example
+  - label: User flow examples
     frame: chengel-userflow
-  - label: User flow example · second flow
-    frame: chengel-userflow2
   - label: Iterations · keyboard and dark mode
     frame: chengel-keyboard
   - label: Design system · colour

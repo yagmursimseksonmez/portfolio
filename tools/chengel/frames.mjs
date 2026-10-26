@@ -49,27 +49,28 @@ ${col('GROW A GARDEN', 'Each level has its own <strong>unique flowers</strong>. 
 </div></div>`);
 
 // ---------------------------------------------------------------- idea
-write('problem', page('width:700px;flex-direction:column;gap:16px', `
+// narrow, so the three cards are filled by their text instead of stretched
+write('problem', page('width:460px;flex-direction:column;gap:16px', `
 ${head(1, 'Idea', 'I wanted learning words to feel like an old <strong>newspaper crossword</strong>.')}
 <div class="pm-stack">
-<div class="pm-card pm-big-h"><h3>QUESTION</h3><p>How can learning vocabulary be fun, like we used to do in old times? <strong>Solving a crossword with a pencil.</strong></p></div>
-<div class="pm-card pm-big-h"><h3>IDEA</h3><p>A crossword where <strong>the clue is in your language</strong> and the answer is the word you are learning.</p></div>
-<div class="pm-card pm-big-h"><h3>REFERENCE</h3><p>We used to solve newspaper crosswords <strong>by hand</strong>. The app brings that back, down to the handwriting. But this time it helps you learn a language.</p></div>
+<div class="pm-card pm-big-h"><h3>QUESTION</h3><p style="font-size:16px">How can learning vocabulary be fun, like we used to do in old times? <strong>Solving a crossword with a pencil.</strong></p></div>
+<div class="pm-card pm-big-h"><h3>IDEA</h3><p style="font-size:16px">A crossword where <strong>the clue is in your language</strong> and the answer is the word you are learning.</p></div>
+<div class="pm-card pm-big-h"><h3>REFERENCE</h3><p style="font-size:16px">We used to solve newspaper crosswords <strong>by hand</strong>. The app brings that back, down to the handwriting. But this time it helps you learn a language.</p></div>
 </div>`));
 
 // ---------------------------------------------------------------- handwriting
-write('hand', page('width:1290px;flex-direction:column;gap:18px', `
+// left: the text above the specimen; right: the grid in dark above the grid in light. Both columns fill the height.
+write('hand', page('width:930px;flex-direction:column;gap:18px', `
 ${head(2, 'Handwriting', 'I took the typography of my handwriting.')}
-<div style="display:flex;gap:22px;height:530px;flex:none;align-items:center">
-  <div style="width:350px;flex:none;display:flex;flex-direction:column;gap:12px;justify-content:center">
-    <div class="pm-card" style="display:flex;flex-direction:column;gap:12px;padding:28px 28px"><h3 style="font-size:26px;line-height:1.2;color:var(--pm-hd)">The letters you write are my own handwriting.</h3><p style="font-size:16px;line-height:1.55">Newspaper crosswords were filled in by hand, so I wanted that look back. I turned it into a typeface, <strong>Yagmur Hand</strong>. One font file covers German, Turkish and Spanish letters.</p></div>
-    <p style="font-size:13.5px;color:var(--pm-tx2);padding:0 6px">Only the grid uses it. Everything else is a clean monospace.</p>
+<div style="display:flex;gap:12px;flex:1;min-height:0">
+  <div style="width:440px;flex:none;display:flex;flex-direction:column;gap:12px">
+    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center;padding:24px 28px"><h3 style="font-size:26px;line-height:1.2;color:var(--pm-hd)">The letters you write are my own handwriting.</h3><p style="font-size:16px;line-height:1.55">Newspaper crosswords were filled in by hand, so I wanted that look back. I turned it into a typeface, <strong>Yagmur Hand</strong>. One font file covers German, Turkish and Spanish letters.</p><p style="font-size:13.5px;color:var(--pm-tx2)">Only the grid uses it. Everything else is a clean monospace.</p></div>
+    <img src="/images/chengel-hand-specimen.webp" alt="Yagmur Hand: the word NACHT, the alphabet and the accented letters" style="width:100%;height:auto;border-radius:14px;display:block;flex:none">
   </div>
-  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px;justify-content:center">
+  <div style="width:422px;flex:none;display:flex;flex-direction:column;justify-content:space-between">
     <img src="/images/chengel-grid-dark.webp" alt="The crossword grid in dark mode with NACHT written in handwriting" style="width:100%;border-radius:14px;display:block">
     <img src="/images/chengel-grid-light.webp" alt="The crossword grid in light mode" style="width:100%;border-radius:14px;display:block">
   </div>
-  <img src="/images/chengel-hand-specimen.webp" alt="Yagmur Hand: the word NACHT, the alphabet and the accented letters" style="height:330px;width:auto;border-radius:14px;flex:none;align-self:center">
 </div>`));
 
 // ---------------------------------------------------------------- cycle (concept)
@@ -110,8 +111,9 @@ ${tcol('Awards', [li('Progress', ['Bloom card', 'Level ladder']), li('Garden', [
 ${tcol('Profile', [li('Course and stats'), li('Languages', ['I speak, I’m learning, level']), li('Appearance', ['Theme: system, light, dark', 'Season theme']), li('Daily goal'), li('Feedback', ['Sounds, haptics', 'Daily reminder'])])}
 </div></div>`);
 
-// ---------------------------------------------------------------- user flows
-function flow(n, lab, h2, W, H, nodes, edges) {
+// ---------------------------------------------------------------- user flows: both on one page, one above the other
+// One flow as an SVG canvas, cropped to [y0, y1] and drawn at scale s. The title sits in the canvas's empty top-left corner.
+function flowSvg(W, y0, y1, s, title, sub, nodes, edges, legendY) {
   const byId = Object.fromEntries(nodes.map((nd) => [nd.id, nd]));
   const box = (nd) => ({ l: nd.x - nd.w / 2, r: nd.x + nd.w / 2, t: nd.y - nd.h / 2, b: nd.y + nd.h / 2 });
   const side = (nd, s) => { const b = box(nd); return { r: [b.r, nd.y], l: [b.l, nd.y], t: [nd.x, b.t], b: [nd.x, b.b] }[s]; };
@@ -125,9 +127,9 @@ function flow(n, lab, h2, W, H, nodes, edges) {
     const pts = [p0, ...(e.via || []), p1];
     const c = e.c || 'y';
     svg += `<path d="M${pts.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join(' L')}" fill="none" stroke="${colour[c]}" stroke-width="1.8" stroke-linejoin="round" marker-end="url(#${arrow[c]})"/><circle cx="${p0[0].toFixed(1)}" cy="${p0[1].toFixed(1)}" r="3" fill="${colour[c]}"/>`;
-    if (e.label) { const [lx, ly, anchor] = e.at || [p0[0] + 6, p0[1] - 7, 'start']; texts += `<text x="${lx}" y="${ly}" class="pm-fe" text-anchor="${anchor || 'start'}">${e.label}</text>`; }
+    if (e.label) { const [lx, ly, anchor] = e.at || [p0[0] + 6, p0[1] - 7, 'start']; texts += `<text x="${lx}" y="${ly}" class="pm-fe" text-anchor="${anchor || 'start'}" style="font-size:12.5px">${e.label}</text>`; }
   }
-  const lines = (nd) => nd.lines.map((t, i) => `<text x="${nd.x}" y="${(nd.y + (i - (nd.lines.length - 1) / 2) * 14 + 4).toFixed(1)}" class="pm-ft" text-anchor="middle">${esc(t)}</text>`).join('');
+  const lines = (nd) => nd.lines.map((t, i) => `<text x="${nd.x}" y="${(nd.y + (i - (nd.lines.length - 1) / 2) * 15.5 + 5).toFixed(1)}" class="pm-ft" text-anchor="middle" style="font-size:14px">${esc(t)}</text>`).join('');
   const shape = (nd) => {
     const b = box(nd);
     if (nd.type === 'decision') return `<polygon points="${nd.x},${b.t} ${b.r},${nd.y} ${nd.x},${b.b} ${b.l},${nd.y}" class="pm-n-decision"/>`;
@@ -138,19 +140,23 @@ function flow(n, lab, h2, W, H, nodes, edges) {
     return `<rect x="${b.l}" y="${b.t}" width="${nd.w}" height="${nd.h}" rx="7" class="pm-n-action"/>`;
   };
   const shapes = nodes.map((nd) => shape(nd) + lines(nd)).join('');
-  const ly = H - 30;
-  const legend =
-    `<polygon points="${60},${ly - 8} ${74},${ly - 8} ${70},${ly + 6} ${56},${ly + 6}" class="pm-n-screen"/><text x="82" y="${ly + 4}" class="pm-fl">Screen</text>` +
-    `<rect x="150" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-action"/><text x="178" y="${ly + 4}" class="pm-fl">Action</text>` +
-    `<polygon points="248,${ly - 8} 258,${ly - 1} 248,${ly + 6} 238,${ly - 1}" class="pm-n-decision"/><text x="266" y="${ly + 4}" class="pm-fl">Decision</text>` +
-    `<rect x="340" y="${ly - 8}" width="20" height="14" rx="7" class="pm-n-pill"/><text x="368" y="${ly + 4}" class="pm-fl">Start or end</text>` +
-    `<rect x="470" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-ok"/><text x="498" y="${ly + 4}" class="pm-fl">Success</text>` +
-    `<rect x="570" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-err"/><text x="598" y="${ly + 4}" class="pm-fl">Problem</text>`;
-  return `<div class="pmf pm-f-fm pm-ch" style="width:${W + 56}px">${head(n, lab, h2)}<div class="pm-fmc"><svg class="pm-fms" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">${svg}${texts}${shapes}${legend}</svg></div></div>`;
+  const ly = legendY;
+  const legend = ly == null ? '' :
+    `<polygon points="${42},${ly - 8} ${56},${ly - 8} ${52},${ly + 6} ${38},${ly + 6}" class="pm-n-screen"/><text x="64" y="${ly + 4}" class="pm-fl" style="font-size:13px">Screen</text>` +
+    `<rect x="140" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-action"/><text x="168" y="${ly + 4}" class="pm-fl" style="font-size:13px">Action</text>` +
+    `<polygon points="248,${ly - 8} 258,${ly - 1} 248,${ly + 6} 238,${ly - 1}" class="pm-n-decision"/><text x="266" y="${ly + 4}" class="pm-fl" style="font-size:13px">Decision</text>` +
+    `<rect x="350" y="${ly - 8}" width="20" height="14" rx="7" class="pm-n-pill"/><text x="378" y="${ly + 4}" class="pm-fl" style="font-size:13px">Start or end</text>` +
+    `<rect x="490" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-ok"/><text x="518" y="${ly + 4}" class="pm-fl" style="font-size:13px">Success</text>` +
+    `<rect x="600" y="${ly - 8}" width="20" height="14" rx="3" class="pm-n-err"/><text x="628" y="${ly + 4}" class="pm-fl" style="font-size:13px">Problem</text>`;
+  const heading = `<text x="24" y="${y0 + 24}" style="font:700 14px Inter,sans-serif;letter-spacing:.14em;fill:#ffd100">${esc(title.toUpperCase())}</text><text x="24" y="${y0 + 48}" style="font:600 19px Inter,sans-serif;fill:#f4f4f2">${esc(sub)}</text>`;
+  const H = y1 - y0;
+  return `<div class="pm-fmc"><svg class="pm-fms" width="${(W * s).toFixed(0)}" height="${(H * s).toFixed(0)}" viewBox="0 ${y0} ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(title)}">${heading}${svg}${texts}${shapes}${legend}</svg></div>`;
 }
 const N = (id, type, x, y, lines, w, h) => ({ id, type, x, y, lines, w: w || (type === 'decision' ? 122 : 118), h: h || (type === 'decision' ? 80 : 52) });
 
-write('userflow', flow(4, 'User flow example · first launch to a solved puzzle', 'From the first launch to a flower on the path.', 1900, 560, [
+// both canvases together are 737 units tall; at 0.764 they fill the 563px left under the header
+const FS = 0.764;
+const flow1 = flowSvg(1880, 92, 470, FS, 'First launch to a solved puzzle', 'From the first launch to a flower on the path.', [
   N('s', 'pill', 80, 190, ['Open', 'the app']),
   N('d1', 'decision', 232, 190, ['First', 'time?']),
   N('a', 'screen', 392, 190, ['Welcome and', 'how it works'], 126),
@@ -163,11 +169,11 @@ write('userflow', flow(4, 'User flow example · first launch to a solved puzzle'
   N('ok', 'ok', 1470, 190, ['Word locks,', 'cells turn', 'green']),
   N('d3', 'decision', 1626, 190, ['All words', 'solved?']),
   N('res', 'screen', 1790, 190, ['Result:', 'stars, new', 'words']),
-  N('hint', 'pill', 1000, 330, ['Stuck? Hint:', 'letter 10 coins,', 'word 30']),
+  N('hint', 'pill', 1000, 330, ['Stuck? Hint:', 'letter 10 coins,', 'word 30'], 140),
   N('bad', 'err', 1306, 330, ['Word shakes,', '“not right”']),
   N('nxt', 'action', 1626, 330, ['Pick the', 'next clue']),
-  N('st', 'screen', 1790, 430, ['Streak, reminder,', 'new bloom'], 138),
-  N('home', 'pill', 1626, 430, ['Back on the path:', 'a flower is planted'], 150),
+  N('st', 'screen', 1790, 430, ['Streak, reminder,', 'new bloom'], 150),
+  N('home', 'pill', 1600, 430, ['Back on the path:', 'a flower is planted'], 164),
 ], [
   { from: 's', fs: 'r', to: 'd1', ts: 'l' },
   { from: 'd1', fs: 'r', to: 'a', ts: 'l', label: 'Yes', at: [296, 183, 'start'] },
@@ -189,15 +195,15 @@ write('userflow', flow(4, 'User flow example · first launch to a solved puzzle'
   { from: 'nxt', fs: 'b', to: 'w', ts: 'b', via: [[1626, 385], [1150, 385]] },
   { from: 'res', fs: 'b', to: 'st', ts: 't', c: 'g' },
   { from: 'st', fs: 'l', to: 'home', ts: 'r', c: 'g' },
-]));
+]);
 
-write('userflow2', flow(5, 'User flow example · words and flash cards', 'From a folder of words to a card you rate.', 1900, 520, [
+const flow2 = flowSvg(1880, 46, 405, FS, 'Words and flash cards', 'From a folder of words to a card you rate.', [
   N('s', 'pill', 80, 180, ['Open the', 'Words tab']),
   N('f', 'screen', 236, 180, ['My words:', 'three folders'], 126),
   N('o', 'action', 392, 180, ['Open a', 'folder']),
-  N('l', 'screen', 548, 180, ['Word list:', 'Deutsch, English'], 130),
+  N('l', 'screen', 548, 180, ['Word list:', 'Deutsch, English'], 144),
   N('st', 'action', 704, 180, ['Tap', 'Study']),
-  N('c', 'screen', 858, 180, ['Flash card:', 'the word in', 'my handwriting'], 130),
+  N('c', 'screen', 858, 180, ['Flash card:', 'the word in', 'my handwriting'], 136, 58),
   N('m', 'action', 1012, 180, ['Show', 'meaning']),
   N('d', 'decision', 1170, 180, ['Did you', 'know it?'], 130),
   N('e', 'ok', 1370, 90, ['Easy: moves', 'up a folder'], 130),
@@ -221,29 +227,33 @@ write('userflow2', flow(5, 'User flow example · words and flash cards', 'From a
   { from: 'a', fs: 'r', to: 'd2', ts: 'l', via: [[1470, 270], [1470, 180]] },
   { from: 'd2', fs: 'b', to: 'c', ts: 'b', via: [[1560, 380], [858, 380]], label: 'Yes: next card', at: [1200, 372, 'middle'] },
   { from: 'd2', fs: 'r', to: 'end', ts: 'l', c: 'g', label: 'No', at: [1626, 173, 'start'] },
-]));
+], 386);
+
+// my wording for the shared header (her two flow titles are kept inside the canvases)
+write('userflow', `<div class="pmf pm-f-fm pm-ch" style="width:${Math.round(1880 * FS) + 56}px">${head(4, 'User flow examples', 'Two flows: <strong>solving a puzzle</strong> and <strong>practising words</strong>.')}${flow1}${flow2}</div>`);
 
 // ---------------------------------------------------------------- iterations: the keyboard and the dark colours
-write('keyboard', page('width:1640px;flex-direction:column;gap:16px', `
-${head(6, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keyboard was <strong>louder than the puzzle</strong>, and the dark colours <strong>tired the eyes</strong>.', 'width:1020px')}
-<div style="display:flex;gap:20px;height:470px;flex:none">
-  <div style="flex:none;display:flex;flex-direction:column;gap:8px"><img src="/images/chengel-kb-options.webp" alt="Four keyboard options in light and dark: soft keys, tonal keys, lilac keys and letters only. Tonal keys was chosen." style="height:446px;width:auto;border-radius:14px;display:block;background:#fff"><div class="pm-lab" style="font-size:11px">Four options. I chose number 2, tonal keys.</div></div>
-  <div style="flex:none;width:560px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px 12px;align-content:start">
+// the row fills the frame height; the text column is narrow so its two cards are filled by their text
+write('keyboard', page('width:1600px;flex-direction:column;gap:16px', `
+${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keyboard was <strong>louder than the puzzle</strong>, and the dark colours <strong>tired the eyes</strong>.', 'width:1020px')}
+<div style="display:flex;gap:20px;flex:1;min-height:0">
+  <div style="flex:none;display:flex;flex-direction:column;gap:8px"><img src="/images/chengel-kb-options.webp" alt="Four keyboard options in light and dark: soft keys, tonal keys, lilac keys and letters only. Tonal keys was chosen." style="height:522px;width:auto;border-radius:14px;display:block;background:#fff"><div class="pm-lab" style="font-size:11px">Four options. I chose number 2, tonal keys.</div></div>
+  <div style="flex:none;width:766px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px 12px;align-content:space-between">
     <div><div class="pm-lab" style="margin-bottom:6px">BEFORE · DARK</div><img src="/images/chengel-kb-before-dark.webp" alt="Keyboard before: outlined keys, dark mode" style="width:100%;border-radius:12px;display:block"></div>
     <div><div class="pm-lab" style="margin-bottom:6px">AFTER · DARK</div><img src="/images/chengel-kb-after-dark.webp" alt="Keyboard after: tonal keys, dark mode" style="width:100%;border-radius:12px;display:block"></div>
     <div><div class="pm-lab" style="margin-bottom:6px">BEFORE · LIGHT</div><img src="/images/chengel-kb-before-light.webp" alt="Keyboard before: outlined keys with dark letters, light mode" style="width:100%;border-radius:12px;display:block"></div>
     <div><div class="pm-lab" style="margin-bottom:6px">AFTER · LIGHT</div><img src="/images/chengel-kb-after-light.webp" alt="Keyboard after: tonal keys, light mode" style="width:100%;border-radius:12px;display:block"></div>
   </div>
-  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+  <div style="flex:none;width:260px;display:flex;flex-direction:column;gap:12px">
     <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;padding:20px 22px">
       <div class="pm-lab">KEYBOARD</div>
-      <p>Keys had a <strong>1px outline</strong> and full-ink letters, so the keyboard shouted louder than the crossword.</p>
-      <p><strong>Now: no outline</strong>, keys one hair lighter than the panel, muted letters. Letter on key is <strong>8.4:1</strong> in light and <strong>6.8:1</strong> in dark.</p>
+      <p style="font-size:16px">Keys had a <strong>1px outline</strong> and full-ink letters, so the keyboard shouted louder than the crossword.</p>
+      <p style="font-size:16px"><strong>Now: no outline</strong>, keys one hair lighter than the panel, muted letters. Letter on key is <strong>8.4:1</strong> in light and <strong>6.8:1</strong> in dark.</p>
     </div>
     <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;padding:20px 22px">
       <div class="pm-lab">DARK MODE</div>
-      <p>I tried several dark colours. Some <strong>reflected and tired my eyes</strong>.</p>
-      <p><strong>Now: a purple-tinted night grey</strong>, never pure black.</p>
+      <p style="font-size:16px">I tried several dark colours. Some <strong>reflected and tired my eyes</strong>.</p>
+      <p style="font-size:16px"><strong>Now: a purple-tinted night grey</strong>, never pure black.</p>
       <div style="display:flex;gap:6px">${['#1a1923', '#272533', '#121118', '#0c0b11', '#38364b'].map((c) => `<span style="flex:1;height:26px;border-radius:7px;background:${c};box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)"></span>`).join('')}</div>
     </div>
   </div>
@@ -251,16 +261,16 @@ ${head(6, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keybo
 
 // ---------------------------------------------------------------- design system boards
 const board = (n, lab, h2, img, alt, w, h) => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`);
-write('colour', board(7, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492));
-write('type', board(8, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
-write('components', board(9, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1560, 459));
-write('icons', board(10, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 1280, 436));
+write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492));
+write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
+write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 571));
+write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 571));
 
 // ---------------------------------------------------------------- final screens, night first
 const finals = (theme) => ['onb-1', 'home', 'puzzle-2', 'cards-2', 'garden', 'profile']
   .map((n, i) => phone(`chengel-${theme}-${n}`, `Chengel ${theme} screen ${i + 1}`, 236)).join('');
-write('final-night', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(11, 'Final screens · dark', 'Welcome, the path, a puzzle, a flash card, the garden and the profile, <strong>in dark</strong>.')}<div class="pm-prow">${finals('dark')}</div></div>`);
-write('final-day', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(12, 'Final screens · light', 'The same screens <strong>in light</strong>: a pale blue paper, navy ink and purple that acts.')}<div class="pm-prow">${finals('light')}</div></div>`);
+write('final-night', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(10, 'Final screens · dark', 'Welcome, the path, a puzzle, a flash card, the garden and the profile, <strong>in dark</strong>.')}<div class="pm-prow">${finals('dark')}</div></div>`);
+write('final-day', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(11, 'Final screens · light', 'The same screens <strong>in light</strong>: a pale blue paper, navy ink and purple that acts.')}<div class="pm-prow">${finals('light')}</div></div>`);
 
 // ---------------------------------------------------------------- App Store
 write('getit', `

@@ -1,11 +1,13 @@
 // Draws the Chengel design-system boards (colour, type, components, icons and illustrations) from the
 // real components of the prototype and the real tokens, in light and dark, and saves them as images.
 //
-//   node tools/chengel/boards.mjs <prototype.html> <out-dir>
+//   node tools/chengel/boards.mjs <prototype.html> <out-dir> [board names, e.g. components icons]
+//
+// FIT=1 prints, for each column marked data-col, how much height is left unused (it should be small).
 import fs from 'node:fs';
 import { launch } from './cdp.mjs';
 
-const [, , proto, out] = process.argv;
+const [, , proto, out, ...only] = process.argv;
 fs.mkdirSync(out, { recursive: true });
 const tokens = JSON.parse(fs.readFileSync(new URL('./tokens.json', import.meta.url), 'utf8'));
 const colours = tokens.color.tokens;
@@ -21,11 +23,15 @@ await c.goto('file://' + proto);
 await c.eval(`document.documentElement.setAttribute('data-theme','light'); document.body.innerHTML='<div id="board"></div>'; document.body.style.cssText='margin:0;padding:0;background:transparent;display:block'; document.documentElement.style.background='transparent'`);
 
 async function draw(name, w, h, build) {
+  if (only.length && !only.includes(name)) return;
   await c.eval(`(function(){var W=window.WordCross; var b=document.getElementById('board'); b.style.cssText='width:${w}px;height:${h}px;position:relative;font-family:var(--font-mono)'; ${build}; })()`);
   await c.sleep(500);
   await c.shot('#board', `${out}/${name}.png`, fs);
-  console.log(name);
+  const fit = process.env.FIT ? await c.eval(`JSON.stringify([...document.querySelectorAll('[data-col]')].map(c=>c.offsetHeight-[...c.children].reduce((s,x)=>s+x.offsetHeight,0)))`) : '';
+  console.log(name, fit);
 }
+// A group of parts scaled by k, with a box the size it is drawn at (a CSS transform alone keeps the old size).
+const FIT_JS = `b.querySelectorAll('[data-fit]').forEach(function(w){var k=+w.dataset.fit,c=w.firstChild;w.style.width=c.offsetWidth*k+'px';w.style.height=c.offsetHeight*k+'px';});`;
 const J = JSON.stringify;
 
 // ------------------------------------------------------------------ colour
@@ -85,59 +91,67 @@ await draw('hand', 720, 450, `
 `);
 
 // ------------------------------------------------------------------ components
-await draw('components', 2040, 600, `
+// Drawn at the size it is shown (571px is the height under the page header). Every column runs the full height,
+// its groups spread from top to bottom, so the board has no empty strip.
+await draw('components', 1986, 571, `
   var V=${J(vars('dark'))};
   var lab=function(s){return '<div class="mono-label" style="color:var(--ink-muted);margin:0 0 5px">'+s+'</div>';};
   var gap=function(n){return '<div style="height:'+(n||12)+'px"></div>';};
   var row=function(){return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+[].slice.call(arguments).join('')+'</div>';};
   var sec=function(n,t,sub){return '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--paper);font:700 16px/34px var(--font-mono);text-align:center">'+n+'</div><div><div class="mono-heading">'+t+'</div><div class="mono-caption" style="color:var(--ink-muted)">'+sub+'</div></div></div>';};
-  var col=function(w,inner,pad){return '<div style="width:'+w+'px;flex:none;'+(pad||'')+'">'+inner+'</div>';};
+  var spacer='<div style="height:46px"></div>';
+  var col=function(w,groups){return '<div data-col style="width:'+w+'px;flex:none;height:100%;display:flex;flex-direction:column;justify-content:space-between">'+groups.map(function(g){return '<div>'+g+'</div>';}).join('')+'</div>';};
+  var fit=function(k,html){return '<div data-fit="'+k+'"><div style="transform:scale('+k+');transform-origin:top left;width:max-content">'+html+'</div></div>';};
   var c2=function(ch,s){return {ch:ch,s:s}};
-  var icons=['grid','book','trophy','user','star','flame','pencil','lock'].map(function(n){return W.icon(n,26);});
-  var atoms=sec('1','Atoms','The smallest parts')+
-   lab('Icons, drawn by hand')+row.apply(null,icons)+gap(10)+
-   lab('Button')+row(W.Button({label:'Continue',icon:'play'}),W.Button({label:'Home',variant:'secondary'}))+gap(6)+row(W.Button({label:'Skip',variant:'ghost'}),W.Button({label:'Collect',disabled:true}))+gap(10)+
-   lab('Coin pill, toggle, page dots')+row(W.CoinPill({value:1140}),W.Toggle({on:true}),W.Toggle({on:false}),W.PageDots({count:5,active:1}))+gap(10)+
-   lab('Path node')+row(W.PathNode({state:'done',stars:3}),W.PathNode({state:'current',tag:'start'}),W.PathNode({state:'chest'}),W.PathNode({state:'locked'}));
-  var molA=sec('2','Molecules','Atoms that work together')+
-   lab('Option row')+'<div style="display:flex;flex-direction:column;gap:6px">'+W.OptionRow({code:'DE',label:'Deutsch',selected:true})+W.OptionRow({label:'A1',sub:'das Lied, die E-Mail, oben'})+'</div>'+gap()+
-   lab('Segmented')+W.Segmented({options:['System','Light','Dark'],value:'Light'})+gap()+
-   lab('Clue bar')+W.ClueBar({clue:'never',len:3,dir:'down',hints:[{icon:'bulb',label:'Letter',cost:10},{icon:'words',label:'Word',cost:30}]})+gap()+
-   lab('Level row')+W.LevelRow({level:'Dandelion',sub:'35 words to go',art:'dandelion',done:40,total:75,state:'current'});
-  var molB='<div style="height:46px"></div>'+
-   lab('Status message')+'<div style="display:flex;flex-direction:column;gap:6px">'+W.StatusMessage({kind:'success',text:'NACHT is right'})+W.StatusMessage({kind:'warning',text:'You are low on coins'})+W.StatusMessage({kind:'danger',text:'Not quite. Try again.'})+'</div>'+gap()+
-   lab('Stat tiles')+'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+[['book',25,'learned'],['flame',3,'streak'],['grid',12,'puzzles'],['star',31,'stars']].map(function(t){return W.StatTile({icon:t[0],value:t[1],label:t[2]});}).join('')+'</div>'+gap()+
-   lab('Settings group')+W.SettingsGroup({title:'Feedback',rows:[{label:'Sounds',toggle:true},{label:'Daily reminder',toggle:false}]});
+  var icons=['grid','book','trophy','user','star','flame','pencil','lock','bulb','words','heart','bell','globe','moon','sun','home','search','settings','calendar','gift'].map(function(n){return W.icon(n,30);});
+  var atoms=[sec('1','Atoms','The smallest parts'),
+   lab('Icons, drawn by hand')+row.apply(null,icons),
+   lab('Button')+row(W.Button({label:'Continue',icon:'play'}),W.Button({label:'Home',variant:'secondary'}))+gap(6)+row(W.Button({label:'Skip',variant:'ghost'}),W.Button({label:'Collect',disabled:true})),
+   lab('Coin pill, toggle, page dots')+row(W.CoinPill({value:1140}),W.Toggle({on:true}),W.Toggle({on:false}),W.PageDots({count:5,active:1})),
+   lab('Path node')+row(W.PathNode({state:'done',stars:3}),W.PathNode({state:'current',tag:'start'}),W.PathNode({state:'chest'}),W.PathNode({state:'locked'}))+gap(18)]; // the stars hang 18px below the node
+  var molA=[sec('2','Molecules','Atoms that work together'),
+   lab('Option row')+'<div style="display:flex;flex-direction:column;gap:6px">'+W.OptionRow({code:'DE',label:'Deutsch',selected:true})+W.OptionRow({label:'A1',sub:'das Lied, die E-Mail, oben'})+'</div>',
+   lab('Clue bar')+W.ClueBar({clue:'never',len:3,dir:'down',hints:[{icon:'bulb',label:'Letter',cost:10},{icon:'words',label:'Word',cost:30}]}),
+   lab('Level row')+W.LevelRow({level:'Dandelion',sub:'35 words to go',art:'dandelion',done:40,total:75,state:'current'}),
+   lab('Stat tiles')+'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">'+[['book',25,'learned'],['flame',3,'streak'],['grid',12,'puzzles'],['star',31,'stars']].map(function(t){return W.StatTile({icon:t[0],value:t[1],label:t[2]});}).join('')+'</div>'];
+  var molB=[spacer,
+   lab('Status message')+'<div style="display:flex;flex-direction:column;gap:6px">'+W.StatusMessage({kind:'success',text:'NACHT is right'})+W.StatusMessage({kind:'warning',text:'You are low on coins'})+W.StatusMessage({kind:'danger',text:'Not quite. Try again.'})+'</div>',
+   lab('Segmented')+W.Segmented({options:['System','Light','Dark'],value:'Light'}),
+   lab('Settings group')+W.SettingsGroup({title:'Feedback',rows:[{label:'Sounds',toggle:true},{label:'Daily reminder',toggle:false}]})];
   var grid=[['B',{clue:'never',arrow:'down'},'B','B','B',{clue:'day',arrow:'down'}],[{clue:'night',arrow:'right'},c2('N','correct'),c2('A','correct'),c2('C','correct'),c2('H','correct'),c2('T','correct')],['B',c2('I','correct'),'B','B','B',c2('A','correct')],[{clue:'agreed',arrow:'right'},c2('E','correct'),c2('','active'),c2('','word'),null,null]];
-  var orgs=sec('3','Organisms','Parts of a screen')+
-   lab('Crossword grid')+W.CrosswordGrid({rows:grid,cell:56})+gap()+
-   lab('Tab bar')+'<div style="width:480px">'+W.TabBar({active:'play',items:[{id:'play',label:'Play',icon:'grid'},{id:'words',label:'Words',icon:'book'},{id:'ach',label:'Awards',icon:'trophy'},{id:'profile',label:'Profile',icon:'user'}]})+'</div>';
-  var pop='<div style="transform:scale(.7);transform-origin:top left;width:300px;height:262px">'+W.ResultPopup({title:'Puzzle solved!',stars:3,detail:'4 new · 0 review',primary:'Next puzzle',secondary:'Home'})+'</div>';
-  var bloom='<div style="transform:scale(.8);transform-origin:top left;width:360px;height:230px">'+W.BloomCard({name:'Dandelion',art:'dandelion',kicker:'Bloom 2 of 8',done:40,total:75,next:'Tulip',nextArt:'tulip',nextNote:'250 words'})+'</div>';
-  b.innerHTML='<div style="'+V+';width:2040px;height:600px;color:var(--ink);padding:10px 8px;display:flex;gap:24px;overflow:hidden">'+
-    col(430,atoms)+col(340,molA)+col(340,molB)+col(500,orgs)+col(290,'<div style="height:46px"></div>'+lab('Result popup')+pop+gap(8)+lab('Bloom card')+bloom)+'</div>';
+  var orgA=[sec('3','Organisms','Parts of a screen'),
+   lab('Crossword grid')+W.CrosswordGrid({rows:grid,cell:78}),
+   lab('Tab bar')+fit(468/514,W.TabBar({active:'play',items:[{id:'play',label:'Play',icon:'grid'},{id:'words',label:'Words',icon:'book'},{id:'ach',label:'Awards',icon:'trophy'},{id:'profile',label:'Profile',icon:'user'}]}))]; // the tab bar is 514px wide
+  var orgB=[spacer,
+   lab('Result popup')+fit(.8,W.ResultPopup({title:'Puzzle solved!',stars:3,detail:'4 new · 0 review',primary:'Next puzzle',secondary:'Home'})),
+   lab('Bloom card')+fit(.8,W.BloomCard({name:'Dandelion',art:'dandelion',kicker:'Bloom 2 of 8',done:40,total:75,next:'Tulip',nextArt:'tulip',nextNote:'250 words'}))];
+  b.innerHTML='<div style="'+V+';box-sizing:border-box;width:100%;height:100%;color:var(--ink);padding:8px;display:flex;gap:28px;overflow:hidden">'+
+    col(410,atoms)+col(340,molA)+col(340,molB)+col(468,orgA)+col(300,orgB)+'</div>';
+  ${FIT_JS}
 `);
 
 // ------------------------------------------------------------------ icons, Cengo, spot illustrations and blooms
-await draw('icons', 1760, 600, `
+// Drawn at the size it is shown. Left: icons, spot illustrations and Cengo, spread over the full height.
+// Right: the blooms with one column per level, eight rows tall, so the board ends level on both sides.
+await draw('icons', 985, 571, `
   var V=${J(vars('dark'))};
-  var panel=function(inner,st){return '<div style="'+V+';color:var(--ink);overflow:hidden;'+(st||'')+'">'+inner+'</div>';};
   var head=function(t,sub){return '<div style="margin-bottom:8px"><div class="mono-heading">'+t+'</div><div class="mono-caption" style="color:var(--ink-muted)">'+sub+'</div></div>';};
-  var icons=W.iconNames.map(function(n){return '<div style="width:62px;text-align:center">'+W.icon(n,26)+'<div style="font:400 8.5px/1.2 var(--font-mono);color:var(--ink-muted);margin-top:3px">'+n+'</div></div>';}).join('');
-  var poses=function(){return W.mascotPoses.map(function(p){return '<div style="text-align:center;width:112px">'+W.Mascot({pose:p,size:84})+'<div style="font:500 10px/1.2 var(--font-mono);color:var(--ink-muted)">'+p+'</div></div>';}).join('');};
-  var spot=['ok','warn','bad','chest','folder-known','folder-letters','folder-weak','sprout','mushroom'].filter(function(n){return W.illoNames.indexOf(n)>-1;}).map(function(n){return '<div style="width:66px;text-align:center">'+W.illo(n,48)+'<div style="font:400 8.5px/1.2 var(--font-mono);color:var(--ink-muted);margin-top:2px">'+n+'</div></div>';}).join('');
+  var name=function(n,wrap){return '<div style="font:400 8.5px/1.2 var(--font-mono);color:var(--ink-muted);margin-top:3px;'+(wrap?'':'white-space:nowrap')+'">'+(wrap?n.replace('-','-<br>'):n)+'</div>';};
+  var icons=W.iconNames.map(function(n){return '<div style="width:48px;text-align:center">'+W.icon(n,28)+name(n)+'</div>';}).join('');
+  var poses=W.mascotPoses.map(function(p){return '<div style="text-align:center;width:89px">'+W.Mascot({pose:p,size:76})+'<div style="font:500 10px/1.2 var(--font-mono);color:var(--ink-muted)">'+p+'</div></div>';}).join('');
+  var spot=['ok','warn','bad','chest','folder-known','folder-letters','folder-weak','sprout','mushroom'].filter(function(n){return W.illoNames.indexOf(n)>-1;}).map(function(n){return '<div style="width:69px;text-align:center">'+W.illo(n,48)+name(n,true)+'</div>';}).join('');
   var bl={A1:['flower','dandelion','tulip','poppy','lavender','orchid','edelweiss','kadupul'],A2:['sunflower','iris','rose','peony','lotus','magnolia','bluepoppy','cherry'],B1:['hydrangea','wisteria','camellia','jasmine','fuchsia','protea','bird','cosmos'],B2:['crocus','gentian','snowdrop','primrose','pasque','moss','snowlotus','himprim'],C1:['slipper','rafflesia','titan','juliet','bat','middlemist','jade','ghostorchid']};
-  var blooms=Object.keys(bl).map(function(k){return '<div style="display:flex;align-items:center;gap:7px"><div class="mono-label" style="width:24px;color:var(--ink-muted)">'+k+'</div>'+bl[k].map(function(n){return '<div style="width:50px;height:50px;border-radius:50%;background:var(--written-wash);display:grid;place-items:center">'+W.illo(n,36)+'</div>';}).join('')+'</div>';}).join('');
-  b.style.cssText+=';display:flex;gap:56px';
-  b.innerHTML=
-    '<div style="width:580px;flex:none;display:flex;flex-direction:column;gap:30px">'+
-      panel(head('52 icons','Hand-drawn, 24px grid, 1.75px line')+'<div style="display:flex;flex-wrap:wrap;gap:8px 0;width:560px">'+icons+'</div>','flex:none')+
-      panel(head('Spot illustrations','Status, rewards and word folders')+'<div style="display:flex;flex-wrap:wrap;gap:6px 0">'+spot+'</div>','flex:none')+
+  var blooms='<div style="display:flex;gap:7px">'+Object.keys(bl).map(function(k){return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div class="mono-label" style="color:var(--ink-muted);height:16px">'+k+'</div>'+bl[k].map(function(n){return '<div style="width:57px;height:57px;border-radius:50%;background:var(--written-wash);display:grid;place-items:center">'+W.illo(n,42)+'</div>';}).join('')+'</div>';}).join('')+'</div>';
+  b.innerHTML='<div style="'+V+';box-sizing:border-box;width:100%;height:100%;color:var(--ink);display:flex;gap:48px;overflow:hidden">'+
+    '<div data-col style="width:624px;flex:none;height:100%;display:flex;flex-direction:column;justify-content:space-between">'+
+      '<div>'+head('52 icons','Hand-drawn, 24px grid, 1.75px line')+'<div style="display:flex;flex-wrap:wrap;gap:8px 0">'+icons+'</div></div>'+
+      '<div>'+head('Spot illustrations','Status, rewards and word folders')+'<div style="display:flex">'+spot+'</div></div>'+
+      '<div>'+head('Cengo, seven poses','The tile mascot with a sprout')+'<div style="display:flex">'+poses+'</div></div>'+
     '</div>'+
-    '<div style="flex:1;display:flex;flex-direction:column;gap:30px;min-width:0">'+
-      panel(head('Cengo, seven poses','The tile mascot with a sprout')+'<div style="display:flex">'+poses()+'</div>','flex:none')+
-      panel(head('40 blooms, five levels','A1 to C1, eight each, planted in the garden')+'<div style="display:flex;flex-direction:column;gap:5px">'+blooms+'</div>','flex:none')+
-    '</div>';
+    '<div data-col style="flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:space-between">'+
+      '<div>'+head('40 blooms, five levels','A1 to C1, eight each, planted in the garden')+'</div>'+blooms+
+    '</div>'+
+  '</div>';
 `);
 
 await c.close();
