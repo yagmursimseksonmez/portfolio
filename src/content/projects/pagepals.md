@@ -1,6 +1,7 @@
 ---
 title: PAGEPALS
 order: 6
+hidden: true
 year: '2026'
 tabNote: 'Web redesign · from survey to design system'
 summary: A social reading app where friends' reading drives discovery.

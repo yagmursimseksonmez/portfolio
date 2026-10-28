@@ -22,6 +22,8 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     order: z.number(),
+    // Left off the site but kept here: set back to false to show the case again.
+    hidden: z.boolean().default(false),
     year: z.string(),
     // One line under the title on the homepage card and the case page.
     summary: z.string(),

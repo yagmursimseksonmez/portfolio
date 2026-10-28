@@ -5,7 +5,7 @@ import Avatar from '../components/Avatar.astro';
 import site from '../data/site.json';
 import { person } from '../data/person';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projects = (await getCollection('projects', ({ data }) => !data.hidden)).sort((a, b) => a.data.order - b.data.order);
 const count = projects.length;
 const frameHtml = import.meta.glob('../content/playmate-frames/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const rendered = await Promise.all(projects.map(async (p) => (await render(p)).Content));
@@ -80,7 +80,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
         <div class="build" data-hero aria-hidden="true"><canvas></canvas></div>
         <p class="hero-static" aria-hidden="true"><span>I design</span><span>things</span></p>
       </div>
-      <div class="subheader grid">
+      <div class="subheader grid" style={`--count:${count}`}>
         <h3>Selected work ↓</h3>
         <p>
           Designer. Researcher. Crafter. PhD in architectural history, Master’s in visual communication design. Strong interest in visual identity.{' '}

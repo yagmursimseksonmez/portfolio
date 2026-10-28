@@ -1,6 +1,7 @@
 ---
 title: Kitbox
 order: 5
+hidden: true
 year: 'Sep 2023 – Jan 2024'
 tabNote: 'First app · e-commerce from scratch'
 summary: A shopping app for a high-end home and office furniture brand.
