@@ -908,7 +908,7 @@
 .work .pmx .pm-ch .pm-bh h2{font-size:25px;line-height:1.18;letter-spacing:-.01em;max-width:none}
 .work .pmx .pm-ch .pm-bhn .pm-big{font-size:44px;line-height:.85}
 .work .pmx .pm-ch .pm-bh .pm-lab{font-size:12px}
-.work .pmx .pm-f-proto .pm-proto-live{width:auto;height:auto;overflow:visible;position:static}
+.work .pmx .pm-f-proto .pm-proto-live:has(.pm-phone){width:auto;height:auto;overflow:visible;position:static}
 .work .pmx .pm-f-proto .pm-proto-live .pm-phone iframe{position:static;transform:none}
 .work .pmx .pm-bimg.pm-tr{box-shadow:none!important;border-radius:0}
 .work .pmx .pm-f-hero.pm-f-chain{width:1050px;align-items:stretch}

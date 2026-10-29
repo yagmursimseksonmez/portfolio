@@ -7,7 +7,7 @@ summary: An RPG-style companion that turns Apple Health data into a game.
 tags: [iOS, Apple Watch, UX research]
 status: complete
 cover: { src: /images/healthbar_card.png, alt: HealthBar app screens, width: 1920, height: 1300 }
-description: 'HealthBar: an RPG-style Apple Health companion for iOS and Apple Watch. UX/UI case study: dashboard comprehension rose from 44% to 89% in usability tests.'
+description: 'HealthBar: an RPG-style Apple Health companion for iOS and Apple Watch. UX/UI case study: after the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9.'
 ogImage: /og/healthbar.jpg
 facts:
   - { label: Platform, value: iOS · Apple Watch · widgets }
@@ -21,8 +21,8 @@ hero:
   lede: An Apple Health companion I designed and shipped with an iOS developer. It turns steps, sleep, water and mood into one HP bar, and a pixel-art mentor tells you what to do next.
   hp: { value: 6, label: HP today }
   points:
-    - { label: Role, title: 'Solo, from survey to App Store', text: 'I did the research, UX/UI, usability tests and the release myself.' }
-    - { label: Problem, title: 'Health data, but no next step', text: '8 of the 13 people I surveyed had muted a health app because it made them feel guilty.' }
+    - { label: Role, title: 'Designer, from survey to App Store', text: 'I did the research, UX/UI and usability tests. The iOS developer built it, and we made the product decisions together.' }
+    - { label: Problem, title: 'Health data, but no next step', text: '8 of the 13 people I surveyed had muted health-app notifications that felt guilt-inducing or repetitive.' }
     - { label: Solution, title: One score and one suggestion, text: 'All the Health data becomes one HP bar, and Master Ronnie suggests one small thing to do next.' }
     - { label: Impact, title: 'Read in 4 seconds, not 13', text: 'After the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9.' }
   chips: [iOS, Apple Watch, Widgets]
@@ -64,6 +64,6 @@ gallery:
 
 I designed and shipped HealthBar with an iOS developer, an RPG-style Apple Health companion for iOS, Apple Watch and widgets.
 
-- **Comprehension** Usability tests raised dashboard comprehension from 44% to 89%.
+- **Comprehension** After the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9.
 - **Speed** Cut the time to a correct read from 13 to 4 seconds.
 - **Live** On the App Store, and I keep shipping updates.
