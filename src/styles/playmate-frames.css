@@ -7,7 +7,6 @@
 .work .pmx button:disabled{opacity:1}
 .card.is-active .work .pmx .pm-hpb i.pm-on{animation:hp-fill-pm 520ms cubic-bezier(.25,.46,.45,.94) both;animation-delay:calc(var(--n) * 70ms + 350ms)}
 @keyframes hp-fill-pm{from{opacity:.15;transform:scaleY(.4)}to{opacity:1;transform:none}}
-@media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} }
 .work .pmx *{box-sizing:border-box;margin:0}
 .work .pmx .pmf{flex:none;height:700px;background:var(--pm-frame);border-radius:20px;padding:28px;display:flex;gap:28px;overflow:hidden}
 .work .pmx h1,.work .pmx h2,.work .pmx h3,.work .pmx h4{color:var(--pm-hd);font-weight:700}
@@ -931,3 +930,4 @@
 .work .pmx .pm-ch-who{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:16px}
 .work .pmx .pm-ch-who p{flex:1;font-size:13px;line-height:1.45;color:var(--pm-tx2)}
 .work .pmx .pm-ch-who strong{color:var(--pm-tx);font-weight:500}
+@media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} }
