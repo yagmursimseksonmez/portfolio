@@ -15,7 +15,8 @@ const phone = (src, alt, pw) =>
 // every numbered page opens with the same header, so the numbers and titles are the same size on all of them
 const head = (n, lab, h2, style = '', extra = '') =>
   `<div class="pm-bh pm-bhn" style="${style}"><div class="pm-big">${n}</div><div><div class="pm-lab">${lab}</div><h2>${h2}</h2></div>${extra}</div>`;
-const page = (style, inner) => `<div class="pmf pm-ch" style="${style}">${inner}</div>`;
+// cls marks a page for the phone layout (site.css): pm-f-wide = a wide board that swipes sideways like a chart
+const page = (style, inner, cls = '') => `<div class="pmf pm-ch${cls ? ` ${cls}` : ''}" style="${style}">${inner}</div>`;
 
 // ---------------------------------------------------------------- hero
 write('hero', `
@@ -265,7 +266,7 @@ ${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keybo
 // the design system in Figma, view only (shared by her 2026-10-30; anyone with the link can view)
 const FIGMA = 'https://www.figma.com/design/a2xrnEApJAnPnG6A55T5WB/Chengel-design-system?node-id=1-3323';
 const figmaLink = `<a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer" style="margin-left:auto;align-self:center;flex:none">View in Figma ↗</a>`;
-const board = (n, lab, h2, img, alt, w, h, extra = '') => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`, extra)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`);
+const board = (n, lab, h2, img, alt, w, h, extra = '') => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`, extra)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`, 'pm-f-wide');
 write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492, figmaLink));
 write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
 write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 571));
@@ -279,14 +280,14 @@ write('final-day', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${hea
 
 // ---------------------------------------------------------------- App Store
 write('getit', `
-<div class="pmf" style="width:1370px;align-items:center;gap:44px;padding:28px 48px">
+<div class="pmf pm-f-getit" style="width:1370px;align-items:center;gap:44px;padding:28px 48px">
   <div style="width:340px;flex:none;display:flex;flex-direction:column;gap:16px">
     <div class="pm-lab">Download from the App Store</div>
     <div style="display:flex;align-items:center;gap:18px"><img src="/images/chengel-icon.webp" alt="Chengel app icon" style="width:112px;height:112px;border-radius:0;box-shadow:none"><div><h2 style="font-size:34px;line-height:1.05">Chengel</h2><p style="font-size:14px;margin-top:4px">Learn words by solving crosswords</p></div></div>
     <p style="font-size:15px;line-height:1.5">I sent Chengel to the App Store. It is <strong>waiting for Apple’s review</strong> and should be out soon. I will put the link here.</p>
     <span class="pm-pbtn" style="align-self:flex-start;background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin:0">In App Store review</span>
   </div>
-  <div style="display:flex;gap:16px;flex:none">${[['dark-home', 'Path'], ['dark-puzzle-4', 'Puzzle'], ['dark-words', 'Words'], ['dark-garden', 'Garden']].map(([n, t]) => `<div style="width:205px"><img src="/images/chengel-${n}.webp" alt="Chengel ${t}" style="width:205px;height:430px;object-fit:cover;object-position:top;border-radius:28px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.1)"></div>`).join('')}</div>
+  <div class="pm-shots" style="display:flex;gap:16px;flex:none">${[['dark-home', 'Path'], ['dark-puzzle-4', 'Puzzle'], ['dark-words', 'Words'], ['dark-garden', 'Garden']].map(([n, t]) => `<div style="width:205px"><img src="/images/chengel-${n}.webp" alt="Chengel ${t}" style="width:205px;height:430px;object-fit:cover;object-position:top;border-radius:28px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.1)"></div>`).join('')}</div>
 </div>`);
 
 // ---------------------------------------------------------------- prototype: an iPhone, with the theme switch beside it

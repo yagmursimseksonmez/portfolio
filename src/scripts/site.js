@@ -848,8 +848,10 @@ document.addEventListener('click', (e) => {
 // Phone: a folder opens as one long page. Pages led by text (first page, problem, numbers, loop, screens, outcome …)
 // reflow into one column at reading size (site.css, .is-reflow). The rest is scaled to the screen width (never below 70%);
 // a frame still wider than the screen, like a chart, scrolls sideways inside its own box.
-const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-result, .pm-f-final, .pm-f-board, .pm-f-comp2, .pm-f-proto, .pm-f-outcome';
-const reflowCases = '#healthbar, #ikeep';
+const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-result, .pm-f-final, .pm-f-board, .pm-f-comp2, .pm-f-proto, .pm-f-outcome, .pm-f-getit, .pm-ch, '
+  + '.pm-f-plan, .pm-f-people, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-f-ut, .pm-f-board2, .pm-f-cmp, .pm-f-ba';
+const chartPages = '.pm-f-iat, .pm-f-fm, .pm-f-wide, .pm-f-pers';
+const reflowCases = '#healthbar, #ikeep, #chengel, #playmate';
 function fitFramesToWidth() {
   if (!mobile.matches) {
     document.querySelectorAll('figure.pmx.is-reflow, figure.pmx.is-chart').forEach((fig) => fig.classList.remove('is-reflow', 'is-chart'));
@@ -862,15 +864,9 @@ function fitFramesToWidth() {
       const page = fig.firstElementChild;
       if (!page) return;
       if (page.classList.contains('pm-f-sum')) { fig.classList.add('is-sum'); page.style.setProperty('--pmz', '1'); return; }
-      if (fig.closest(reflowCases) && page.matches(reflowPages)) {
-        fig.classList.add('is-reflow');
-        fig.classList.remove('is-wide');
-        fig.style.removeProperty('--pm-h');
-        page.style.setProperty('--pmz', '1');
-        return;
-      }
       // A chart keeps its drawing and scrolls sideways, a little larger than the rest; its title moves out above it at reading size.
-      if (fig.closest(reflowCases) && page.matches('.pm-f-iat, .pm-f-fm')) {
+      const wideBoard = page.matches('.pm-f-board') && parseFloat(page.querySelector('img.pm-bimg')?.style.width) > 900;
+      if (fig.closest(reflowCases) && (page.matches(chartPages) || wideBoard)) {
         fig.classList.add('is-chart');
         if (!fig.previousElementSibling?.classList.contains('chart-cap')) {
           const cap = document.createElement('div');
@@ -879,6 +875,12 @@ function fitFramesToWidth() {
           cap.innerHTML = `${num ? `<span>${num}</span>` : ''}<div><small></small><h3></h3></div>`;
           cap.querySelector('small').textContent = page.querySelector('.pm-lab')?.textContent.trim() ?? '';
           cap.querySelector('h3').textContent = page.querySelector('h2')?.textContent.trim() ?? '';
+          // a link in the hidden header (Chengel's View in Figma) comes along
+          page.querySelectorAll('.pm-bh a[href]').forEach((a) => {
+            const link = document.createElement('a');
+            link.href = a.href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = a.textContent;
+            cap.querySelector('div').append(link);
+          });
           fig.before(cap);
         }
         page.style.setProperty('--pmz', '1');
@@ -886,6 +888,20 @@ function fitFramesToWidth() {
         const s = Math.min(1, Math.max(0.8, avail / w));
         page.style.setProperty('--pmz', String(s));
         fig.classList.toggle('is-wide', w * s > avail + 4);
+        return;
+      }
+      if (fig.closest(reflowCases) && page.matches(reflowPages)) {
+        // The loop's numbers and texts sit absolutely on a desktop, so their order there does not matter; on a phone
+        // they become a list, so each number goes right before its text.
+        page.querySelectorAll('.pm-cwrap').forEach((wrap) => {
+          const nds = [...wrap.querySelectorAll(':scope > .pm-nd')];
+          const nts = [...wrap.querySelectorAll(':scope > .pm-nt')];
+          if (nds.length === nts.length) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
+        });
+        fig.classList.add('is-reflow');
+        fig.classList.remove('is-wide');
+        fig.style.removeProperty('--pm-h');
+        page.style.setProperty('--pmz', '1');
         return;
       }
       page.style.setProperty('--pmz', '1');

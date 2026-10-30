@@ -1439,7 +1439,8 @@ body.is-scroll { overflow-x: clip; }
   /* first page: the phone on top, then the text */
   .card.is-active .work .pmx.is-reflow .pm-f-hero { gap: 18px !important; }
   .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v { width: 100% !important; height: auto !important; aspect-ratio: auto !important; justify-content: center !important; align-self: stretch !important; }
-  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v video { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
+  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v.pm-ph > video { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
+  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v:not(.pm-ph) > video { width: 100% !important; height: auto !important; }
   .card.is-active .work .pmx.is-reflow .pm-hero-t { gap: 12px !important; padding: 0 !important; justify-content: flex-start !important; }
   .card.is-active .work .pmx.is-reflow .pm-grid2 { grid-template-columns: 1fr !important; }
   .card.is-active .work .pmx.is-reflow :is(.pm-hfoot, .pm-ch-who) { flex-wrap: wrap !important; align-items: flex-start !important; gap: 12px !important; }
@@ -1465,7 +1466,7 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-reflow .pm-ring { display: none !important; }
   .card.is-active .work .pmx.is-reflow .pm-cmid { position: static !important; grid-column: 1 / -1; width: auto !important; text-align: left !important; transform: none !important; }
   .card.is-active .work .pmx.is-reflow .pm-nd { position: static !important; margin: 0 !important; width: 40px !important; height: 40px !important; font-size: 20px !important; line-height: 40px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-nt { position: static !important; width: auto !important; text-align: left !important; transform: none !important; }
+  .card.is-active .work .pmx.is-reflow .pm-nt { position: static !important; width: auto !important; height: auto !important; display: block !important; text-align: left !important; transform: none !important; }
   /* boards and parts: images fit the width */
   .card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; }
   .card.is-active .work .pmx.is-reflow :is(.pm-cgl, .pm-cgr, .pm-cgr .pm-cgi) { flex-direction: column !important; width: auto !important; }
@@ -1474,6 +1475,30 @@ body.is-scroll { overflow-x: clip; }
   /* the get-it page: text first, then the phone */
   .card.is-active .work .pmx.is-reflow .pm-f-proto { align-items: center !important; }
   .card.is-active .work .pmx.is-reflow .pm-ptxt { order: -1; align-self: stretch; }
+  /* Chengel's own pages: their inline rows stack; the download page's screenshots become a swipe row */
+  .card.is-active .work .pmx.is-reflow .pm-ch div[style*="display:flex"]:not(.pm-shots) { flex-direction: column !important; flex-wrap: nowrap !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ch img[style*="height:"] { max-width: 100%; height: auto !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ch [style*="flex:1"] { flex: none !important; }
+  .card.is-active .work .pmx.is-reflow .pm-f-getit { align-items: stretch !important; }
+  .card.is-active .work .pmx.is-reflow .pm-shots { flex-direction: row !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+  .card.is-active .work .pmx.is-reflow .pm-shots > div { flex: none !important; width: 180px !important; scroll-snap-align: start; }
+  .card.is-active .work .pmx.is-reflow .pm-shots img { width: 180px !important; height: 378px !important; }
+  /* PlayMate's research boards: their columns stack, images fit the width, the wireframe phones become a swipe row */
+  .card.is-active .work .pmx.is-reflow :is(.pm-plan, .pm-ppl, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-duo, .pm-cpr, .pm-ut-r, .pm-sa, .pm-sb, .pm-emt, .pm-wl) { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 14px !important; width: auto !important; height: auto !important; position: static !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-ncol, .pm-pcol, .pm-duo1, .pm-cpc, .pm-board, .pm-shot, .pm-rawb, .pm-emi, .pm-panel) { width: auto !important; height: auto !important; max-width: 100% !important; position: static !important; flex: none !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-emg, .pm-pbody, .pm-ut-g, .pm-themes, .pm-wns, .pm-legend) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; height: auto !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-board, .pm-shot, .pm-rawb, .pm-emi) img, .card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; max-height: none !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; justify-content: flex-start !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) > * { flex: none !important; scroll-snap-align: start; }
+  .card.is-active .work .pmx.is-chart > .pmf > .pm-ph { display: none !important; }
+  .card.is-active .work .pmx.is-reflow i.pm-sec { display: none !important; }
+  /* iKeep before and after: each pair is a row you swipe, before → after */
+  .card.is-active .work .pmx.is-reflow .pm-bar { display: flex !important; flex-direction: column !important; gap: 22px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ba { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: flex-start !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+  .card.is-active .work .pmx.is-reflow .pm-ba-s { flex: none !important; scroll-snap-align: start; }
+  .card.is-active .work .pmx.is-reflow .pm-cpg { display: flex !important; flex-wrap: nowrap !important; gap: 10px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ar { flex: none !important; align-self: center !important; }
+  .card.is-active .work .pmx.is-reflow .pm-tag { position: static !important; align-self: flex-start; margin-top: -4px; }
   /* outcome: impact above next */
   .card.is-active .work .pmx.is-reflow .pm-oc2 { grid-template-columns: 1fr !important; grid-auto-rows: auto !important; }
   /* charts: the title sits above at reading size, the drawing below scrolls sideways */
@@ -1481,6 +1506,7 @@ body.is-scroll { overflow-x: clip; }
   .chart-cap > span { flex: none; color: var(--accent); font-size: 40px; font-weight: 700; line-height: 1; }
   .chart-cap small { display: block; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
   .chart-cap h3 { margin-top: 4px; color: #f4f4f2; font-size: 20px; line-height: 1.25; font-weight: 700; }
+  .chart-cap a { display: inline-block; margin-top: 10px; padding: 9px 16px; border-radius: 99px; background: var(--accent); color: #202020; font-size: 14px; font-weight: 700; text-decoration: none; }
   .card.is-active .work figure.pmx.is-chart { height: auto; }
   .card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
   .card.is-active .work .pmx.is-chart :is(.pm-bh, .pm-fmh) { display: none !important; }
