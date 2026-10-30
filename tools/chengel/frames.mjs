@@ -13,8 +13,8 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 const phone = (src, alt, pw) =>
   `<div class="pm-phone pm-static" style="--pw:${pw}"><div class="pm-scr"><img src="/images/${src}.webp" alt="${esc(alt)}" loading="lazy"></div></div>`;
 // every numbered page opens with the same header, so the numbers and titles are the same size on all of them
-const head = (n, lab, h2, style = '') =>
-  `<div class="pm-bh pm-bhn" style="${style}"><div class="pm-big">${n}</div><div><div class="pm-lab">${lab}</div><h2>${h2}</h2></div></div>`;
+const head = (n, lab, h2, style = '', extra = '') =>
+  `<div class="pm-bh pm-bhn" style="${style}"><div class="pm-big">${n}</div><div><div class="pm-lab">${lab}</div><h2>${h2}</h2></div>${extra}</div>`;
 const page = (style, inner) => `<div class="pmf pm-ch" style="${style}">${inner}</div>`;
 
 // ---------------------------------------------------------------- hero
@@ -262,8 +262,11 @@ ${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keybo
 </div>`));
 
 // ---------------------------------------------------------------- design system boards
-const board = (n, lab, h2, img, alt, w, h) => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`);
-write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492));
+// the design system in Figma, view only (shared by her 2026-10-30; anyone with the link can view)
+const FIGMA = 'https://www.figma.com/design/a2xrnEApJAnPnG6A55T5WB/Chengel-design-system?node-id=1-3323';
+const figmaLink = `<a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer" style="margin-left:auto;align-self:center;flex:none">View in Figma ↗</a>`;
+const board = (n, lab, h2, img, alt, w, h, extra = '') => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`, extra)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`);
+write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492, figmaLink));
 write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
 write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 571));
 write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 571));
