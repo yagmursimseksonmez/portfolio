@@ -285,11 +285,12 @@ write('getit', `
 </div>`);
 
 // ---------------------------------------------------------------- prototype: an iPhone, with the theme switch beside it
+// (phones and touch screens get the still screen and a link that opens the prototype full screen instead)
 {
   const k = 0.746; // 390 x 844 shown at 291 x 630
   write('prototype', `
 <div class="pmf pm-f-proto" style="width:860px;align-items:center;gap:56px;padding:28px 56px"><div class="pm-pwrap"><div class="pm-proto-live"><div class="pm-phone" style="--pw:291;width:305px"><div class="pm-scr" style="width:291px;height:630px;background:#1a1923"><div style="width:390px;height:844px;transform:scale(${k});transform-origin:0 0"><iframe src="/prototypes/chengel/index.html" data-w="390" data-h="844" title="Chengel clickable prototype" loading="lazy" style="display:block;border:0;width:390px;height:844px;background:#1a1923"></iframe></div></div></div></div><div class="pm-proto-still"><div class="pm-phone pm-static" style="--pw:250"><div class="pm-scr"><img src="/images/chengel-dark-home-start.webp" alt="Chengel path" loading="lazy"></div></div></div></div>
-<div class="pm-ptxt"><div class="pm-lab">Prototype</div><h2>Solve a puzzle yourself.</h2><p><strong>Tap the start node</strong> and type the words with your keyboard or the keys.</p><button type="button" class="pm-pbtn" data-chengel-theme style="cursor:pointer;border:0;font-family:inherit">Switch to light</button></div></div>`);
+<div class="pm-ptxt"><div class="pm-lab">Prototype</div><h2>Solve a puzzle yourself.</h2><p><strong>Tap the start node</strong> and type the words with your keyboard or the keys.</p><button type="button" class="pm-pbtn" data-chengel-theme style="cursor:pointer;border:0;font-family:inherit">Switch to light</button><a class="pm-pbtn pm-proto-open" href="/prototypes/chengel/index.html" target="_blank" rel="noopener noreferrer">Open the prototype ↗</a></div></div>`);
 }
 
 // ---------------------------------------------------------------- outcome

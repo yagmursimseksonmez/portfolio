@@ -930,4 +930,5 @@
 .work .pmx .pm-ch-who{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:16px}
 .work .pmx .pm-ch-who p{flex:1;font-size:13px;line-height:1.45;color:var(--pm-tx2)}
 .work .pmx .pm-ch-who strong{color:var(--pm-tx);font-weight:500}
-@media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} }
+.work .pmx .pm-proto-open{display:none}
+@media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} .work .pmx .pm-proto-open{display:inline-block} .work .pmx [data-chengel-theme]{display:none} }
