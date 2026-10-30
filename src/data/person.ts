@@ -14,7 +14,6 @@ export const person = {
     'https://www.linkedin.com/in/yagmursimseks',
     'https://www.behance.net/nagehanyagmursimsek',
     'https://yildiz.academia.edu/NagehanYagmurSimsekSonmez',
-    'https://www.flickr.com/people/126174140@N08/',
     'https://www.xing.com/profile/Yagmur_SimsekSoenmez/web_profiles',
   ],
 };

@@ -13,7 +13,7 @@ facts:
   - { label: Tools, value: Claude Design }
 hero:
   frame: chengel-hero
-  kicker: Chengel · iOS · submitted to the App Store
+  kicker: Chengel · iOS · Freelance · Konkret · submitted to the App Store
   title: Learn words by solving crosswords.
   lede: Chengel is an iOS app for learning vocabulary. The clue is in your language, the answer is in the one you are learning, and you write it in my own handwriting, like filling in a newspaper crossword.
   points:

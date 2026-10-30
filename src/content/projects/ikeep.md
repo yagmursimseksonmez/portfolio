@@ -1,6 +1,6 @@
 ---
 title: iKeep
-order: 2
+order: 4
 year: '2026'
 tabNote: 'Redesign shipped in a week'
 summary: A copy and paste vault for the values you type again and again.
@@ -19,7 +19,7 @@ link: { label: View on the App Store, href: 'https://apps.apple.com/app/id650234
 kicker: Store the things to remember.
 hero:
   frame: ikeep-hero
-  kicker: iKeep · iOS · live on the App Store
+  kicker: iKeep · iOS · Freelance · Konkret · live on the App Store
   title: Store the things to remember.
   lede: A vault for the values you type again and again, like Wi-Fi passwords and door codes. I was asked to rebrand it, and in one week I redesigned how it works too.
   points:

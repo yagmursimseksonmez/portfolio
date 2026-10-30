@@ -1,6 +1,6 @@
 ---
 title: HealthBar
-order: 3
+order: 2
 year: '2025 → now'
 tabNote: 'Most complex work · research to App Store'
 summary: An RPG-style companion that turns Apple Health data into a game.
@@ -11,12 +11,12 @@ description: 'HealthBar: an RPG-style Apple Health companion for iOS and Apple W
 ogImage: /og/healthbar.jpg
 facts:
   - { label: Platform, value: iOS · Apple Watch · widgets }
-  - { label: Role, value: 'Product Designer (end-to-end UX/UI)' }
+  - { label: Role, value: 'Product Designer (research, UX/UI, testing)' }
   - { label: Tools, value: Stitch · Claude Design · Figma · Codex }
 link: { label: View on the App Store, href: 'https://apps.apple.com/de/app/healthbar-daily-hp-tracker/id6773367246?l=en-GB' }
 hero:
   frame: healthbar-hero
-  kicker: HealthBar · iOS, Apple Watch · live on the App Store
+  kicker: HealthBar · iOS, Apple Watch · Freelance · Konkret · live on the App Store
   title: Your health, turned into a health bar.
   lede: An Apple Health companion I designed and shipped with an iOS developer. It turns steps, sleep, water and mood into one HP bar, and a pixel-art mentor tells you what to do next.
   hp: { value: 6, label: HP today }

@@ -931,4 +931,6 @@
 .work .pmx .pm-ch-who p{flex:1;font-size:13px;line-height:1.45;color:var(--pm-tx2)}
 .work .pmx .pm-ch-who strong{color:var(--pm-tx);font-weight:500}
 .work .pmx .pm-proto-open{display:none}
+.work .pmx .pm-hstore{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.work .pmx .pm-hnote{font-size:12px;line-height:1.35;color:var(--pm-tx2);text-align:right;max-width:170px}
 @media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} .work .pmx .pm-proto-open{display:inline-block} .work .pmx [data-chengel-theme]{display:none} }

@@ -24,7 +24,7 @@ write('hero', `
     <div class="pm-phone pm-static" style="--pw:282;box-shadow:0 18px 40px rgba(0,0,0,.4)"><div class="pm-scr"><video src="/videos/chengel-demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Chengel in dark mode: first launch, a puzzle in my handwriting, the word folders and flash cards, the awards and the garden" style="width:100%!important;height:100%!important;object-fit:cover;display:block;border-radius:0!important;box-shadow:none!important;margin:0!important"></video></div></div>
   </div>
   <div class="pm-hero-t">
-    <div class="pm-lab">Chengel · iOS · submitted to the App Store</div>
+    <div class="pm-lab">Chengel · iOS · Freelance · Konkret · submitted to the App Store</div>
     <h1>Learn words by solving crosswords.</h1>
     <p class="pm-lede">Chengel is an iOS app for learning vocabulary. The clue is in your language, the answer is in the one you are learning, and <strong>you write it in my own handwriting</strong>, like filling in a newspaper crossword.</p>
     <div class="pm-grid2">
@@ -33,6 +33,7 @@ write('hero', `
       <div class="pm-card"><div class="pm-lab">SOLUTION</div><h4>A crossword with a garden</h4><p>Solve a puzzle, <strong>keep the words</strong> you learned, and plant a flower for every puzzle.</p></div>
       <div class="pm-card"><div class="pm-lab">IMPACT</div><h4>Built in 3 weeks, now in review</h4><p>Designed and built <strong>Oct 1–20, 2026</strong>. It is <strong>waiting for Apple’s review</strong>.</p></div>
     </div>
+    <p class="pm-ch-lim"><strong>Tested:</strong> contrast of every text pair, above 4.5:1. <strong>Not yet tested</strong> with learners.</p>
     <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span></div><span class="pm-pbtn pm-sm" style="background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin-left:auto">In App Store review</span></div>
   </div>
 </div>`);
@@ -304,8 +305,9 @@ write('outcome', `
 </div></section>
 <section class="pm-oc-col"><div class="pm-lab">NEXT</div><div class="pm-oc-grid">
 <div class="pm-oc-nx"><i>1</i><div><b>Go live</b><span>Add the <strong>App Store link</strong> here when Apple approves it.</span></div></div>
-<div class="pm-oc-nx"><i>2</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides, still in design.</span></div></div>
-<div class="pm-oc-nx"><i>3</i><div><b>More puzzles</b><span>The path already has scenery up to <strong>C1</strong>. It needs more puzzles to walk through.</span></div></div>
+<div class="pm-oc-nx"><i>2</i><div><b>Test with learners</b><span>Watch a few <strong>learners solve a puzzle</strong> and see where they get stuck.</span></div></div>
+<div class="pm-oc-nx"><i>3</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides, still in design.</span></div></div>
+<div class="pm-oc-nx"><i>4</i><div><b>More puzzles</b><span>The path already has scenery up to <strong>C1</strong>. It needs more puzzles to walk through.</span></div></div>
 </div></section></div></div>`);
 
 // ---------------------------------------------------------------- summary

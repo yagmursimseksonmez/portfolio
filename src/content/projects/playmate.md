@@ -1,6 +1,6 @@
 ---
 title: PlayMate
-order: 4
+order: 3
 year: '2026'
 tabNote: 'Deepest UX research'
 summary: A community-driven sports matchmaking app.
@@ -10,11 +10,11 @@ description: 'PlayMate: a community-driven sports matchmaking mobile app. Case s
 ogImage: /og/playmate.jpg
 seeMore: false
 facts:
-  - { label: Position, value: Product Designer }
-  - { label: Time, value: '3 months · Summer 2026' }
+  - { label: Position, value: 'Bootcamp project, solo' }
+  - { label: Time, value: '3 months · Mar–Jun 2026' }
   - { label: Tools, value: Figma · Claude · Stitch }
 hero:
-  kicker: PlayMate · case study · community sports app
+  kicker: PlayMate · ReDI School bootcamp project · community sports app
   title: "Wanna do sports but don't have a team/partner? I have a solution!"
   compact: true
   frame: hero
