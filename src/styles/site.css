@@ -361,6 +361,11 @@ nav h3 { white-space: nowrap; }
   touch-action: pan-x;
 }
 .card-content::-webkit-scrollbar { display: none; }
+/* With a mouse the open folder can be dragged sideways (site.js, startDragScroll). */
+@media (hover: hover) and (pointer: fine) {
+  .gallery.is-focused .card.is-active .card-content { cursor: grab; }
+  .gallery.is-focused .card.is-active .card-content.is-dragging { cursor: grabbing; user-select: none; }
+}
 
 .work {
   --max-w: min(90dvw, 1280px);

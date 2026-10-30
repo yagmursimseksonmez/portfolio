@@ -477,6 +477,49 @@ function startGallery() {
   measureGallery();
 }
 
+// ---------------------------------------------------------- drag to scroll
+// With a mouse, click and drag moves the open folder sideways, like a swipe on the phone. Links, buttons, the
+// before/after slider and a live screen keep their own clicks, and the click that ends a drag does nothing.
+function startDragScroll() {
+  const own = 'a, button, input, select, textarea, iframe, [data-compare], .is-live';
+  cards.forEach((card) => {
+    const content = card.querySelector('.card-content');
+    let drag = null;
+    let dragged = false;
+    content.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || mobile.matches || !card.classList.contains('is-active')) return;
+      if (e.target.closest(own) || content.scrollWidth <= content.clientWidth) return;
+      drag = { id: e.pointerId, x: e.clientX, left: content.scrollLeft, moved: false };
+    });
+    content.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved) {
+        if (Math.abs(dx) < 6) return;
+        drag.moved = true;
+        content.setPointerCapture(e.pointerId);
+        content.classList.add('is-dragging');
+        getSelection()?.removeAllRanges();
+      }
+      content.scrollLeft = drag.left - dx;
+    });
+    const end = () => {
+      if (!drag) return;
+      if (drag.moved) {
+        content.classList.remove('is-dragging');
+        dragged = true;
+        setTimeout(() => { dragged = false; }, 0);
+      }
+      drag = null;
+    };
+    content.addEventListener('pointerup', end);
+    content.addEventListener('pointercancel', end);
+    content.addEventListener('click', (e) => { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+    // Images would otherwise start the browser's own drag and drop.
+    content.addEventListener('dragstart', (e) => { if (card.classList.contains('is-active')) e.preventDefault(); });
+  });
+}
+
 // ------------------------------------------------------------ tall boards
 // Hovering a tall board opens it down to the bottom of the folder and pans the screens to their end.
 function startTallBoards() {
@@ -738,6 +781,7 @@ startClock();
 hero = startHero();
 startContact();
 startGallery();
+startDragScroll();
 startCompare();
 startTallBoards();
 startScrollScreens();
@@ -757,22 +801,31 @@ if (linked) {
 // ------------------------------------------------------- PlayMate pages
 // The finished pages in src/content/playmate-frames are designed 700px tall; scale each to the strip's frame height.
 function fitPlaymateFrames() {
-  const ro = new ResizeObserver((entries) => {
-    entries.forEach(({ target }) => {
-      const page = target.firstElementChild;
-      if (!page || target.clientHeight <= 0) return;
-      const z = target.clientHeight / 700;
-      page.style.setProperty('--pmz', String(z));
-      // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
-      // undo the zoom on the frame and give it the zoomed size instead.
-      page.querySelectorAll('iframe[data-w]').forEach((f) => {
-        f.style.zoom = String(1 / z);
-        f.style.width = `${f.dataset.w * z}px`;
-        f.style.height = `${f.dataset.h * z}px`;
-      });
+  const fit = (target) => {
+    const page = target.firstElementChild;
+    if (!page || target.clientHeight <= 0) return;
+    let z = target.clientHeight / 700;
+    // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width,
+    // if that takes no more than 15% off. Strips of screens and research boards run on sideways.
+    if (!mobile.matches && page.matches('.pm-f-iat, .pm-f-fm')) {
+      const work = target.closest('.work');
+      const avail = target.closest('.card-content').clientWidth - 2 * parseFloat(getComputedStyle(work).paddingLeft);
+      const w = parseFloat(page.style.width);
+      if (w && w * z > avail) z = Math.max(z * 0.85, avail / w);
+    }
+    page.style.setProperty('--pmz', String(z));
+    // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
+    // undo the zoom on the frame and give it the zoomed size instead.
+    page.querySelectorAll('iframe[data-w]').forEach((f) => {
+      f.style.zoom = String(1 / z);
+      f.style.width = `${f.dataset.w * z}px`;
+      f.style.height = `${f.dataset.h * z}px`;
     });
-  });
+  };
+  const ro = new ResizeObserver((entries) => entries.forEach(({ target }) => fit(target)));
   document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
+  // A narrower window leaves the frame height alone, so the charts are fitted again on resize.
+  addEventListener('resize', () => document.querySelectorAll('figure.pmx').forEach((fig) => { if (fig.querySelector(':scope > .pm-f-iat, :scope > .pm-f-fm')) fit(fig); }));
 }
 fitPlaymateFrames();
 

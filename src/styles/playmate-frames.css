@@ -933,4 +933,7 @@
 .work .pmx .pm-proto-open{display:none}
 .work .pmx .pm-hstore{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
 .work .pmx .pm-hnote{font-size:12px;line-height:1.35;color:var(--pm-tx2);text-align:right;max-width:170px}
+.work .pmx .pm-fmh{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex:none}
+.work .pmx .pm-fml{flex:none;display:block}
+.work .pmx .pm-fmh .pm-bh{flex:1 1 auto;min-width:0}
 @media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} .work .pmx .pm-proto-open{display:inline-block} .work .pmx [data-chengel-theme]{display:none} }
