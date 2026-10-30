@@ -936,4 +936,15 @@
 .work .pmx .pm-fmh{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex:none}
 .work .pmx .pm-fml{flex:none;display:block}
 .work .pmx .pm-fmh .pm-bh{flex:1 1 auto;min-width:0}
+.work .pmx .pm-f-stats .pm-stsub{font-size:17px;line-height:1.4;color:var(--pm-tx2);flex:none}
+.work .pmx .pm-f-stats .pm-stsub strong{color:var(--pm-tx);font-weight:500}
+.work .pmx .pm-hd,.work .pmx .pm-bhn{align-items:flex-start!important;gap:16px!important}
+.work .pmx .pm-hd .pm-big,.work .pmx .pm-bhn .pm-big,.work .pmx .pm-ph .pm-big{font-size:64px!important;line-height:.85!important;flex:none}
+.work .pmx .pmf h2,.work .pmx .pm-hd p{font-size:28px!important;line-height:1.18!important;font-weight:700!important;letter-spacing:-.01em!important}
+.work .pmx .pm-hd .pm-lab,.work .pmx .pm-bh .pm-lab{font-size:12px!important}
+.work .pmx .pm-f-empathy{align-items:flex-start!important}
+.work .pmx .pm-emt{height:auto!important}
+.work .pmx .pm-f-hero .pm-hero-t{align-self:flex-start!important;justify-content:flex-start!important;padding-top:0!important}
+.work .pmx .pm-fmh{min-height:89px;align-items:flex-start!important}
+.work .pmx .pm-sa .pm-rawb{width:430px;align-self:flex-start}
 @media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} .work .pmx .pm-proto-open{display:inline-block} .work .pmx [data-chengel-theme]{display:none} }

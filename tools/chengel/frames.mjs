@@ -158,7 +158,7 @@ function flowSvg(W, y0, y1, s, title, sub, nodes, edges, legendY) {
 const N = (id, type, x, y, lines, w, h) => ({ id, type, x, y, lines, w: w || (type === 'decision' ? 122 : 118), h: h || (type === 'decision' ? 80 : 52) });
 
 // both canvases together are 737 units tall; at 0.764 they fill the 563px left under the header
-const FS = 0.764;
+const FS = 0.7564;  // 1% smaller so the page fits under the shared 64 px header (2026-10-31)
 const flow1 = flowSvg(1880, 92, 470, FS, 'First launch to a solved puzzle', 'From the first launch to a flower on the path.', [
   N('s', 'pill', 80, 190, ['Open', 'the app']),
   N('d1', 'decision', 232, 190, ['First', 'time?']),
@@ -269,8 +269,8 @@ const figmaLink = `<a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel=
 const board = (n, lab, h2, img, alt, w, h, extra = '') => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`, extra)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`, 'pm-f-wide');
 write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492, figmaLink));
 write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
-write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 571));
-write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 571));
+write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 562));
+write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 532));
 
 // ---------------------------------------------------------------- final screens, night first
 const finals = (theme) => ['onb-1', 'home', 'puzzle-2', 'cards-2', 'garden', 'profile']

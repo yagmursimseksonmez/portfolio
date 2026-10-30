@@ -75,10 +75,9 @@ nav h3 { white-space: nowrap; }
 .hero { padding: 0 var(--pad); }
 .build { position: relative; width: 100%; height: 18vw; }
 .build canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.subheader { padding: var(--pad); }
-.subheader h3 { grid-column: 1; }
-.subheader p { grid-column: 3; text-wrap: balance; }
-@media (max-width: 1440px) { .subheader p { grid-column: 2 / span 2; } }
+/* The intro sits under the headline on its left edge, and "Selected work ↓" right below it, as the cue into the folders. */
+.subheader { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 36px; padding: 28px var(--pad) var(--pad); }
+.subheader p { max-width: 600px; text-wrap: pretty; }
 
 /* ------------------------------------------------------------------ contact */
 .contact {
@@ -1340,6 +1339,12 @@ body.is-scroll { overflow-x: clip; }
 .about-facts span { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--secondary); }
 .about-photo img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: var(--inset-stroke); }
 .about-photo figcaption { margin-top: 8px; font-size: 13px; color: var(--secondary); }
+.about-portrait { display: none; }
+@media (max-width: 700px) {
+  /* Phone: the About shows her portrait (the left page of the book on a desktop), not the conference photos. */
+  .about-portrait { display: block; width: 100%; height: auto; aspect-ratio: 1824 / 1273; object-fit: cover; border-radius: 14px; box-shadow: var(--inset-stroke); }
+  .about-photo { display: none; }
+}
 .about-how ul { display: flex; flex-direction: column; gap: 8px; }
 .about-how li { padding: 14px 16px; border-radius: 14px; background: hsla(0, 0%, 0%, 0.24); font-size: 16px; line-height: 1.5; color: var(--primary); }
 .about-how strong { display: block; color: var(--foreground); font-weight: 700; margin-bottom: 2px; }
@@ -1434,6 +1439,7 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; line-height: 1.45 !important; }
   .card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11px !important; }
   .card.is-active .work .pmx.is-reflow .pm-big { font-size: 40px !important; line-height: 1 !important; }
+  .card.is-active .work .pmx.is-reflow .pm-hd > div > p { font-size: 22px !important; line-height: 1.2 !important; font-weight: 700 !important; }
   /* big number + label/title headers */
   .card.is-active .work .pmx.is-reflow :is(.pm-hd, .pm-bhn) { gap: 12px !important; align-items: flex-start !important; }
   /* first page: the phone on top, then the text */
@@ -1516,12 +1522,17 @@ body.is-scroll { overflow-x: clip; }
 /* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
 .hero-static { display: none; }
 @media (max-width: 700px) {
-  /* The moving lettering stays off on a phone: a still headline instead. */
-  .build { display: none; }
-  .hero-static { display: block; padding: 0 var(--pad); color: #fafaf8; font-weight: 700; font-size: 21.5vw; line-height: 0.86; letter-spacing: -0.045em; }
-  .hero-static span { display: block; }
+  /* The moving lettering runs on a phone too, on two lines (site.js startHero), with room under the Contact button. */
+  .build { width: auto; margin: 14px var(--pad) 0; }
 
-  .gallery { --hh: 48px; --row: 54px; --hw: 168px; --list-top: calc(100dvh - var(--count) * var(--row) - 124px); }
+  /* The folder list sits near the bottom, but never above the end of the intro text (site.js sets --sub-bottom). */
+  .gallery, .subheader { --list-top: max(calc(100dvh - var(--count, 5) * 54px - 124px), calc(var(--sub-bottom, 0px) + 48px)); }
+  .gallery { --hh: 48px; --row: 54px; --hw: 168px; }
+  /* the intro: smaller, and the link never breaks or runs into the text before it (balanced wrapping misplaces it in Safari) */
+  .subheader p { font-size: 15px; line-height: 1.45; text-wrap: wrap; }
+  .subheader p a { white-space: nowrap; }
+  /* the yellow "Hi" band sits a little lower */
+  .book { --y: calc(var(--origin) + 60px - var(--cover-top) * var(--h)); }
   .gallery, .gallery.has-front { --peek-offset: 0px !important; }
   .card {
     --hy: calc(var(--list-top) + (var(--count) - 1 - var(--i)) * var(--row));
@@ -1545,7 +1556,7 @@ body.is-scroll { overflow-x: clip; }
 
 @media (max-width: 700px) {
   /* "Selected work" sits right above the folder list, on the right */
-  .subheader h3 { position: fixed; right: var(--pad); top: calc(100dvh - var(--count, 5) * 54px - 124px - 34px); margin: 0; width: max-content; font-size: 14px; text-align: right; z-index: 2; transition: opacity 200ms var(--ease); }
+  .subheader h3 { position: fixed; right: var(--pad); top: calc(var(--list-top) - 34px); margin: 0; width: max-content; font-size: 14px; text-align: right; z-index: 2; transition: opacity 200ms var(--ease); }
   #root:has(.gallery.is-focused) .subheader h3 { opacity: 0; }
   /* The overview page at the end of each folder: one column of cards at reading size, no scaling */
   .card.is-active .work figure.pmx.is-sum { height: auto; overflow: visible; }

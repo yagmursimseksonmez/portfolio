@@ -128,21 +128,20 @@ function startHero() {
   function draw() {
     ctx.globalCompositeOperation = 'source-over';
     ctx.clearRect(0, 0, w, h);
+    // The letters first, in the base colour; the discs are then painted only where there is a letter.
+    // (Masking each line in turn would erase the line before it, so two lines on a phone came out empty.)
     ctx.fillStyle = base;
-    ctx.fillRect(0, 0, w, h);
+    for (const l of lines) {
+      ctx.font = font(l.size);
+      if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * l.size}px`;
+      ctx.fillText(l.t, l.x, l.y);
+    }
+    ctx.globalCompositeOperation = 'source-atop';
     for (const p of particles) {
       ctx.fillStyle = p.color;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
-    }
-    // Keep only what falls inside the letters.
-    ctx.globalCompositeOperation = 'destination-in';
-    ctx.fillStyle = '#000';
-    for (const l of lines) {
-      ctx.font = font(l.size);
-      if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * l.size}px`;
-      ctx.fillText(l.t, l.x, l.y);
     }
   }
 
@@ -175,7 +174,7 @@ function startHero() {
   }
 
   function sync() {
-    const go = onScreen && !covered && !reduceMotion.matches && !mobile.matches && document.visibilityState === 'visible';
+    const go = onScreen && !covered && !reduceMotion.matches && document.visibilityState === 'visible';
     if (go && !running) { running = true; raf = requestAnimationFrame(step); }
     if (!go) { running = false; cancelAnimationFrame(raf); draw(); }
   }
@@ -779,6 +778,17 @@ function playIntro() {
 
 startClock();
 hero = startHero();
+
+// Phone: the folder list (and "Selected work" above it) starts below the intro text, however far the text runs on a
+// short screen (site.css, --list-top).
+const subText = document.querySelector('.subheader p');
+const markSubBottom = () => {
+  if (subText && !root.querySelector('.gallery.is-focused')) root.style.setProperty('--sub-bottom', `${Math.round(subText.getBoundingClientRect().bottom + scrollY)}px`);
+};
+if (subText) new ResizeObserver(markSubBottom).observe(subText);
+addEventListener('resize', markSubBottom);
+document.fonts.ready.then(markSubBottom);
+markSubBottom();
 startContact();
 startGallery();
 startDragScroll();
@@ -807,13 +817,17 @@ function fitPlaymateFrames() {
     // On a phone a reflowed page (and the overview page) is laid out at reading size, never zoomed.
     if (mobile.matches && target.matches('.is-reflow, .is-sum, .is-chart')) return;
     let z = target.clientHeight / 700;
-    // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width,
-    // if that takes no more than 15% off. Strips of screens and research boards run on sideways.
-    if (!mobile.matches && page.matches('.pm-f-iat, .pm-f-fm')) {
-      const work = target.closest('.work');
+    // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width, if
+    // that takes no more than 15% off. The whole folder shrinks with it, so every page keeps the same height.
+    const work = target.closest('.work');
+    if (!mobile.matches && work && innerWidth > 1024) {  // tablets get their own layout (responsive step 2)
       const avail = target.closest('.card-content').clientWidth - 2 * parseFloat(getComputedStyle(work).paddingLeft);
-      const w = parseFloat(page.style.width);
-      if (w && w * z > avail) z = Math.max(z * 0.85, avail / w);
+      let zc = z;
+      work.querySelectorAll(':scope > figure.pmx > .pm-f-iat, :scope > figure.pmx > .pm-f-fm').forEach((chart) => {
+        const w = parseFloat(chart.style.width);
+        if (w) zc = Math.min(zc, avail / w);
+      });
+      z = Math.max(z * 0.85, zc);
     }
     page.style.setProperty('--pmz', String(z));
     // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
@@ -826,8 +840,8 @@ function fitPlaymateFrames() {
   };
   const ro = new ResizeObserver((entries) => entries.forEach(({ target }) => fit(target)));
   document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
-  // A narrower window leaves the frame height alone, so the charts are fitted again on resize.
-  addEventListener('resize', () => document.querySelectorAll('figure.pmx').forEach((fig) => { if (fig.querySelector(':scope > .pm-f-iat, :scope > .pm-f-fm')) fit(fig); }));
+  // A narrower window leaves the frame height alone, so the pages are fitted again on resize.
+  addEventListener('resize', () => document.querySelectorAll('figure.pmx').forEach(fit));
 }
 fitPlaymateFrames();
 
