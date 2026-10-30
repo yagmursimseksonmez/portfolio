@@ -38,7 +38,8 @@ write('hero', `
 </div>`);
 
 // ---------------------------------------------------------------- result: four short steps, all in dark
-const col = (lab, p, src, alt) => `<div class="pm-rcol" style="width:244px"><div class="pm-cap"><div class="pm-lab">${lab}</div><p>${p}</p></div>${phone(src, alt, 230)}</div>`;
+// every caption gets room for three lines, so the four phones start at the same height even when one caption runs longer
+const col = (lab, p, src, alt) => `<div class="pm-rcol" style="width:244px"><div class="pm-cap"><div class="pm-lab">${lab}</div><p style="min-height:56px">${p}</p></div>${phone(src, alt, 230)}</div>`;
 write('result', `
 <div class="pmf pm-f-result" style="width:1132px"><h2>Follow the path, solve the puzzle, practice your words and grow a garden.</h2>
 <div class="pm-rrow">
