@@ -804,6 +804,8 @@ function fitPlaymateFrames() {
   const fit = (target) => {
     const page = target.firstElementChild;
     if (!page || target.clientHeight <= 0) return;
+    // On a phone a reflowed page (and the overview page) is laid out at reading size, never zoomed.
+    if (mobile.matches && target.matches('.is-reflow, .is-sum, .is-chart')) return;
     let z = target.clientHeight / 700;
     // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width,
     // if that takes no more than 15% off. Strips of screens and research boards run on sideways.
@@ -843,10 +845,16 @@ document.addEventListener('click', (e) => {
 });
 
 
-// Phone: a folder opens as one long page. Every designed frame is scaled to the screen width (never below 70%);
-// a frame still wider than the screen scrolls sideways inside its own box.
+// Phone: a folder opens as one long page. Pages led by text (first page, problem, numbers, loop, screens, outcome …)
+// reflow into one column at reading size (site.css, .is-reflow). The rest is scaled to the screen width (never below 70%);
+// a frame still wider than the screen, like a chart, scrolls sideways inside its own box.
+const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-result, .pm-f-final, .pm-f-board, .pm-f-comp2, .pm-f-proto, .pm-f-outcome';
+const reflowCases = '#healthbar, #ikeep';
 function fitFramesToWidth() {
-  if (!mobile.matches) return;
+  if (!mobile.matches) {
+    document.querySelectorAll('figure.pmx.is-reflow, figure.pmx.is-chart').forEach((fig) => fig.classList.remove('is-reflow', 'is-chart'));
+    return;
+  }
   document.querySelectorAll('.card.is-active .card-content').forEach((content) => {
     const avail = content.clientWidth - 24;
     if (avail <= 0) return;
@@ -854,6 +862,32 @@ function fitFramesToWidth() {
       const page = fig.firstElementChild;
       if (!page) return;
       if (page.classList.contains('pm-f-sum')) { fig.classList.add('is-sum'); page.style.setProperty('--pmz', '1'); return; }
+      if (fig.closest(reflowCases) && page.matches(reflowPages)) {
+        fig.classList.add('is-reflow');
+        fig.classList.remove('is-wide');
+        fig.style.removeProperty('--pm-h');
+        page.style.setProperty('--pmz', '1');
+        return;
+      }
+      // A chart keeps its drawing and scrolls sideways, a little larger than the rest; its title moves out above it at reading size.
+      if (fig.closest(reflowCases) && page.matches('.pm-f-iat, .pm-f-fm')) {
+        fig.classList.add('is-chart');
+        if (!fig.previousElementSibling?.classList.contains('chart-cap')) {
+          const cap = document.createElement('div');
+          cap.className = 'chart-cap';
+          const num = page.querySelector('.pm-big')?.textContent.trim();
+          cap.innerHTML = `${num ? `<span>${num}</span>` : ''}<div><small></small><h3></h3></div>`;
+          cap.querySelector('small').textContent = page.querySelector('.pm-lab')?.textContent.trim() ?? '';
+          cap.querySelector('h3').textContent = page.querySelector('h2')?.textContent.trim() ?? '';
+          fig.before(cap);
+        }
+        page.style.setProperty('--pmz', '1');
+        const w = page.getBoundingClientRect().width || page.scrollWidth;
+        const s = Math.min(1, Math.max(0.8, avail / w));
+        page.style.setProperty('--pmz', String(s));
+        fig.classList.toggle('is-wide', w * s > avail + 4);
+        return;
+      }
       page.style.setProperty('--pmz', '1');
       const w = page.getBoundingClientRect().width || page.scrollWidth;
       const s = Math.min(1, Math.max(0.7, avail / w));
