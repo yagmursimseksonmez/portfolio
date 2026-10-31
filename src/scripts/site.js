@@ -866,6 +866,32 @@ const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-
   + '.pm-f-plan, .pm-f-people, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-f-ut, .pm-f-board2, .pm-f-cmp, .pm-f-ba';
 const chartPages = '.pm-f-iat, .pm-f-fm, .pm-f-wide, .pm-f-pers';
 const reflowCases = '#healthbar, #ikeep, #chengel, #playmate';
+// Phone: a row you swipe sideways (screens, before and after, the store screenshots) gets a dot per item under it and a
+// "Swipe →" cue that goes once the row has moved, so it is clear there is more to the right.
+function addSwipeDots(page) {
+  page.querySelectorAll('.pm-rrow, .pm-prow, .pm-wrow, .pm-cpp, .pm-ba, .pm-shots').forEach((row) => {
+    if (row.dataset.dots) return;
+    const items = [...row.children].filter((el) => !el.matches('.pm-ar, i'));
+    if (items.length < 2) return;
+    row.dataset.dots = '1';
+    const dots = document.createElement('div');
+    dots.className = 'swipe-dots';
+    dots.setAttribute('aria-hidden', 'true');
+    dots.innerHTML = `${items.map(() => '<i></i>').join('')}<span>Swipe →</span>`;
+    row.after(dots);
+    const marks = [...dots.querySelectorAll('i')];
+    const update = () => {
+      const max = row.scrollWidth - row.clientWidth;
+      dots.hidden = max < 4;
+      const k = max > 0 ? Math.round((row.scrollLeft / max) * (items.length - 1)) : 0;
+      marks.forEach((m, i) => m.classList.toggle('on', i === k));
+      if (row.scrollLeft > 8) dots.classList.add('moved');
+    };
+    row.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(row);
+    update();
+  });
+}
 function fitFramesToWidth() {
   if (!mobile.matches) {
     document.querySelectorAll('figure.pmx.is-reflow, figure.pmx.is-chart').forEach((fig) => fig.classList.remove('is-reflow', 'is-chart'));
@@ -913,6 +939,7 @@ function fitFramesToWidth() {
           if (nds.length === nts.length) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
         });
         fig.classList.add('is-reflow');
+        addSwipeDots(page);
         fig.classList.remove('is-wide');
         fig.style.removeProperty('--pm-h');
         page.style.setProperty('--pmz', '1');

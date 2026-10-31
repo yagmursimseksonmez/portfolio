@@ -1364,6 +1364,9 @@ body.is-scroll { overflow-x: clip; }
   .about-facts { grid-template-columns: 1fr; }
   .about-work li { flex-direction: column; gap: 2px; }
   .about-work span { text-align: left; }
+  /* "How I got here" sits in cards like the facts and "How I work" */
+  .about-story p { max-width: none; padding: 14px 16px; border-radius: 14px; background: hsla(0, 0%, 0%, 0.24); }
+  .about-story p + p { margin-top: 8px; }
 }
 .book-end { padding: 0 calc(var(--pad) * 3) calc(var(--pad) * 3); }
 
@@ -1435,13 +1438,14 @@ body.is-scroll { overflow-x: clip; }
 @media (max-width: 700px) {
   .hi-card {
     position: absolute; z-index: 1; left: var(--pad); width: calc(100% - var(--pad) - var(--hw) + 24px);
-    top: calc(var(--list-top) + 18px); bottom: 88px;
+    top: calc(var(--list-top) + 18px); bottom: 16px; container-type: size;
     display: flex; align-items: center; justify-content: center; padding: 0 24px 0 0;
     border: 0; border-radius: var(--radius-card); background: var(--accent); color: var(--on-accent);
-    font: 700 clamp(64px, 30vw, 132px) / 1 var(--sans, inherit); letter-spacing: -0.04em;
+    font: 700 64px / 1 var(--sans, inherit); letter-spacing: -0.04em;
     box-shadow: var(--inset-stroke), var(--elevation-low); pointer-events: auto; cursor: pointer;
     transition: opacity 240ms var(--ease), transform 240ms var(--ease);
   }
+  .hi-card span { font-size: min(62cqw, 78cqh); }
   .hi-card:active { transform: scale(0.98); }
   .gallery.is-focused .hi-card, .gallery.is-book .hi-card { opacity: 0; pointer-events: none; z-index: 0; }
   .book { --closed-x: 0%; --closed-scale: 0.96; opacity: 0; transition: transform var(--time-cards) var(--ease), opacity 240ms var(--ease); }
@@ -1482,7 +1486,7 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { display: flex !important; flex-wrap: nowrap !important; justify-content: flex-start !important; align-items: flex-start !important; gap: 14px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { scroll-padding-inline: 16px; }
   .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow)::-webkit-scrollbar { display: none; }
-  .card.is-active .work .pmx.is-reflow .pm-rcol { flex: none !important; width: 214px !important; scroll-snap-align: start; }
+  .card.is-active .work .pmx.is-reflow .pmf .pm-rcol.pm-rcol { flex: none !important; width: 214px !important; scroll-snap-align: start; }
   .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) > * { scroll-snap-align: start; }
   .card.is-active .work .pmx.is-reflow .pm-phone { --pw: 200 !important; }
   .card.is-active .work .pmx.is-reflow .pm-cap p { min-height: 0 !important; }
@@ -1531,6 +1535,18 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-reflow .pm-tag { position: static !important; align-self: flex-start; margin-top: -4px; }
   /* outcome: impact above next */
   .card.is-active .work .pmx.is-reflow .pm-oc2 { grid-template-columns: 1fr !important; grid-auto-rows: auto !important; }
+  /* every row you swipe gets dots under it and a "Swipe" cue until it has been moved (site.js addSwipeDots) */
+  .swipe-dots { display: flex; align-items: center; gap: 6px; margin-top: -4px; }
+  .swipe-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(244, 244, 242, 0.28); transition: background 160ms, width 160ms; }
+  .swipe-dots i.on { width: 18px; border-radius: 3px; background: var(--accent); }
+  .swipe-dots span { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--accent); transition: opacity 200ms; }
+  .swipe-dots.moved span { opacity: 0; }
+  /* first pages: chips, the store listing, the button and its note all start on the left */
+  .card.is-active .work .pmx.is-reflow .pm-hfoot { flex-direction: column !important; align-items: flex-start !important; }
+  .card.is-active .work .pmx.is-reflow .pm-hfoot > *, .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-pbtn { margin-left: 0 !important; }
+  .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-chips { flex-direction: row !important; flex-wrap: wrap !important; }
+  .card.is-active .work .pmx.is-reflow .pm-hstore { align-items: flex-start !important; }
+  .card.is-active .work .pmx.is-reflow .pm-hnote { text-align: left !important; max-width: none !important; }
   /* charts: the title sits above at reading size, the drawing below scrolls sideways */
   .chart-cap { display: flex; gap: 12px; align-items: flex-start; margin: 10px 4px -4px; }
   .chart-cap > span { flex: none; color: var(--accent); font-size: 40px; font-weight: 700; line-height: 1; }
@@ -1541,7 +1557,7 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
   .card.is-active .work .pmx.is-chart :is(.pm-bh, .pm-fmh) { display: none !important; }
 }
-@media (min-width: 701px) { .chart-cap { display: none; } }
+@media (min-width: 701px) { .chart-cap, .swipe-dots { display: none; } }
 
 /* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
 .hero-static { display: none; }
