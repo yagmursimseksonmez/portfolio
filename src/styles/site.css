@@ -1428,6 +1428,30 @@ body.is-scroll { overflow-x: clip; }
 .scroll-hint.is-on { opacity: 1; }
 @media (hover: none) { .scroll-hint { display: none; } }
 
+/* Phone: the closed "Hi" is a card of its own, from the text's left edge to just under the folder tabs; it opens the
+   About. The book itself only shows open, without the page turn (the turning page's back was a second copy of her photo
+   that flashed by before the About's own photo). */
+.hi-card { display: none; }
+@media (max-width: 700px) {
+  .hi-card {
+    position: absolute; z-index: 1; left: var(--pad); width: calc(100% - var(--pad) - var(--hw) + 24px);
+    top: calc(var(--list-top) + 18px); bottom: 88px;
+    display: flex; align-items: center; justify-content: center; padding: 0 24px 0 0;
+    border: 0; border-radius: var(--radius-card); background: var(--accent); color: var(--on-accent);
+    font: 700 clamp(64px, 30vw, 132px) / 1 var(--sans, inherit); letter-spacing: -0.04em;
+    box-shadow: var(--inset-stroke), var(--elevation-low); pointer-events: auto; cursor: pointer;
+    transition: opacity 240ms var(--ease), transform 240ms var(--ease);
+  }
+  .hi-card:active { transform: scale(0.98); }
+  .gallery.is-focused .hi-card, .gallery.is-book .hi-card { opacity: 0; pointer-events: none; z-index: 0; }
+  .book { --closed-x: 0%; --closed-scale: 0.96; opacity: 0; transition: transform var(--time-cards) var(--ease), opacity 240ms var(--ease); }
+  .gallery.is-book .book { opacity: 1; }
+  .book-leaf { display: none; }
+  html.is-intro .hi-card { opacity: 0; }
+  html.is-intro-play .hi-card { animation: hi-in var(--intro-card) var(--ease) var(--intro-start) both; }
+}
+@keyframes hi-in { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: none; } }
+
 /* ------------------------------------------------ phone: designed pages reflow into one column (site.js marks them .is-reflow) */
 @media (max-width: 700px) {
   .card.is-active .work figure.pmx.is-reflow { height: auto; overflow: visible; }
