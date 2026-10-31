@@ -863,7 +863,7 @@ document.addEventListener('click', (e) => {
 // reflow into one column at reading size (site.css, .is-reflow). The rest is scaled to the screen width (never below 70%);
 // a frame still wider than the screen, like a chart, scrolls sideways inside its own box.
 const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-result, .pm-f-final, .pm-f-board, .pm-f-comp2, .pm-f-proto, .pm-f-outcome, .pm-f-getit, .pm-ch, '
-  + '.pm-f-plan, .pm-f-people, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-f-ut, .pm-f-board2, .pm-f-cmp, .pm-f-ba';
+  + '.pm-f-plan, .pm-f-people, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-f-ut, .pm-f-board2, .pm-f-cmp, .pm-f-ba, .pm-f-dec';
 const chartPages = '.pm-f-iat, .pm-f-fm, .pm-f-wide, .pm-f-pers';
 const reflowCases = '#healthbar, #ikeep, #chengel, #playmate';
 // Phone: a row you swipe sideways (screens, before and after, the store screenshots) gets a dot per item under it and a

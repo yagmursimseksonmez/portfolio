@@ -50,6 +50,8 @@ gallery:
     frame: ikeep-getit
   - label: Outcome
     frame: ikeep-outcome
+  - label: Decision · category symbols
+    frame: ikeep-decision
   - label: Overview
     frame: ikeep-summary
 ---

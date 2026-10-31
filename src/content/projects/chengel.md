@@ -45,6 +45,8 @@ gallery:
     frame: chengel-components
   - label: Design system · icons and illustrations
     frame: chengel-icons
+  - label: Build with the kit
+    frame: chengel-kit
   - label: Final screens · dark
     frame: chengel-final-night
   - label: Final screens · light

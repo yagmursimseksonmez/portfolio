@@ -1533,6 +1533,17 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-reflow .pm-cpg { display: flex !important; flex-wrap: nowrap !important; gap: 10px !important; }
   .card.is-active .work .pmx.is-reflow .pm-ar { flex: none !important; align-self: center !important; }
   .card.is-active .work .pmx.is-reflow .pm-tag { position: static !important; align-self: flex-start; margin-top: -4px; }
+  /* decision panels and the kit: steps (label above text) first, then the screens; the kit rules full width */
+  .card.is-active .work .pmx.is-reflow :is(.pm-dec, .pm-kit) { flex-direction: column !important; gap: 18px !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-dec-steps, .pm-kit-rules) { width: auto !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-s { grid-template-columns: 1fr !important; row-gap: 4px; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-pick { margin: 4px -10px !important; padding: 12px 10px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf span.pm-dec-tag { font-size: 10px !important; line-height: 1.3 !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) { flex-wrap: nowrap !important; gap: 12px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) .pm-phone { --pw: 148 !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-vis { flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-vis img[style*="height"] { height: auto !important; width: 100% !important; }
+  .card.is-active .work .pmx.is-reflow .pm-dec-vis > div:not(.pm-dec-ph) { flex: 1 1 100% !important; width: 100% !important; min-width: 0 !important; }
   /* outcome: impact above next */
   .card.is-active .work .pmx.is-reflow .pm-oc2 { grid-template-columns: 1fr !important; grid-auto-rows: auto !important; }
   /* every row you swipe gets dots under it and a "Swipe" cue until it has been moved (site.js addSwipeDots) */

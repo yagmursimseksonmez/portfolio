@@ -50,6 +50,8 @@ gallery:
     frame: healthbar-character
   - label: Usability testing
     frame: healthbar-testing
+  - label: Decision · the home screen
+    frame: healthbar-decision
   - label: Design system · Foundations
     frame: healthbar-foundations
   - label: Design system · Components

@@ -57,6 +57,8 @@ gallery:
     frame: testing
   - label: Testing round 1
     frame: testing-round-1
+  - label: Decision · no-shows
+    frame: playmate-decision
   - label: Iterations
     frame: compare
   - label: Design system and components

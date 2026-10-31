@@ -235,32 +235,37 @@ const flow2 = flowSvg(1880, 46, 405, FS, 'Words and flash cards', 'From a folder
 // my wording for the shared header (her two flow titles are kept inside the canvases)
 write('userflow', `<div class="pmf pm-f-fm pm-ch" style="width:${Math.round(1880 * FS) + 56}px">${head(4, 'User flow examples', 'Two flows: <strong>solving a puzzle</strong> and <strong>practising words</strong>.')}${flow1}${flow2}</div>`);
 
-// ---------------------------------------------------------------- iterations: the keyboard and the dark colours
-// the row fills the frame height; the text column is narrow so its two cards are filled by their text
-write('keyboard', page('width:1600px;flex-direction:column;gap:16px', `
+// ---------------------------------------------------------------- iterations: the keyboard, told as a decision (brief 8)
+// the steps on the left (same panel family as the other cases); the four options, before/after and the dark colours on the right
+const decStep = (lab, text, pick) => `<div class="pm-dec-s${pick ? ' pm-dec-pick' : ''}"><div class="pm-lab">${lab}</div><p>${text}</p></div>`;
+const kbShot = (lab, img, alt) => `<div><div class="pm-lab" style="margin-bottom:6px">${lab}</div><img src="/images/${img}.webp" alt="${esc(alt)}" style="width:100%;border-radius:12px;display:block"></div>`;
+write('keyboard', page('width:1720px;flex-direction:column;gap:20px', `
 ${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keyboard was <strong>louder than the puzzle</strong>, and the dark colours <strong>tired the eyes</strong>.', 'width:1020px')}
-<div style="display:flex;gap:20px;flex:1;min-height:0">
-  <div style="flex:none;display:flex;flex-direction:column;gap:8px"><img src="/images/chengel-kb-options.webp" alt="Four keyboard options in light and dark: soft keys, tonal keys, lilac keys and letters only. Tonal keys was chosen." style="height:522px;width:auto;border-radius:14px;display:block;background:#fff"><div class="pm-lab" style="font-size:11px">Four options. I chose number 2, tonal keys.</div></div>
-  <div style="flex:none;width:766px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px 12px;align-content:space-between">
-    <div><div class="pm-lab" style="margin-bottom:6px">BEFORE · DARK</div><img src="/images/chengel-kb-before-dark.webp" alt="Keyboard before: outlined keys, dark mode" style="width:100%;border-radius:12px;display:block"></div>
-    <div><div class="pm-lab" style="margin-bottom:6px">AFTER · DARK</div><img src="/images/chengel-kb-after-dark.webp" alt="Keyboard after: tonal keys, dark mode" style="width:100%;border-radius:12px;display:block"></div>
-    <div><div class="pm-lab" style="margin-bottom:6px">BEFORE · LIGHT</div><img src="/images/chengel-kb-before-light.webp" alt="Keyboard before: outlined keys with dark letters, light mode" style="width:100%;border-radius:12px;display:block"></div>
-    <div><div class="pm-lab" style="margin-bottom:6px">AFTER · LIGHT</div><img src="/images/chengel-kb-after-light.webp" alt="Keyboard after: tonal keys, light mode" style="width:100%;border-radius:12px;display:block"></div>
+<div class="pm-dec">
+  <div class="pm-dec-steps">
+    ${decStep('Problem', 'Keys had a 1px outline, and it made the letters harder to read. In dark mode the light areas added up, and the keyboard stood out more than the puzzle.')}
+    ${decStep('Options', 'Four keyboards, each in light and dark: soft keys, tonal keys, lilac keys, letters only.')}
+    ${decStep('What I chose', '<strong>Tonal keys.</strong> No outline, each key a hair lighter than the panel.', true)}
+    ${decStep('Why', 'I checked the contrast of each one and picked the smallest step between key and panel that still passes. The lighter the key, the lighter the letter has to be to pass, and at night that glares. In light mode it works the same way, the other way round.')}
+    ${decStep('The risk', 'Muted keys could be harder to read. Checked: letters stay at <strong>8.4:1</strong> in light and <strong>6.8:1</strong> in dark.')}
   </div>
-  <div style="flex:none;width:260px;display:flex;flex-direction:column;gap:12px">
-    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;padding:20px 22px">
-      <div class="pm-lab">KEYBOARD</div>
-      <p style="font-size:16px">Keys had a <strong>1px outline</strong> and full-ink letters, so the keyboard shouted louder than the crossword.</p>
-      <p style="font-size:16px"><strong>Now: no outline</strong>, keys one hair lighter than the panel, muted letters. Letter on key is <strong>8.4:1</strong> in light and <strong>6.8:1</strong> in dark.</p>
-    </div>
-    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;padding:20px 22px">
-      <div class="pm-lab">DARK MODE</div>
-      <p style="font-size:16px">I tried several dark colours. Some <strong>reflected and tired my eyes</strong>.</p>
-      <p style="font-size:16px"><strong>Now: a purple-tinted night grey</strong>, never pure black.</p>
-      <div style="display:flex;gap:6px">${['#1a1923', '#272533', '#121118', '#0c0b11', '#38364b'].map((c) => `<span style="flex:1;height:26px;border-radius:7px;background:${c};box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)"></span>`).join('')}</div>
+  <div class="pm-dec-vis" style="align-items:stretch;justify-content:flex-start">
+    <div style="flex:none;display:flex;flex-direction:column;gap:8px;justify-content:center"><img src="/images/chengel-kb-options.webp" alt="Four keyboard options in light and dark: soft keys, tonal keys, lilac keys and letters only. Tonal keys was chosen." style="height:472px;width:auto;border-radius:14px;display:block;background:#fff"><div class="pm-lab" style="font-size:11px">Four options. I chose number 2, tonal keys.</div></div>
+    <div style="flex:none;width:520px;display:flex;flex-direction:column;gap:12px;justify-content:center">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 12px">
+        ${kbShot('BEFORE · DARK', 'chengel-kb-before-dark', 'Keyboard before: outlined keys, dark mode')}
+        ${kbShot('AFTER · DARK', 'chengel-kb-after-dark', 'Keyboard after: tonal keys, dark mode')}
+        ${kbShot('BEFORE · LIGHT', 'chengel-kb-before-light', 'Keyboard before: outlined keys with dark letters, light mode')}
+        ${kbShot('AFTER · LIGHT', 'chengel-kb-after-light', 'Keyboard after: tonal keys, light mode')}
+      </div>
+      <div class="pm-card" style="display:flex;flex-direction:column;gap:8px;padding:16px 20px">
+        <div class="pm-lab">DARK MODE</div>
+        <p style="font-size:16px">I tried several dark colours. Some <strong>reflected and tired my eyes</strong>. <strong>Now: a purple-tinted night grey</strong>, never pure black.</p>
+        <div style="display:flex;gap:6px">${['#1a1923', '#272533', '#121118', '#0c0b11', '#38364b'].map((c) => `<span style="flex:1;height:24px;border-radius:7px;background:${c};box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)"></span>`).join('')}</div>
+      </div>
     </div>
   </div>
-</div>`));
+</div>`, 'pm-f-dec'));
 
 // ---------------------------------------------------------------- design system boards
 // the design system in Figma, view only (shared by her 2026-10-30; anyone with the link can view)
@@ -271,6 +276,20 @@ write('colour', board(6, 'Design system · colour', 'Three colours carry the bra
 write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
 write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 562));
 write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 532));
+
+// ---------------------------------------------------------------- build with the kit (brief 8): the rules from DESIGN-SYSTEM-README, and the Figma link
+// ("Read the system doc" stays out until she makes the doc public; the example screen comes once she approves it)
+const KIT = [
+  ['Purple acts, blue writes.', 'Buttons and progress are purple. Only the letters a player types are blue; nothing else is ever blue.'],
+  ['One typeface:', 'JetBrains Mono for everything. Yagmur Hand only for letters inside the crossword.'],
+  ['Thin lines:', '1px for the grid and cards, 1.5px for buttons and icons, 2px for whatever is active.'],
+  ['Every status has an icon and words.', 'Colour is never the only cue.'],
+  ['Every text pair meets 4.5:1,', 'in light and dark.'],
+  ['Copy is short and in sentence case.', 'Exclamation marks only on success. Languages get a two-letter code, never a flag.'],
+];
+write('kit', page('width:756px;flex-direction:column;gap:20px', `<div class="pm-bh"><div class="pm-lab">Build with the kit</div><h2>What a designer or developer needs to know before making a new Chengel screen.</h2></div>
+<div class="pm-kit"><div><ol class="pm-kit-rules">${KIT.map(([a, b], i) => `<li class="pm-kit-r"><i>${i + 1}</i><p><strong>${a}</strong> ${b}</p></li>`).join('')}</ol>
+<div class="pm-kit-foot"><a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer">Open the kit in Figma ↗</a></div></div></div>`));
 
 // ---------------------------------------------------------------- final screens, night first
 const finals = (theme) => ['onb-1', 'home', 'puzzle-2', 'cards-2', 'garden', 'profile']
