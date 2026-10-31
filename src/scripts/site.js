@@ -809,6 +809,11 @@ if (linked) {
 
 
 // ------------------------------------------------------- PlayMate pages
+// Write a class or a style value only when it changes. Setting the same value again still reports a change to the observers
+// below, and on a phone that re-fitted the open folder every frame until Safari closed the tab.
+const setVar = (el, name, v) => { if (el.style.getPropertyValue(name) !== v) el.style.setProperty(name, v); };
+const addClass = (el, c) => { if (!el.classList.contains(c)) el.classList.add(c); };
+
 // The finished pages in src/content/playmate-frames are designed 700px tall; scale each to the strip's frame height.
 function fitPlaymateFrames() {
   const fit = (target) => {
@@ -829,7 +834,7 @@ function fitPlaymateFrames() {
       });
       z = Math.max(z * 0.85, zc);
     }
-    page.style.setProperty('--pmz', String(z));
+    setVar(page, '--pmz', String(z));
     // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
     // undo the zoom on the frame and give it the zoomed size instead.
     page.querySelectorAll('iframe[data-w]').forEach((f) => {
@@ -885,12 +890,23 @@ function addSwipeDots(page) {
       dots.hidden = max < 4;
       const k = max > 0 ? Math.round((row.scrollLeft / max) * (items.length - 1)) : 0;
       marks.forEach((m, i) => m.classList.toggle('on', i === k));
-      if (row.scrollLeft > 8) dots.classList.add('moved');
+      if (row.scrollLeft > 8) addClass(dots, 'moved');
     };
     row.addEventListener('scroll', update, { passive: true });
     new ResizeObserver(update).observe(row);
     update();
   });
+}
+// A page's width at zoom 1, measured once (it is a fixed-size board), so a refit has nothing to re-measure.
+let naturalWidths = new WeakMap();
+function naturalWidth(page) {
+  if (!naturalWidths.has(page)) {
+    setVar(page, '--pmz', '1');
+    const w = page.getBoundingClientRect().width || page.scrollWidth;
+    if (!w) return 0;
+    naturalWidths.set(page, w);
+  }
+  return naturalWidths.get(page);
 }
 function fitFramesToWidth() {
   if (!mobile.matches) {
@@ -903,11 +919,11 @@ function fitFramesToWidth() {
     content.querySelectorAll('figure.pmx').forEach((fig) => {
       const page = fig.firstElementChild;
       if (!page) return;
-      if (page.classList.contains('pm-f-sum')) { fig.classList.add('is-sum'); page.style.setProperty('--pmz', '1'); return; }
+      if (page.classList.contains('pm-f-sum')) { addClass(fig, 'is-sum'); setVar(page, '--pmz', '1'); return; }
       // A chart keeps its drawing and scrolls sideways, a little larger than the rest; its title moves out above it at reading size.
       const wideBoard = page.matches('.pm-f-board') && parseFloat(page.querySelector('img.pm-bimg')?.style.width) > 900;
       if (fig.closest(reflowCases) && (page.matches(chartPages) || wideBoard)) {
-        fig.classList.add('is-chart');
+        addClass(fig, 'is-chart');
         if (!fig.previousElementSibling?.classList.contains('chart-cap')) {
           const cap = document.createElement('div');
           cap.className = 'chart-cap';
@@ -923,10 +939,10 @@ function fitFramesToWidth() {
           });
           fig.before(cap);
         }
-        page.style.setProperty('--pmz', '1');
-        const w = page.getBoundingClientRect().width || page.scrollWidth;
+        const w = naturalWidth(page);
+        if (!w) return;
         const s = Math.min(1, Math.max(0.8, avail / w));
-        page.style.setProperty('--pmz', String(s));
+        setVar(page, '--pmz', String(s));
         fig.classList.toggle('is-wide', w * s > avail + 4);
         return;
       }
@@ -936,28 +952,31 @@ function fitFramesToWidth() {
         page.querySelectorAll('.pm-cwrap').forEach((wrap) => {
           const nds = [...wrap.querySelectorAll(':scope > .pm-nd')];
           const nts = [...wrap.querySelectorAll(':scope > .pm-nt')];
-          if (nds.length === nts.length) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
+          if (nds.length === nts.length && nds.some((nd, i) => nd.nextElementSibling !== nts[i])) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
         });
-        fig.classList.add('is-reflow');
+        addClass(fig, 'is-reflow');
         addSwipeDots(page);
-        fig.classList.remove('is-wide');
+        fig.classList.toggle('is-wide', false);
         fig.style.removeProperty('--pm-h');
-        page.style.setProperty('--pmz', '1');
+        setVar(page, '--pmz', '1');
         return;
       }
-      page.style.setProperty('--pmz', '1');
-      const w = page.getBoundingClientRect().width || page.scrollWidth;
+      const w = naturalWidth(page);
+      if (!w) return;
       const s = Math.min(1, Math.max(0.7, avail / w));
-      fig.style.setProperty('--pm-h', `${700 * s}px`);
-      page.style.setProperty('--pmz', String(s));
+      setVar(fig, '--pm-h', `${700 * s}px`);
+      setVar(page, '--pmz', String(s));
       fig.classList.toggle('is-wide', w * s > avail + 4);
     });
   });
 }
 mobile.addEventListener('change', fitFramesToWidth);
 window.addEventListener('resize', fitFramesToWidth);
-new MutationObserver(() => requestAnimationFrame(fitFramesToWidth)).observe(document.querySelector('.gallery') ?? document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
-window.addEventListener('load', fitFramesToWidth);
+// Fit again when a folder opens. Only the cards themselves are watched: the fitting changes classes inside them.
+document.querySelectorAll('[data-card]').forEach((card) => {
+  new MutationObserver(() => requestAnimationFrame(fitFramesToWidth)).observe(card, { attributes: true, attributeFilter: ['class'] });
+});
+window.addEventListener('load', () => { naturalWidths = new WeakMap(); fitFramesToWidth(); });
 fitFramesToWidth();
 
 // ------------------------------------------------------- reading progress
