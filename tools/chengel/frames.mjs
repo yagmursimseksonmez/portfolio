@@ -27,14 +27,13 @@ write('hero', `
   <div class="pm-hero-t">
     <div class="pm-lab">Chengel · iOS · Freelance · Konkret · submitted to the App Store</div>
     <h1>Learn words by solving crosswords.</h1>
-    <p class="pm-lede">Chengel is an iOS app for learning vocabulary. The clue is in your language, the answer is in the one you are learning, and <strong>you write it in my own handwriting</strong>, like filling in a newspaper crossword.</p>
+    <p class="pm-lede">Chengel is an iOS app for learning vocabulary. The clue is in your language and the answer is in the one you are learning. <strong>You write it in my own handwriting</strong>, like filling in a newspaper crossword.</p>
     <div class="pm-grid2">
-      <div class="pm-card"><div class="pm-lab">ROLE</div><h4>Designer, with one iOS developer</h4><p>I designed the <strong>app, the design system, the icons and the illustrations</strong>. One iOS developer built it.</p></div>
-      <div class="pm-card"><div class="pm-lab">PROBLEM</div><h4>Word apps feel like homework</h4><p>Lists and flash cards work, but they feel like <strong>studying</strong>. I wanted it to feel like a game you already know.</p></div>
-      <div class="pm-card"><div class="pm-lab">SOLUTION</div><h4>A crossword with a garden</h4><p>Solve a puzzle, <strong>keep the words</strong> you learned, and plant a flower for every puzzle.</p></div>
-      <div class="pm-card"><div class="pm-lab">IMPACT</div><h4>Built in 3 weeks, now in review</h4><p>Designed and built <strong>Oct 1–20, 2026</strong>. It is <strong>waiting for Apple’s review</strong>.</p></div>
+      <div class="pm-card"><div class="pm-lab">SITUATION</div><h4>Word apps feel like homework</h4><p>Lists and flash cards work, but they feel like <strong>studying</strong>. I wanted learning words to feel like a game you already know.</p></div>
+      <div class="pm-card"><div class="pm-lab">TASK</div><h4>Designer, with one iOS developer</h4><p>I designed the <strong>app, the design system, the icons and the illustrations</strong>. One iOS developer built it.</p></div>
+      <div class="pm-card"><div class="pm-lab">ACTION</div><h4>A crossword in my handwriting</h4><p>I tried <strong>four keyboards</strong> in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.</p></div>
+      <div class="pm-card"><div class="pm-lab">RESULT</div><h4>Built in 3 weeks, now in review</h4><p>It was designed and built Oct 1–20, 2026. Every text pair passes <strong>4.5:1 contrast</strong>, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.</p></div>
     </div>
-    <p class="pm-ch-lim"><strong>Tested:</strong> contrast of every text pair, above 4.5:1. <strong>Not yet tested</strong> with learners.</p>
     <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span></div><span class="pm-pbtn pm-sm" style="background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin-left:auto">In App Store review</span></div>
   </div>
 </div>`);
@@ -43,31 +42,31 @@ write('hero', `
 // every caption gets room for three lines, so the four phones start at the same height even when one caption runs longer
 const col = (lab, p, src, alt) => `<div class="pm-rcol" style="width:244px"><div class="pm-cap"><div class="pm-lab">${lab}</div><p style="min-height:56px">${p}</p></div>${phone(src, alt, 230)}</div>`;
 write('result', `
-<div class="pmf pm-f-result" style="width:1132px"><h2>Follow the path, solve the puzzle, practice your words and grow a garden.</h2>
+<div class="pmf pm-f-result" style="width:1132px"><h2>How Chengel works, in four steps</h2>
 <div class="pm-rrow">
-${col('FOLLOW THE PATH', 'Every stop is a puzzle. <strong>Finish it and a flower grows.</strong>', 'chengel-dark-home', 'The Chengel path in dark mode with a finished puzzle and the next one to start')}
-${col('SOLVE THE PUZZLE', 'Clues in your language. <strong>You write the answer in my handwriting.</strong>', 'chengel-dark-puzzle-4', 'A crossword in dark mode with the word NACHT written in handwriting')}
-${col('PRACTICE IT', 'Solved words go into <strong>three folders</strong>. Practice them so you always remember.', 'chengel-dark-words', 'The word folders in dark mode: Knew it, Knew with letters and Mostly revealed')}
-${col('GROW A GARDEN', 'Each level has its own <strong>unique flowers</strong>. Each milestone helps you bloom one.', 'chengel-dark-awards', 'The awards screen in dark mode with the flowers from common to rare')}
+${col('FOLLOW THE PATH', 'Every stop is a puzzle. <strong>When you finish one, a flower grows.</strong>', 'chengel-dark-home', 'The Chengel path in dark mode with a finished puzzle and the next one to start')}
+${col('SOLVE THE PUZZLE', 'The clues are in your language. <strong>You write the answers in my handwriting.</strong>', 'chengel-dark-puzzle-4', 'A crossword in dark mode with the word NACHT written in handwriting')}
+${col('PRACTICE IT', 'Solved words go into <strong>three folders</strong>. You practise them there so you always remember them.', 'chengel-dark-words', 'The word folders in dark mode: Knew it, Knew with letters and Mostly revealed')}
+${col('GROW A GARDEN', 'Each level has <strong>its own flowers</strong>. Every milestone helps one of them bloom.', 'chengel-dark-awards', 'The awards screen in dark mode with the flowers from common to rare')}
 </div></div>`);
 
 // ---------------------------------------------------------------- idea
 // narrow, so the three cards are filled by their text instead of stretched
 write('problem', page('width:460px;flex-direction:column;gap:16px', `
-${head(1, 'Idea', 'I wanted learning words to feel like an old <strong>newspaper crossword</strong>.')}
+${head(1, 'Idea', 'A <strong>newspaper crossword</strong> for learning words.')}
 <div class="pm-stack">
-<div class="pm-card pm-big-h"><h3>QUESTION</h3><p style="font-size:16px">How can learning vocabulary be fun, like we used to do in old times? <strong>Solving a crossword with a pencil.</strong></p></div>
+<div class="pm-card pm-big-h"><h3>QUESTION</h3><p style="font-size:16px">How can learning vocabulary be as much fun as <strong>solving a crossword with a pencil</strong>?</p></div>
 <div class="pm-card pm-big-h"><h3>IDEA</h3><p style="font-size:16px">A crossword where <strong>the clue is in your language</strong> and the answer is the word you are learning.</p></div>
-<div class="pm-card pm-big-h"><h3>REFERENCE</h3><p style="font-size:16px">We used to solve newspaper crosswords <strong>by hand</strong>. The app brings that back, down to the handwriting. But this time it helps you learn a language.</p></div>
+<div class="pm-card pm-big-h"><h3>REFERENCE</h3><p style="font-size:16px">We used to solve newspaper crosswords <strong>by hand</strong>. The app brings that back to help you learn a language.</p></div>
 </div>`));
 
 // ---------------------------------------------------------------- handwriting
 // left: the text above the specimen; right: the grid in dark above the grid in light. Both columns fill the height.
 write('hand', page('width:930px;flex-direction:column;gap:18px', `
-${head(2, 'Handwriting', 'I took the typography of my handwriting.')}
+${head(2, 'Handwriting', 'I turned my handwriting into a typeface.')}
 <div style="display:flex;gap:12px;flex:1;min-height:0">
   <div style="width:440px;flex:none;display:flex;flex-direction:column;gap:12px">
-    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center;padding:24px 28px"><h3 style="font-size:26px;line-height:1.2;color:var(--pm-hd)">The letters you write are my own handwriting.</h3><p style="font-size:16px;line-height:1.55">Newspaper crosswords were filled in by hand, so I wanted that look back. I turned it into a typeface, <strong>Yagmur Hand</strong>. One font file covers German, Turkish and Spanish letters.</p><p style="font-size:13.5px;color:var(--pm-tx2)">Only the grid uses it. Everything else is a clean monospace.</p></div>
+    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center;padding:24px 28px"><h3 style="font-size:26px;line-height:1.2;color:var(--pm-hd)">The letters you write are my own handwriting.</h3><p style="font-size:16px;line-height:1.55">I wanted the look of a newspaper crossword filled in by hand. The typeface is called <strong>Yagmur Hand</strong>, and one font file covers German, Turkish and Spanish letters.</p><p style="font-size:13.5px;color:var(--pm-tx2)">Only the grid uses it. Everything else is a clean monospace.</p></div>
     <img src="/images/chengel-hand-specimen.webp" alt="Yagmur Hand: the word NACHT, the alphabet and the accented letters" style="width:100%;height:auto;border-radius:14px;display:block;flex:none">
   </div>
   <div style="width:422px;flex:none;display:flex;flex-direction:column;justify-content:space-between">
@@ -91,12 +90,12 @@ ${head(2, 'Handwriting', 'I took the typography of my handwriting.')}
   write('cycle', `
 <div class="pmf pm-f-cycle pm-thm" style="--cbg:#44086a;--cfg:#f6effc;--cnb:#94b7f8;--cnf:#000131"><div class="pm-cwrap">
 <svg class="pm-ring" viewBox="0 0 1184 644"><defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#f6effc" stroke-width="2"/></marker></defs>${arcs}</svg>
-<div class="pm-cmid" style="left:442px;top:330px;transform:translateY(-50%)"><div class="pm-lab">CONCEPT</div><h2>One puzzle, four steps. Then again.</h2></div>
+<div class="pm-cmid" style="left:442px;top:330px;transform:translateY(-50%)"><div class="pm-lab">CONCEPT</div><h2>Four steps that repeat with every puzzle.</h2></div>
 ${nodes}
-<div class="pm-nt pm-nt2" style="width:420px;left:382px;top:${cy - r - 150}px;text-align:center;height:112px;display:flex;flex-direction:column;justify-content:flex-end"><h3>Follow the path.</h3><p>It shows <strong>where you are</strong>. Tap the start node and the puzzle opens.</p></div>
-<div class="pm-nt pm-nt2" style="width:350px;left:${cx + r + 44}px;top:${cy - 52}px;text-align:left"><h3>Solve the puzzle.</h3><p>Clues in <strong>your language</strong>, answers in the one you learn. Stuck? A letter costs 10 coins, a word 30.</p></div>
+<div class="pm-nt pm-nt2" style="width:420px;left:382px;top:${cy - r - 150}px;text-align:center;height:112px;display:flex;flex-direction:column;justify-content:flex-end"><h3>Follow the path.</h3><p>The path shows <strong>where you are</strong>. When you tap the start node, the puzzle opens.</p></div>
+<div class="pm-nt pm-nt2" style="width:350px;left:${cx + r + 44}px;top:${cy - 52}px;text-align:left"><h3>Solve the puzzle.</h3><p>The clues are in <strong>your language</strong> and the answers in the one you learn. A letter hint costs 10 coins and a word hint 30.</p></div>
 <div class="pm-nt pm-nt2" style="width:420px;left:382px;top:${cy + r + 44}px;text-align:center"><h3>Practice it.</h3><p>Solved words go into three folders: <strong>Knew it</strong>, <strong>Knew with letters</strong>, <strong>Mostly revealed</strong>. Flash cards bring them back.</p></div>
-<div class="pm-nt pm-nt2" style="width:350px;right:${1184 - (cx - r - 44)}px;top:${cy - 52}px;text-align:right"><h3>Grow a garden.</h3><p>Each level, A1 to C1, has a garden with <strong>eight blooms</strong>. Learned words plant them.</p></div>
+<div class="pm-nt pm-nt2" style="width:350px;right:${1184 - (cx - r - 44)}px;top:${cy - 52}px;text-align:right"><h3>Grow a garden.</h3><p>Each level from A1 to C1 has a garden with <strong>eight blooms</strong>. The words you learn plant them.</p></div>
 </div></div>`);
 }
 
@@ -240,14 +239,14 @@ write('userflow', `<div class="pmf pm-f-fm pm-ch" style="width:${Math.round(1880
 const decStep = (lab, text, pick) => `<div class="pm-dec-s${pick ? ' pm-dec-pick' : ''}"><div class="pm-lab">${lab}</div><p>${text}</p></div>`;
 const kbShot = (lab, img, alt) => `<div><div class="pm-lab" style="margin-bottom:6px">${lab}</div><img src="/images/${img}.webp" alt="${esc(alt)}" style="width:100%;border-radius:12px;display:block"></div>`;
 write('keyboard', page('width:1720px;flex-direction:column;gap:20px', `
-${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keyboard was <strong>louder than the puzzle</strong>, and the dark colours <strong>tired the eyes</strong>.', 'width:1020px')}
+${head(4, 'Iterations · keyboard and dark mode', 'I tuned the keyboard and the dark colours.', 'width:1020px')}
 <div class="pm-dec">
   <div class="pm-dec-steps">
-    ${decStep('Problem', 'Keys had a 1px outline, and it made the letters harder to read. In dark mode the light areas added up, and the keyboard stood out more than the puzzle.')}
-    ${decStep('Options', 'Four keyboards, each in light and dark: soft keys, tonal keys, lilac keys, letters only.')}
-    ${decStep('What I chose', '<strong>Tonal keys.</strong> No outline, each key a hair lighter than the panel.', true)}
-    ${decStep('Why', 'I checked the contrast of each one and picked the smallest step between key and panel that still passes. The lighter the key, the lighter the letter has to be to pass, and at night that glares. In light mode it works the same way, the other way round.')}
-    ${decStep('The risk', 'Muted keys could be harder to read. Checked: letters stay at <strong>8.4:1</strong> in light and <strong>6.8:1</strong> in dark.')}
+    ${decStep('Problem', 'Each key had a 1px outline that made the letters harder to read. In dark mode, the keyboard stood out more than the puzzle.')}
+    ${decStep('Options', 'I tried four keyboards, each in light and dark: soft keys, tonal keys, lilac keys and letters only.')}
+    ${decStep('What I chose', '<strong>Tonal keys.</strong> They have no outline, and each key is a hair lighter than the panel.', true)}
+    ${decStep('Why', 'I checked the contrast of each one and picked the smallest step between key and panel that still passes. A lighter key needs a lighter letter to pass, and at night that glares.')}
+    ${decStep('The risk', 'Muted keys could be harder to read. I checked, and the letters stay at <strong>8.4:1 in light and 6.8:1 in dark</strong>.')}
   </div>
   <div class="pm-dec-vis" style="align-items:stretch;justify-content:flex-start">
     <div style="flex:none;display:flex;flex-direction:column;gap:8px;justify-content:center"><img src="/images/chengel-kb-options.webp" alt="Four keyboard options in light and dark: soft keys, tonal keys, lilac keys and letters only. Tonal keys was chosen." style="height:472px;width:auto;border-radius:14px;display:block;background:#fff"><div class="pm-lab" style="font-size:11px">Four options. I chose number 2, tonal keys.</div></div>
@@ -260,7 +259,7 @@ ${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keybo
       </div>
       <div class="pm-card" style="display:flex;flex-direction:column;gap:8px;padding:16px 20px">
         <div class="pm-lab">DARK MODE</div>
-        <p style="font-size:16px">I tried several dark colours. Some <strong>reflected and tired my eyes</strong>. <strong>Now: a purple-tinted night grey</strong>, never pure black.</p>
+        <p style="font-size:16px">I tried several dark colours, and some reflected and tired my eyes. Dark mode now uses a <strong>purple-tinted night grey</strong>, never pure black.</p>
         <div style="display:flex;gap:6px">${['#1a1923', '#272533', '#121118', '#0c0b11', '#38364b'].map((c) => `<span style="flex:1;height:24px;border-radius:7px;background:${c};box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)"></span>`).join('')}</div>
       </div>
     </div>
@@ -272,10 +271,10 @@ ${head(5, 'Iterations · keyboard and dark mode', 'Two things I tuned: the keybo
 const FIGMA = 'https://www.figma.com/design/a2xrnEApJAnPnG6A55T5WB/Chengel-design-system?node-id=1-3323';
 const figmaLink = `<a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer" style="margin-left:auto;align-self:center;flex:none">View in Figma ↗</a>`;
 const board = (n, lab, h2, img, alt, w, h, extra = '') => page('flex-direction:column;gap:20px', `${head(n, lab, h2, `width:${w}px`, extra)}<img class="pm-bimg pm-tr" style="width:${w}px;height:${h}px;object-fit:contain" src="/images/${img}.webp" alt="${esc(alt)}">`, 'pm-f-wide');
-write('colour', board(6, 'Design system · colour', 'Three colours carry the brand: navy, purple and light blue. <strong>Purple acts, blue writes.</strong>', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492, figmaLink));
-write('type', board(7, 'Design system · type', 'One monospace face for the interface, and <strong>my handwriting turned into a typeface</strong> for the letters you write.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
-write('components', board(8, 'Design system · components', 'Built with atomic design: <strong>atoms, molecules, organisms</strong>, each drawn once and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 562));
-write('icons', board(9, 'Design system · icons and illustrations', 'I drew the icons, Cengo and the flowers <strong>by hand</strong>, then polished them with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 532));
+write('colour', board(5, 'Design system · colour', 'Navy, purple and light blue carry the brand.', 'chengel-ds-colour', 'Chengel colour tokens in light and dark: surfaces, ink, brand, written and status colours with their values', 1000, 492, figmaLink));
+write('type', board(6, 'Design system · type', 'The app uses a monospace typeface and <strong>my handwriting</strong>.', 'chengel-ds-type', 'Chengel type styles in JetBrains Mono, the puzzle letter style in my handwriting, and lines, corners, space and shadows', 1060, 424));
+write('components', board(7, 'Design system · components', 'Components built with <strong>atomic design</strong> and reused on every screen.', 'chengel-ds-components', 'Chengel components cut from the live design system, in dark mode: atoms, molecules and organisms', 1986, 562));
+write('icons', board(8, 'Design system · icons and illustrations', 'Icons and illustrations, drawn <strong>by hand</strong> and polished with AI.', 'chengel-ds-icons', 'The 52 hand-drawn icons, the spot illustrations, Cengo in seven poses and 40 blooms, in dark mode', 985, 532));
 
 // ---------------------------------------------------------------- build with the kit (brief 8): the rules from DESIGN-SYSTEM-README, and the Figma link
 // ("Read the system doc" stays out until she makes the doc public; the example screen comes once she approves it)
@@ -287,15 +286,15 @@ const KIT = [
   ['Every text pair meets 4.5:1,', 'in light and dark.'],
   ['Copy is short and in sentence case.', 'Exclamation marks only on success. Languages get a two-letter code, never a flag.'],
 ];
-write('kit', page('width:756px;flex-direction:column;gap:20px', `<div class="pm-bh"><div class="pm-lab">Build with the kit</div><h2>What a designer or developer needs to know before making a new Chengel screen.</h2></div>
+write('kit', page('width:756px;flex-direction:column;gap:20px', `<div class="pm-bh"><div class="pm-lab">Build with the kit</div><h2>Rules for a new Chengel screen.</h2><p class="pm-bsub">What a designer or developer needs to know before they start.</p></div>
 <div class="pm-kit"><div><ol class="pm-kit-rules">${KIT.map(([a, b], i) => `<li class="pm-kit-r"><i>${i + 1}</i><p><strong>${a}</strong> ${b}</p></li>`).join('')}</ol>
 <div class="pm-kit-foot"><a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer">Open the kit in Figma ↗</a></div></div></div>`));
 
 // ---------------------------------------------------------------- final screens, night first
 const finals = (theme) => ['onb-1', 'home', 'puzzle-2', 'cards-2', 'garden', 'profile']
   .map((n, i) => phone(`chengel-${theme}-${n}`, `Chengel ${theme} screen ${i + 1}`, 236)).join('');
-write('final-night', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(10, 'Final screens · dark', 'Welcome, the path, a puzzle, a flash card, the garden and the profile, <strong>in dark</strong>.')}<div class="pm-prow">${finals('dark')}</div></div>`);
-write('final-day', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(11, 'Final screens · light', 'The same screens <strong>in light</strong>: a pale blue paper, navy ink and purple that acts.')}<div class="pm-prow">${finals('light')}</div></div>`);
+write('final-night', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(9, 'Final screens · dark', 'The main screens in <strong>dark mode</strong>, from welcome to profile.')}<div class="pm-prow">${finals('dark')}</div></div>`);
+write('final-day', `<div class="pmf pm-f-final pm-ch" style="width:1690px">${head(10, 'Final screens · light', 'The same screens in <strong>light mode</strong>, on pale blue paper with navy ink.')}<div class="pm-prow">${finals('light')}</div></div>`);
 
 // ---------------------------------------------------------------- App Store
 write('getit', `
@@ -322,23 +321,23 @@ write('getit', `
 write('outcome', `
 <div class="pmf pm-f-outcome pm-tight pm-side" style="width:1060px"><h2>What it achieved, and what I'd do next.</h2><div class="pm-oc2" style="align-content:start;margin-top:6px">
 <section class="pm-oc-col"><div class="pm-lab">IMPACT</div><div class="pm-oc-list">
-<div class="pm-oc-it"><b>Sent to the App Store</b><span>Designed and built in <strong>3 weeks</strong>, Oct 1–20, 2026, with one iOS developer. Now <strong>waiting for review</strong>.</span></div>
+<div class="pm-oc-it"><b>Sent to the App Store</b><span>One iOS developer and I made it in <strong>3 weeks</strong>, Oct 1–20, 2026. It is now waiting for review.</span></div>
 <div class="pm-oc-it"><b>One system, two looks</b><span>Light and dark come from <strong>the same tokens</strong>. Every text pair stays above 4.5:1 contrast.</span></div>
 <div class="pm-oc-it"><b>Something people can try</b><span>The clickable prototype is on this page, so you can <strong>solve a puzzle yourself</strong>.</span></div>
 </div></section>
 <section class="pm-oc-col"><div class="pm-lab">NEXT</div><div class="pm-oc-grid">
-<div class="pm-oc-nx"><i>1</i><div><b>Go live</b><span>Add the <strong>App Store link</strong> here when Apple approves it.</span></div></div>
-<div class="pm-oc-nx"><i>2</i><div><b>Test with learners</b><span>Watch a few <strong>learners solve a puzzle</strong> and see where they get stuck.</span></div></div>
-<div class="pm-oc-nx"><i>3</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides, still in design.</span></div></div>
+<div class="pm-oc-nx"><i>1</i><div><b>Go live</b><span>I will add the <strong>App Store link</strong> here when Apple approves it.</span></div></div>
+<div class="pm-oc-nx"><i>2</i><div><b>Test with learners</b><span>I want to watch a few <strong>learners solve a puzzle</strong> and see where they get stuck.</span></div></div>
+<div class="pm-oc-nx"><i>3</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides. They are still in design.</span></div></div>
 <div class="pm-oc-nx"><i>4</i><div><b>More puzzles</b><span>The path already has scenery up to <strong>C1</strong>. It needs more puzzles to walk through.</span></div></div>
 </div></section></div></div>`);
 
 // ---------------------------------------------------------------- summary
 write('summary', `
 <div class="pmf pm-f-sum"><div class="pm-sumtop">
-<div class="pm-card pm-sm"><h3>WHAT I DID</h3><p>I designed <strong>Chengel</strong>, an iOS crossword for learning words: the app, the design system, the icons and the illustrations.</p></div>
-<div class="pm-card pm-sm"><h3>HOW I DID IT</h3><p>I took the typography of <strong>my own handwriting</strong> for the puzzle letters, drew the icons by hand, polished them with AI, and built the design in <strong>Claude Design</strong>.</p></div>
+<div class="pm-card pm-sm"><h3>WHAT I DID</h3><p>I designed <strong>Chengel</strong>, an iOS crossword for learning words. I also made its design system, icons and illustrations.</p></div>
+<div class="pm-card pm-sm"><h3>HOW I DID IT</h3><p>I made a typeface from <strong>my own handwriting</strong> for the puzzle letters. I drew the icons by hand and polished them with AI.</p></div>
 <div class="pm-card pm-sm"><h3>WHY I DID IT</h3><p>I wanted learning words to feel like the <strong>newspaper crosswords</strong> we used to fill in by hand.</p></div>
-<div class="pm-card pm-sm"><h3>WHO WAS INVOLVED</h3><p>Me for the design, and <strong>one iOS developer</strong> who built it. It is now in <strong>App Store review</strong>.</p></div>
+<div class="pm-card pm-sm"><h3>WHO WAS INVOLVED</h3><p>I did the design, and <strong>one iOS developer</strong> built it. It is now in App Store review.</p></div>
 </div>
 <div class="pm-pills"><div class="pm-pill"><span class="pm-lab">Position</span><b>Product Designer</b></div><div class="pm-pill"><span class="pm-lab">Time</span><b>3 weeks · Oct 1–20, 2026</b></div><div class="pm-pill"><span class="pm-lab">Tools</span><b>Claude Design</b></div></div></div>`);

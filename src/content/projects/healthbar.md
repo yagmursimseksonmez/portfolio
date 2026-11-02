@@ -21,14 +21,14 @@ hero:
   lede: An Apple Health companion I designed and shipped with an iOS developer. It turns steps, sleep, water and mood into one HP bar, and a pixel-art mentor tells you what to do next.
   hp: { value: 6, label: HP today }
   points:
-    - { label: Role, title: 'Designer, from survey to App Store', text: 'I did the research, UX/UI and usability tests. The iOS developer built it, and we made the product decisions together.' }
-    - { label: Problem, title: 'Health data, but no next step', text: '8 of the 13 people I surveyed had muted health-app notifications that felt guilt-inducing or repetitive.' }
-    - { label: Solution, title: One score and one suggestion, text: 'All the Health data becomes one HP bar, and Master Ronnie suggests one small thing to do next.' }
-    - { label: Impact, title: 'Read in 4 seconds, not 13', text: 'After the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9.' }
+    - { label: Situation, title: 'Health data, but no next step', text: '8 of the 13 people I surveyed had muted health-app notifications that felt guilt-inducing or repetitive. 9 of 13 said they’d check a health app more often if it felt encouraging.' }
+    - { label: Task, title: 'Designer, from survey to App Store', text: 'I did the research, UX/UI and usability tests. The iOS developer built it, and we made the product decisions together.' }
+    - { label: Action, title: 'The HP bar comes first', text: 'The developer wanted more data on the home screen. I pointed to the survey, where 7 of 13 wanted one clear suggestion a day. Now the HP bar sits at the top, and Master Ronnie suggests one small thing to do next.' }
+    - { label: Result, title: 'HP read in 4 seconds, down from 13', text: 'After the redesign, 8 of 9 testers read their HP right at first look, up from 4 of 9. It has been live on the App Store since July, and 105 people have downloaded it.' }
   chips: [iOS, Apple Watch, Widgets]
   video: { src: /videos/healthbar-demo.mp4, width: 804, height: 1748, label: 'HealthBar walkthrough: the HP bar and Master Ronnie’s tip, quick actions for mood and water, then achievements, daily goals and the HP trend' }
 gallery:
-  - label: The result
+  - label: The app
     frame: healthbar-result
   - label: Problem
     frame: healthbar-problem
@@ -38,10 +38,6 @@ gallery:
     frame: healthbar-cycle
   - label: Information architecture
     frame: healthbar-ia
-  - label: User flow example
-    frame: healthbar-userflow
-  - label: User flow example · second flow
-    frame: healthbar-userflow2
   - label: Onboarding
     frame: healthbar-onboarding
   - label: Daily loop

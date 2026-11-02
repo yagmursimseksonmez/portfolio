@@ -972,3 +972,26 @@
 .work .pmx .pm-dec-s{grid-template-columns:150px 1fr}
 .work .pmx .pm-f-outcome.pm-tight.pm-side .pm-oc-col{justify-content:flex-start}
 @media (max-width: 900px), (hover: none) { .work .pmx .pm-proto-live{display:none} .work .pmx .pm-proto-still{display:block} .work .pmx .pm-proto-open{display:inline-block} .work .pmx [data-chengel-theme]{display:none} }
+/* HealthBar phones: the Figma screens are 402 × 874; the fixed footer (tab bar, log button) is its own layer, --fh units tall */
+.work .pmx .pm-hb .pm-scr{height:calc(var(--pw) * 874px / 402);background:#1b1613}
+.work .pmx .pm-hb .pm-pbot.pm-foot{height:calc(var(--fh) * var(--s));pointer-events:none}
+/* HealthBar foundations: colour and type tokens from the Figma file, as swatches */
+.work .pmx .hbf{display:flex;flex-direction:column;gap:10px}
+.work .pmx .hbf .pm-lab{margin-top:6px}
+.work .pmx .hbf-row{display:flex;gap:8px}
+.work .pmx .hbf-sw{flex:1;min-width:0;border-radius:12px;padding:10px 11px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;border:1px solid rgba(255,255,255,.1);font:12px/1.3 ui-monospace,'SF Mono',Menlo,monospace}
+.work .pmx .hbf-sw b{font-weight:700;font-size:12.5px;overflow-wrap:anywhere}
+.work .pmx .hbf-a .hbf-sw{height:136px}
+.work .pmx .hbf-b .hbf-sw{height:104px}
+.work .pmx .hbf-type{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 24px;padding:22px 20px;border-radius:12px;background:#1b1613;color:#e4f2f2;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-weight:700}
+.work .pmx .hbf-t1{font-size:32px}.work .pmx .hbf-t2{font-size:18px}.work .pmx .hbf-t3{font-size:14px;color:#ada46c}.work .pmx .hbf-t4{font-size:12px;font-weight:400;color:#7a7f79}
+.work .pmx.is-reflow .hbf-row{flex-wrap:wrap}
+.work .pmx.is-reflow .hbf-sw{flex:1 1 40%;height:72px}
+/* phones: a header button (View in Figma) drops under the heading instead of squeezing it */
+.work .pmx.is-reflow .pm-bhn:has(> .pm-pbtn){flex-wrap:wrap}
+.work .pmx.is-reflow .pm-bhn:has(> .pm-pbtn) > div:not(.pm-big){flex:1 1 0;min-width:72%}
+.work .pmx.is-reflow .pm-bhn > .pm-pbtn{margin-left:0 !important}
+/* a one-line subtitle under a board heading */
+.work .pmx .pm-bsub{margin-top:6px;font-size:16px;line-height:1.4;font-weight:400;color:var(--pm-tx2);max-width:680px}
+/* the interview screenshots carry their own footnote bottom left, so their tag sits bottom right */
+.work .pmx .pm-ppl .pm-shot .pm-tag{left:auto;right:14px}

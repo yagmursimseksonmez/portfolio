@@ -609,6 +609,14 @@ function startScrollScreens() {
       if (e.timeStamp - last < 400) { e.preventDefault(); e.stopPropagation(); last = e.timeStamp; }
     }, { passive: false });
   });
+  // A long screen can open part way down (data-start = share of its height), until someone scrolls it.
+  const startAt = new ResizeObserver((entries) => entries.forEach(({ target: win }) => {
+    if (!win.dataset.moved && win.scrollHeight) win.scrollTop = win.scrollHeight * win.dataset.start;
+  }));
+  document.querySelectorAll('.pm-pmid[data-start]').forEach((win) => {
+    startAt.observe(win);
+    win.addEventListener('scroll', () => { if (win.classList.contains('is-live')) win.dataset.moved = '1'; }, { passive: true });
+  });
 }
 
 // --------------------------------------------------------- "See more" panel

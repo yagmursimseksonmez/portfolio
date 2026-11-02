@@ -15,15 +15,15 @@ hero:
   frame: chengel-hero
   kicker: Chengel · iOS · Freelance · Konkret · submitted to the App Store
   title: Learn words by solving crosswords.
-  lede: Chengel is an iOS app for learning vocabulary. The clue is in your language, the answer is in the one you are learning, and you write it in my own handwriting, like filling in a newspaper crossword.
+  lede: Chengel is an iOS app for learning vocabulary. The clue is in your language and the answer is in the one you are learning. You write it in my own handwriting, like filling in a newspaper crossword.
   points:
-    - { label: Role, title: 'Designer, with one iOS developer', text: 'I designed the app, the design system, the icons and the illustrations. One iOS developer built it.' }
-    - { label: Problem, title: 'Word apps feel like homework', text: 'Lists and flash cards work, but they feel like studying. I wanted it to feel like a game you already know.' }
-    - { label: Solution, title: A crossword with a garden, text: 'Solve a puzzle, keep the words you learned, and plant a flower for every puzzle.' }
-    - { label: Impact, title: 'Built in 3 weeks, now in review', text: 'Designed and built Oct 1–20, 2026. It is waiting for Apple’s review.' }
+    - { label: Situation, title: 'Word apps feel like homework', text: 'Lists and flash cards work, but they feel like studying. I wanted learning words to feel like a game you already know.' }
+    - { label: Task, title: 'Designer, with one iOS developer', text: 'I designed the app, the design system, the icons and the illustrations. One iOS developer built it.' }
+    - { label: Action, title: 'A crossword in my handwriting', text: 'I tried four keyboards in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.' }
+    - { label: Result, title: 'Built in 3 weeks, now in review', text: 'It was designed and built Oct 1–20, 2026. Every text pair passes 4.5:1 contrast, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.' }
   chips: [iOS, Design system, Light and dark]
 gallery:
-  - label: The result
+  - label: The app
     frame: chengel-result
   - label: Idea
     frame: chengel-problem
@@ -33,8 +33,6 @@ gallery:
     frame: chengel-cycle
   - label: Information architecture
     frame: chengel-ia
-  - label: User flow examples
-    frame: chengel-userflow
   - label: Iterations · keyboard and dark mode
     frame: chengel-keyboard
   - label: Design system · colour

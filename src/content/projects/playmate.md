@@ -18,18 +18,18 @@ hero:
   title: "Wanna do sports but don't have a team/partner? I have a solution!"
   compact: true
   frame: hero
-  lede: 'This is a mobile app that matches people for sport. Instead of a group chat, you join a game room: you see the time, the place, the cost, who’s playing. And the team members? You can check their profile to see skill levels, peer ratings and a no-show penalty, and build trust beforehand.'
+  lede: 'PlayMate is a mobile app that matches people for sport. Instead of a group chat, you join a game room that shows the time, place, cost and who’s playing. Profiles show each player’s skill level, peer ratings and no-show penalties, so you can trust them before you meet.'
   points:
-    - { label: Role, title: 'Solo, from interviews to prototype', text: 'I ran the interviews and the usability tests, and designed every screen.' }
-    - { label: Problem, title: 'Organising a game, why pure chaos?', text: 'All 4 players I interviewed had a routine, and all struggled with coordination, skill matching or trusting someone new.' }
-    - { label: Solution, title: 'Game rooms with reputations', text: 'Schedule, split the cost and play! No place left? Join the waitlist.' }
-    - { label: Impact, title: 'Tested at every step, 4 iterations', text: 'With the testers’ feedback, I added cost splitting, waitlists and a rating flow. Made the visual style calmer.' }
+    - { label: Situation, title: 'Organising a game is chaos', text: 'All 4 players I interviewed had a routine, and all struggled with coordination, skill matching or trusting someone new.' }
+    - { label: Task, title: 'Solo, a 3-month bootcamp project', text: 'I did this project at ReDI School, Mar–Jun 2026. I ran the interviews and usability tests and designed every screen.' }
+    - { label: Action, title: 'Game rooms and player reputations', text: 'A game room shows the time, place, cost and who’s playing. When testers asked about no-shows, I chose a reliability star that others can see instead of a private warning.' }
+    - { label: Result, title: '4 test rounds, 4 iterations', text: 'After each round I fixed what testers stumbled on. I added cost splitting, waitlists and a rating flow, and I made the colours calmer. There are no live users yet.' }
   chips: [Case study, User research, Usability testing]
   concept:
     flat: true
     video: { src: /videos/playmate-hero-final.mp4, width: 1400, height: 916, label: 'PlayMate walkthrough: onboarding, finding a match, joining a game, creating one, friends, profiles and settings, with the words “mobile app that connects people through sport” floating around the phone' }
 gallery:
-  - label: The result
+  - label: The app
     frame: result
   - label: Problem
     frame: problem
@@ -47,10 +47,6 @@ gallery:
     frame: playmate-cycle
   - label: Information architecture
     frame: playmate-ia
-  - label: User flow example
-    frame: playmate-userflow
-  - label: User flow example · second flow
-    frame: playmate-userflow2
   - label: Low fidelity wireframes
     frame: wireframes
   - label: Usability testing
@@ -76,8 +72,8 @@ gallery:
 prototype:
   frame: prototype
   label: Try it
-  title: Play with the prototype.
-  text: Join a game, create one and rate your teammates, on the same screens as above.
+  title: The clickable prototype
+  text: You can join a game, create one and rate your teammates on the final screens.
   poster: { src: /images/playmate-screen-home.webp, alt: 'PlayMate home screen', width: 402, height: 1464 }
   cta: Prototype coming soon
 ---
