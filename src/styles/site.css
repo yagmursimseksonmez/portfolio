@@ -1635,4 +1635,12 @@ body.is-scroll { overflow-x: clip; }
   .work figure.pmx.is-sum .pm-pill b { font-size: 14px; }
   .work figure.pmx.is-sum .pm-pills { display: flex; flex-direction: column; gap: 8px; }
   .work figure.pmx.is-sum .pm-pill { width: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
+  /* The next-project card after it: reading size, the screen cut off at the bottom */
+  .card.is-active .work figure.pmx.is-next { height: auto; overflow: hidden; }
+  .work figure.pmx.is-next .pmf { width: 100% !important; height: 540px; padding: 30px 22px 0; }
+  .work figure.pmx.is-next .pmf h2 { font-size: 34px !important; }
+  .work figure.pmx.is-next .pmf h3 { margin-top: 16px; font-size: 26px; }
+  .work figure.pmx.is-next .pm-nx-sum { font-size: 16px; }
+  .work figure.pmx.is-next .pm-nx-peek { width: 200px; margin-top: 32px; }
+  .work figure.pmx.is-next .pm-nx-peek.is-wide { width: 100%; }
 }

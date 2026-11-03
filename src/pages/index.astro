@@ -10,6 +10,13 @@ const count = projects.length;
 const frameHtml = import.meta.glob('../content/playmate-frames/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 const rendered = await Promise.all(projects.map(async (p) => (await render(p)).Content));
 const isWide = (img: { width?: number; height?: number }) => !!img.width && !!img.height && img.width > img.height;
+// Each case ends on a card for the next one, in the folders' order; the last leads back to the first.
+// Its screen is the video from that project's first page (a phone, or PlayMate's wide board).
+const nextOf = (k: number) => {
+  const n = projects[(k + 1) % count];
+  const html = n.data.hero?.frame ? frameHtml[`../content/playmate-frames/${n.data.hero.frame}.html`] ?? '' : '';
+  return { id: n.id, title: n.data.title, note: n.data.tabNote, summary: n.data.summary, video: html.match(/<video src="([^"]+)"/)?.[1], wide: !html.includes('pm-hero-v pm-ph') };
+};
 
 // Newest first; `years` is how many year rows each role spans on the timeline.
 const jobs = [
@@ -167,6 +174,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           const role = d.facts.find((f) => f.label === 'Role')?.value;
           const platform = d.facts.find((f) => f.label === 'Platform')?.value;
           const tools = d.facts.find((f) => f.label === 'Tools')?.value;
+          const next = nextOf(k);
           return (
             <section class="card" id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
               <div class="card-tab"><h2 class:list={{ "has-note": !!d.tabNote }}><span>{d.title}</span>{d.tabNote && <small class="tab-note">{d.tabNote}</small>}</h2></div>
@@ -464,6 +472,16 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         </div>
                       )}
                     </div>}
+                    <figure class="pmx" aria-label="Next project">
+                      <a class="pmf pm-f-next" href={`#${next.id}`} data-next={next.id} aria-label={`Next project: ${next.title}`}>
+                        <h2>Next project</h2>
+                        <h3>{next.title}</h3>
+                        {next.note && <p class="pm-nx-note">{next.note}</p>}
+                        <p class="pm-nx-sum">{next.summary}</p>
+                        <span class="pm-nx-btn">Open {next.title}<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                        {next.video && <div class:list={['pm-nx-peek', { 'is-wide': next.wide }]}><video src={next.video} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video></div>}
+                      </a>
+                    </figure>
                   </div>
                 </article>
                 <div class="read-progress" aria-hidden="true"><i></i></div>

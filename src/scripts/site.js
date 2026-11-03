@@ -422,6 +422,16 @@ function startGallery() {
   cards.forEach((card, k) => {
     card.querySelector('.card-tab h2').addEventListener('click', () => { if (active !== k) focusGallery(k); });
     card.querySelector('.card-sheet').addEventListener('click', () => { if (active !== k) focusGallery(k); });
+    // The card at the end of a case opens the next folder from its first page. It stops here, or the sheet's own click
+    // would bring this folder back.
+    card.querySelectorAll('[data-next]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const to = cards.findIndex((c) => c.id === a.dataset.next);
+      if (to < 0) return;
+      cards[to].querySelector('.card-content').scrollTop = 0;
+      focusGallery(to);
+    }));
     card.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && e.target === card && active !== k) { e.preventDefault(); focusGallery(k); }
     });
@@ -828,7 +838,7 @@ function fitPlaymateFrames() {
     const page = target.firstElementChild;
     if (!page || target.clientHeight <= 0) return;
     // On a phone a reflowed page (and the overview page) is laid out at reading size, never zoomed.
-    if (mobile.matches && target.matches('.is-reflow, .is-sum, .is-chart')) return;
+    if (mobile.matches && target.matches('.is-reflow, .is-sum, .is-next, .is-chart')) return;
     let z = target.clientHeight / 700;
     // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width, if
     // that takes no more than 15% off. The whole folder shrinks with it, so every page keeps the same height.
@@ -928,6 +938,7 @@ function fitFramesToWidth() {
       const page = fig.firstElementChild;
       if (!page) return;
       if (page.classList.contains('pm-f-sum')) { addClass(fig, 'is-sum'); setVar(page, '--pmz', '1'); return; }
+      if (page.classList.contains('pm-f-next')) { addClass(fig, 'is-next'); setVar(page, '--pmz', '1'); return; }
       // A chart keeps its drawing and scrolls sideways, a little larger than the rest; its title moves out above it at reading size.
       const wideBoard = page.matches('.pm-f-board') && parseFloat(page.querySelector('img.pm-bimg')?.style.width) > 900;
       if (fig.closest(reflowCases) && (page.matches(chartPages) || wideBoard)) {
