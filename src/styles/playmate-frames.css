@@ -945,6 +945,10 @@
 .work .pmx .pm-f-empathy{align-items:flex-start!important}
 .work .pmx .pm-emt{height:auto!important}
 .work .pmx .pm-f-hero .pm-hero-t{align-self:flex-start!important;justify-content:flex-start!important;padding-top:0!important}
+/* first screen on desktop: the text block sits in the middle of the panel, top and bottom space equal (phones keep phone, then text) */
+.work .pmx:not(.is-reflow) .pm-f-hero .pm-hero-t{align-self:center!important}
+/* HealthBar: the dates and App Store line follow the text instead of sitting at the bottom of the panel */
+.work .pmx:not(.is-reflow) .pm-f-chain .pm-ch-who{margin-top:24px}
 .work .pmx .pm-fmh{min-height:89px;align-items:flex-start!important}
 .work .pmx .pm-sa .pm-rawb{width:430px;align-self:flex-start}
 .work .pmx .pm-f-dec{flex-direction:column;gap:20px}
