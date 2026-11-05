@@ -25,10 +25,10 @@ hero:
   points:
     - { label: Situation, title: 'Every item looked the same', text: 'Items were identical rows, so you had to read each one to find what to copy. The Add button also sat out of thumb reach.' }
     - { label: Task, title: 'Designed and coded in one week', text: 'The brief was a rebrand. I took it from design to code. The iOS developer who first built iKeep handles releases and builds.' }
-    - { label: Action, title: 'Rows became colour-coded cards', text: 'A new look alone would still make people read every row. I turned the rows into colour-coded cards, moved Add into thumb reach and added categories you can reorder. Then I coded it myself with Claude.' }
+    - { label: Action, title: 'Rows became separate cards', text: 'A new look alone would still make people read every row. I turned the rows into separate cards, moved Add into thumb reach and added categories you can reorder. Then I coded it myself with Claude.' }
     - { label: Result, title: 'Live within the week', text: 'After launch, the App Store page got 52% more views in 28 days (300 vs 198), but downloads stayed flat (123 vs 120).' }
   chips: [iOS, Light and dark, iCloud sync]
-  video: { src: /videos/ikeep-demo.mp4, width: 786, height: 1704, label: 'iKeep walkthrough: values hidden as dots and revealed with the eye, adding a new item from the plus button, then switching to dark mode in settings' }
+  video: { src: /videos/ikeep21-demo.mp4, width: 786, height: 1708, label: 'iKeep walkthrough: a value hidden as dots and revealed with the eye, a new item added from the plus button and shown in its category, then the list in dark mode' }
 gallery:
   - label: The app
     frame: ikeep-result
@@ -54,6 +54,6 @@ gallery:
 
 I was asked to rebrand iKeep, an iOS vault for the values people copy again and again. In one week I redesigned how it works too, and it is now live on the App Store.
 
-- **Recognisable items** Turned identical list rows into colour-coded cards, in light and dark mode.
+- **Recognisable items** Turned identical list rows into separate cards, in light and dark mode.
 - **Thumb-first actions** Moved item creation into thumb reach and added search, edit and delete.
 - **Organisation** Added sorting, plus categories people can create and reorder.
