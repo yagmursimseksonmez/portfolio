@@ -1474,6 +1474,9 @@ body.is-scroll { overflow-x: clip; }
    bottom of the first screen empty. */
 .work .pmx .pm-hero-t .pm-hfoot.pm-wp .pm-chips { flex: 1 1 auto; min-width: 0; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
 .work .pmx .pm-hero-t .pm-chips .pm-when { margin: 0 0 0 6px; }
+/* HealthBar: the same row in its footer, beside the App Store button. */
+.work .pmx .pm-ch-who .pm-chips { flex: 1 1 auto; min-width: 0; align-items: center; }
+.work .pmx .pm-ch-who .pm-chips .pm-when { flex: none; }
 /* While the strip moves, a prototype it carries under the pointer lets the wheel through (site.js, startStripMotion). */
 .card-content.is-moving iframe { pointer-events: none; }
 /* PlayMate's prototype is Figma's page, so its wheel cannot be passed on: it takes the pointer only after a click. */
