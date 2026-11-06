@@ -25,16 +25,16 @@ write('hero', `
     <div class="pm-phone pm-static" style="--pw:282;box-shadow:0 18px 40px rgba(0,0,0,.4)"><div class="pm-scr"><video src="/videos/chengel-demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Chengel in dark mode: first launch, a puzzle in my handwriting, the word folders and flash cards, the awards and the garden" style="width:100%!important;height:100%!important;object-fit:cover;display:block;border-radius:0!important;box-shadow:none!important;margin:0!important"></video></div></div>
   </div>
   <div class="pm-hero-t">
-    <div class="pm-lab">Chengel · iOS · Freelance · Konkret · submitted to the App Store</div>
+    <div class="pm-lab">Chengel · iOS · Freelance · Konkret</div>
     <h1>Learn words by solving crosswords.</h1>
     <p class="pm-lede">Chengel is an iOS app for learning vocabulary. The clue is in your language and the answer is in the one you are learning. <strong>You write it in my own handwriting</strong>, like filling in a newspaper crossword.</p>
     <div class="pm-grid2">
       <div class="pm-card"><div class="pm-lab">SITUATION</div><h4>Word apps feel like homework</h4><p>Lists and flash cards work, but they feel like <strong>studying</strong>. I wanted learning words to feel like a game you already know.</p></div>
-      <div class="pm-card"><div class="pm-lab">TASK</div><h4>Designer, with one iOS developer</h4><p>I designed the <strong>app, the design system, the icons and the illustrations</strong>. One iOS developer built it.</p></div>
+      <div class="pm-card"><div class="pm-lab">TASK</div><p>I designed the <strong>app, the design system, the icons and the illustrations</strong>. One iOS developer built it.</p></div>
       <div class="pm-card"><div class="pm-lab">ACTION</div><h4>A crossword in my handwriting</h4><p>I tried <strong>four keyboards</strong> in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.</p></div>
-      <div class="pm-card"><div class="pm-lab">RESULT</div><h4>Built in 3 weeks, now in review</h4><p>It was designed and built Oct 1–20, 2026. Every text pair passes <strong>4.5:1 contrast</strong>, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.</p></div>
+      <div class="pm-card"><div class="pm-lab">RESULT</div><p>Every text pair passes <strong>4.5:1 contrast</strong>. It has not been tested with learners yet.</p></div>
     </div>
-    <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span></div><span class="pm-pbtn pm-sm" style="background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin-left:auto">In App Store review</span></div>
+    <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span><p class="pm-when"><strong>2026</strong> · 3 weeks</p></div><span class="pm-pbtn pm-sm" style="background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin-left:auto">In App Store review</span></div>
   </div>
 </div>`);
 
@@ -66,7 +66,7 @@ write('hand', page('width:930px;flex-direction:column;gap:18px', `
 ${head(2, 'Handwriting', 'I turned my handwriting into a typeface.')}
 <div style="display:flex;gap:12px;flex:1;min-height:0">
   <div style="width:440px;flex:none;display:flex;flex-direction:column;gap:12px">
-    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center;padding:24px 28px"><h3 style="font-size:26px;line-height:1.2;color:var(--pm-hd)">The letters you write are my own handwriting.</h3><p style="font-size:16px;line-height:1.55">I wanted the look of a newspaper crossword filled in by hand. The typeface is called <strong>Yagmur Hand</strong>, and one font file covers German, Turkish and Spanish letters.</p><p style="font-size:13.5px;color:var(--pm-tx2)">Only the grid uses it. Everything else is a clean monospace.</p></div>
+    <div class="pm-card" style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center;padding:24px 28px"><p style="font-size:16px;line-height:1.55">I wanted the look of a newspaper crossword filled in by hand. The typeface is called <strong>Yagmur Hand</strong>, and one font file covers German, Turkish and Spanish letters.</p><p style="font-size:13.5px;color:var(--pm-tx2)">Only the grid uses it. Everything else is a clean monospace.</p></div>
     <img src="/images/chengel-hand-specimen.webp" alt="Yagmur Hand: the word NACHT, the alphabet and the accented letters" style="width:100%;height:auto;border-radius:14px;display:block;flex:none">
   </div>
   <div style="width:422px;flex:none;display:flex;flex-direction:column;justify-content:space-between">
@@ -84,12 +84,12 @@ ${head(2, 'Handwriting', 'I turned my handwriting into a typeface.')}
   const arcs = angles.map((a, i) => {
     const b = angles[(i + 1) % 4] + (i === 3 ? 360 : 0);
     const [x1, y1] = pt(a + gap), [x2, y2] = pt(b - gap);
-    return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" marker-end="url(#ah)"/>`;
+    return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" marker-end="url(#ah-chengel-cycle)"/>`;
   }).join('');
   const nodes = angles.map((a, i) => { const [x, y] = pt(a); return `<div class="pm-nd" style="left:${x.toFixed(0)}px;top:${y.toFixed(0)}px">${i + 1}</div>`; }).join('');
   write('cycle', `
 <div class="pmf pm-f-cycle pm-thm" style="--cbg:#44086a;--cfg:#f6effc;--cnb:#94b7f8;--cnf:#000131"><div class="pm-cwrap">
-<svg class="pm-ring" viewBox="0 0 1184 644"><defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#f6effc" stroke-width="2"/></marker></defs>${arcs}</svg>
+<svg class="pm-ring" viewBox="0 0 1184 644"><defs><marker id="ah-chengel-cycle" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#f6effc" stroke-width="2"/></marker></defs>${arcs}</svg>
 <div class="pm-cmid" style="left:442px;top:330px;transform:translateY(-50%)"><div class="pm-lab">CONCEPT</div><h2>Four steps that repeat with every puzzle.</h2></div>
 ${nodes}
 <div class="pm-nt pm-nt2" style="width:420px;left:382px;top:${cy - r - 150}px;text-align:center;height:112px;display:flex;flex-direction:column;justify-content:flex-end"><h3>Follow the path.</h3><p>The path shows <strong>where you are</strong>. When you tap the start node, the puzzle opens.</p></div>
@@ -286,7 +286,7 @@ const KIT = [
   ['Every text pair meets 4.5:1,', 'in light and dark.'],
   ['Copy is short and in sentence case.', 'Exclamation marks only on success. Languages get a two-letter code, never a flag.'],
 ];
-write('kit', page('width:756px;flex-direction:column;gap:20px', `<div class="pm-bh"><div class="pm-lab">Build with the kit</div><h2>Rules for a new Chengel screen.</h2><p class="pm-bsub">What a designer or developer needs to know before they start.</p></div>
+write('kit', page('width:756px;flex-direction:column;gap:20px', `<div class="pm-bh"><div class="pm-lab">Build with the kit</div><h2>Rules for a new Chengel screen.</h2></div>
 <div class="pm-kit"><div><ol class="pm-kit-rules">${KIT.map(([a, b], i) => `<li class="pm-kit-r"><i>${i + 1}</i><p><strong>${a}</strong> ${b}</p></li>`).join('')}</ol>
 <div class="pm-kit-foot"><a class="pm-pbtn pm-sm" href="${FIGMA}" target="_blank" rel="noopener noreferrer">Open the kit in Figma ↗</a></div></div></div>`));
 
@@ -302,7 +302,7 @@ write('getit', `
   <div style="width:340px;flex:none;display:flex;flex-direction:column;gap:16px">
     <div class="pm-lab">Download from the App Store</div>
     <div style="display:flex;align-items:center;gap:18px"><img src="/images/chengel-icon.webp" alt="Chengel app icon" style="width:112px;height:112px;border-radius:0;box-shadow:none"><div><h2 style="font-size:34px;line-height:1.05">Chengel</h2><p style="font-size:14px;margin-top:4px">Learn words by solving crosswords</p></div></div>
-    <p style="font-size:15px;line-height:1.5">I sent Chengel to the App Store. It is <strong>waiting for Apple’s review</strong> and should be out soon. I will put the link here.</p>
+    
     <span class="pm-pbtn" style="align-self:flex-start;background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin:0">In App Store review</span>
   </div>
   <div class="pm-shots" style="display:flex;gap:16px;flex:none">${[['dark-home', 'Path'], ['dark-puzzle-4', 'Puzzle'], ['dark-words', 'Words'], ['dark-garden', 'Garden']].map(([n, t]) => `<div style="width:205px"><img src="/images/chengel-${n}.webp" alt="Chengel ${t}" style="width:205px;height:430px;object-fit:cover;object-position:top;border-radius:28px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.1)"></div>`).join('')}</div>
@@ -321,7 +321,7 @@ write('getit', `
 write('outcome', `
 <div class="pmf pm-f-outcome pm-tight pm-side" style="width:1060px"><h2>What it achieved, and what I'd do next.</h2><div class="pm-oc2" style="align-content:start;margin-top:6px">
 <section class="pm-oc-col"><div class="pm-lab">IMPACT</div><div class="pm-oc-list">
-<div class="pm-oc-it"><b>Sent to the App Store</b><span>One iOS developer and I made it in <strong>3 weeks</strong>, Oct 1–20, 2026. It is now waiting for review.</span></div>
+<div class="pm-oc-it"><b>Sent to the App Store</b><span>One iOS developer and I made it in <strong>3 weeks</strong>, Oct 1–20, 2026.</span></div>
 <div class="pm-oc-it"><b>One system, two looks</b><span>Light and dark come from <strong>the same tokens</strong>. Every text pair stays above 4.5:1 contrast.</span></div>
 <div class="pm-oc-it"><b>Something people can try</b><span>The clickable prototype is on this page, so you can <strong>solve a puzzle yourself</strong>.</span></div>
 </div></section>
@@ -338,6 +338,6 @@ write('summary', `
 <div class="pm-card pm-sm"><h3>WHAT I DID</h3><p>I designed <strong>Chengel</strong>, an iOS crossword for learning words. I also made its design system, icons and illustrations.</p></div>
 <div class="pm-card pm-sm"><h3>HOW I DID IT</h3><p>I made a typeface from <strong>my own handwriting</strong> for the puzzle letters. I drew the icons by hand and polished them with AI.</p></div>
 <div class="pm-card pm-sm"><h3>WHY I DID IT</h3><p>I wanted learning words to feel like the <strong>newspaper crosswords</strong> we used to fill in by hand.</p></div>
-<div class="pm-card pm-sm"><h3>WHO WAS INVOLVED</h3><p>I did the design, and <strong>one iOS developer</strong> built it. It is now in App Store review.</p></div>
+<div class="pm-card pm-sm"><h3>WHO WAS INVOLVED</h3><p>I did the design, and <strong>one iOS developer</strong> built it.</p></div>
 </div>
 <div class="pm-pills"><div class="pm-pill"><span class="pm-lab">Position</span><b>Product Designer</b></div><div class="pm-pill"><span class="pm-lab">Time</span><b>3 weeks · Oct 1–20, 2026</b></div><div class="pm-pill"><span class="pm-lab">Tools</span><b>Claude Design</b></div></div></div>`);

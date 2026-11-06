@@ -10,18 +10,18 @@ description: 'PlayMate: a community-driven sports matchmaking mobile app. Case s
 ogImage: /og/playmate.jpg
 seeMore: false
 facts:
-  - { label: Position, value: 'Bootcamp project, solo' }
+  - { label: Position, value: 'Solo project' }
   - { label: Time, value: '3 months · Mar–Jun 2026' }
   - { label: Tools, value: Figma · Claude · Stitch }
 hero:
-  kicker: PlayMate · ReDI School bootcamp project · community sports app
+  kicker: PlayMate · solo project · community sports app
   title: "Wanna do sports but don't have a team/partner? I have a solution!"
   compact: true
   frame: hero
   lede: 'PlayMate is a mobile app that matches people for sport. Instead of a group chat, you join a game room that shows the time, place, cost and who’s playing. Profiles show each player’s skill level, peer ratings and no-show penalties, so you can trust them before you meet.'
   points:
     - { label: Situation, title: 'Organising a game is chaos', text: 'All 4 players I interviewed had a routine, and all struggled with coordination, skill matching or trusting someone new.' }
-    - { label: Task, title: 'Solo, a 3-month bootcamp project', text: 'I did this project at ReDI School, Mar–Jun 2026. I ran the interviews and usability tests and designed every screen.' }
+    - { label: Task, title: 'Solo, a 3-month project', text: 'I did this project from March to June 2026. I ran the interviews and usability tests and designed every screen.' }
     - { label: Action, title: 'Game rooms and player reputations', text: 'A game room shows the time, place, cost and who’s playing. When testers asked about no-shows, I chose a reliability star that others can see instead of a private warning.' }
     - { label: Result, title: '4 test rounds, 4 iterations', text: 'After each round I fixed what testers stumbled on. I added cost splitting, waitlists and a rating flow, and I made the colours calmer. There are no live users yet.' }
   chips: [Case study, User research, Usability testing]

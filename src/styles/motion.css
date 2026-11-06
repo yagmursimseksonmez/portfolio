@@ -1,0 +1,296 @@
+/* Motion inside the folders, after the Serbanoiu study (sirket/portfolyo/notlar/2026-11-05-serbanoiu-etud.md, section 6).
+   The folders keep their own move (--time-cards, --ease). Everything here is smaller and shorter: at most 64px, never below
+   92% scale, one eye-catching move per page. The designed pages (playmate-frames) are generated, so their rules live here,
+   under the same .work .pmx selectors. Anything that hides content until it is seen needs both motion allowed and
+   site.js running (html.has-reveals); without either, every page shows as it always did. */
+:root {
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-press: cubic-bezier(.12, .23, .5, 1);
+  /* a soft spring that overshoots by about 1.5% */
+  --spring: linear(0, .086, .263, .458, .632, .769, .869, .936, .978, 1.001, 1.012, 1.015, 1.014, 1.012, 1.009, 1.006, 1.004, 1.002, 1.001, 1, 1);
+  --t-hover: 200ms;
+  --t-move: 450ms;
+  --t-reveal: 600ms;
+}
+
+/* ------------------------------------------- a fill rises from the bottom of a button */
+.work .pmx .pm-nx-btn { position: relative; overflow: hidden; isolation: isolate; transition: transform .2s ease, color var(--t-hover) var(--ease-press), scale 120ms var(--ease-out); }
+.link:not(.primary, .is-soon) { position: relative; isolation: isolate; }
+.link { transition: scale 120ms var(--ease-out); }
+.link:not(.primary, .is-soon) h3, .link:not(.primary, .is-soon) .arrow { transition: color var(--t-hover) var(--ease-press), transform 200ms var(--ease); }
+.work .pmx .pm-nx-btn::before,
+.link:not(.primary, .is-soon)::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: -15%;
+  right: -15%;
+  height: 220%;
+  border-radius: 50%;
+  translate: 0 100%;
+  transition: translate var(--t-hover) var(--ease-press);
+  pointer-events: none;
+}
+.work .pmx .pm-nx-btn::before { background: var(--pm-hd); }
+.link:not(.primary, .is-soon)::before { background: var(--accent); }
+.work .pmx .pm-f-next:focus-visible .pm-nx-btn::before,
+.link:not(.primary, .is-soon):focus-visible::before { translate: 0 -30%; }
+.work .pmx .pm-f-next:focus-visible .pm-nx-btn { color: var(--pm-on); }
+.link:not(.primary, .is-soon):focus-visible :is(h3, .arrow) { color: var(--on-accent); }
+@media (hover: hover) {
+  .work .pmx .pm-f-next:hover .pm-nx-btn::before,
+  .link:not(.primary, .is-soon):hover::before { translate: 0 -30%; }
+  /* Once the fill is up, the button takes its colour too, so no dark hairline is left at the rounded edge. */
+  .work .pmx .pm-f-next:hover .pm-nx-btn {
+    color: var(--pm-on);
+    background-color: var(--pm-hd);
+    transition: transform .2s ease, color var(--t-hover) var(--ease-press), scale 120ms var(--ease-out), background-color 0s linear var(--t-hover);
+  }
+  .link:not(.primary, .is-soon):hover { background-color: var(--accent); transition: scale 120ms var(--ease-out), background-color 0s linear var(--t-hover); }
+  .link:not(.primary, .is-soon):hover :is(h3, .arrow) { color: var(--on-accent); }
+  /* The next-project card: a soft dark glow inside the yellow, where the study's cards glow white on black. */
+  .work .pmx .pmf.pm-f-next { transition: box-shadow var(--t-move) var(--ease-out); }
+  .work .pmx .pmf.pm-f-next:hover { box-shadow: inset 0 1px 40px 2px rgba(32, 32, 32, .22); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .link:active, .work .pmx .pm-f-next:active .pm-nx-btn { scale: .96; }
+}
+
+/* ------------------------------------------- resting stack: the folder under the pointer stays bright, the rest dim */
+/* A brightness filter rather than opacity: the folders are opaque sheets on top of each other, and a see-through one
+   would show the folder behind it. */
+@media (hover: hover) and (pointer: fine) {
+  .card { transition: transform var(--time-cards) var(--ease), filter var(--t-hover) var(--ease-out); }
+  .gallery:not(.is-focused):has(.card:hover) .card:not(:hover) { filter: brightness(.8); }
+}
+
+/* ------------------------------------------- pages that build up once they are seen (site.js, startReveals) */
+@media (prefers-reduced-motion: no-preference) {
+  .has-reveals .work .pmx :is(.pm-dec-s, .pm-dec-ph, .pm-ut-r):not(.is-seen) { opacity: 0; }
+
+  /* Decision boards: the steps come in one after another; the one that was chosen comes last, with a yellow ring that fades. */
+  .work .pmx :is(.pm-dec-s, .pm-ut-r).is-seen { animation: mo-rise var(--t-reveal) var(--ease-out) backwards; }
+  .work .pmx .pm-dec-s.is-seen:nth-child(2) { animation-delay: 80ms; }
+  .work .pmx .pm-dec-s.is-seen:nth-child(3) { animation-delay: 160ms; }
+  .work .pmx .pm-dec-s.is-seen:nth-child(4) { animation-delay: 240ms; }
+  .work .pmx .pm-dec-s.is-seen:nth-child(5) { animation-delay: 320ms; }
+  .work .pmx .pm-dec-s.pm-dec-pick.is-seen { animation: mo-rise var(--t-reveal) var(--ease-out) 420ms backwards, mo-ring 1400ms var(--ease-out) 760ms backwards; }
+  /* PlayMate's test rounds, one after another. */
+  .work .pmx .pm-ut-r.is-seen:nth-child(2) { animation-delay: 110ms; }
+  .work .pmx .pm-ut-r.is-seen:nth-child(3) { animation-delay: 220ms; }
+  .work .pmx .pm-ut-r.is-seen:nth-child(4) { animation-delay: 330ms; }
+  /* An A/B pair: the two phones close in from either side. */
+  .work .pmx .pm-dec-ph.is-seen { animation: mo-rise var(--t-reveal) var(--ease-out) 120ms backwards; }
+  .work .pmx .pm-dec-ph.is-seen:first-child:not(:last-child) { animation-name: mo-from-left; }
+  .work .pmx .pm-dec-ph.is-seen:last-child:not(:first-child) { animation-name: mo-from-right; }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  /* Pointing at one step dims the others. */
+  .work .pmx .pm-dec-s { transition: opacity var(--t-hover) var(--ease-out); }
+  .work .pmx .pm-dec-steps:has(.pm-dec-s:hover) .pm-dec-s:not(:hover) { opacity: .35; }
+}
+@keyframes mo-rise { from { opacity: 0; translate: 0 24px; } }
+@keyframes mo-from-left { from { opacity: 0; translate: -48px 0; } }
+@keyframes mo-from-right { from { opacity: 0; translate: 48px 0; } }
+@keyframes mo-ring { from { box-shadow: inset 0 0 0 2px var(--pm-ac); } to { box-shadow: inset 0 0 0 2px transparent; } }
+
+/* ------------------------------------------- the strip: the page you are on fills the folder, the pages beside it step back */
+/* The pages fill the folder's height. They were held to 800px and to the window's width, which left a band of empty folder
+   on a big window and on a narrow one; a narrow window still keeps them below 85% of its width, or one page would be several
+   screens wide. startFocus marks the page you are on; the others are a tenth smaller and faded, each anchored on its edge
+   next to the page you are on, so the seams between pages stay put. The page box itself never moves (the reading progress
+   and the arrow keys measure it); only the designed page inside it does. */
+@media (min-width: 701px) {
+  .work > figure.pmx { height: min(100cqh, 85cqw); }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
+  .has-focus .work > figure.pmx > .pmf {
+    border-radius: calc(var(--radius-card) / var(--pmz, 1));
+    transform-origin: 0 50%;
+    transition: scale var(--t-move) var(--ease-out), opacity var(--t-move) var(--ease-out);
+  }
+  .has-focus .work > figure.pmx.is-before > .pmf { transform-origin: 100% 50%; }
+  .has-focus .gallery.is-focused .card.is-active .work > figure.pmx:not(.is-cur) > .pmf { scale: .9; opacity: .2; }
+  /* A prototype (an embedded page) shows only on the page you are on, once that page has grown: drawn faded and scaled,
+     Figma's prototype held the strip still for 100-230ms as it came in. */
+  .has-focus .work > figure.pmx iframe { transition: visibility 0s linear var(--t-move); }
+  .has-focus .gallery.is-focused .card.is-active .work > figure.pmx:not(.is-cur) iframe { visibility: hidden; transition: none; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .card.is-active .work > figure.pmx { view-timeline: --frame inline; }
+    /* PlayMate's final screens: the row of phones drifts a little slower than the strip. */
+    #playmate.is-active .work .pmx .pm-f-final > .pm-prow { animation: mo-drift linear both; animation-timeline: --frame; animation-range: cover 0% cover 100%; }
+  }
+  /* Phone: the folder is one long page, so pages come up from below as it scrolls; the phone row is a swipe row there and
+     stays put. */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 700px) {
+    .card.is-active .work > figure.pmx { view-timeline-axis: block; }
+    .card.is-active .work > figure.pmx > .pmf { animation: mo-frame-up linear both; animation-timeline: --frame; animation-range: entry 0% entry 60%; }
+    #playmate.is-active .work .pmx .pm-f-final > .pm-prow { animation: none; }
+  }
+}
+@keyframes mo-frame-up { from { opacity: .35; translate: 0 48px; scale: .97; } }
+@keyframes mo-drift { from { translate: -40px 0; } to { translate: 40px 0; } }
+
+/* ------------------------------------------- numbers that count up once seen (HealthBar's survey and test results) */
+@media (prefers-reduced-motion: no-preference) {
+  .has-reveals .work .pmx .pm-stv:not(.is-seen) { opacity: 0; }
+  .work .pmx .pm-stv.is-seen { animation: mo-fade var(--t-reveal) var(--ease-out) backwards; }
+}
+@keyframes mo-fade { from { opacity: 0; } }
+
+/* ------------------------------------------- iKeep: a yellow line opens under "52% more views" */
+/* A background line rather than a scaled pseudo-element, so it follows the words if they wrap. */
+.work .pmx strong.mo-mark {
+  padding-bottom: 1px;
+  background: linear-gradient(var(--pm-ac), var(--pm-ac)) no-repeat 0 100% / 100% 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .has-reveals .work .pmx strong.mo-mark:not(.is-seen) { background-size: 0% 2px; }
+  .work .pmx strong.mo-mark.is-seen { transition: background-size var(--t-reveal) var(--ease-out) 200ms; }
+}
+
+/* ------------------------------------------- videos: a dark box until the first frame is ready, then the picture comes up */
+.has-reveals .card video { background-color: #141414; }
+@media (prefers-reduced-motion: no-preference) {
+  .card video.is-loaded { animation: mo-video-in 350ms var(--ease-out) backwards; }
+}
+@keyframes mo-video-in { from { filter: brightness(0); } }
+
+/* ------------------------------------------- next project: the title flies to its folder (site.js, openNext) */
+/* The folders are snapshots for the length of the move, so their own transitions are switched off underneath. */
+.gallery.is-swapping .card, .gallery.is-swapping .card *, .gallery.is-swapping .card *::before, .gallery.is-swapping .card *::after { transition: none !important; }
+::view-transition-group(*) { animation-duration: var(--time-cards); animation-timing-function: var(--ease); }
+/* Each folder shows one picture while it moves (a cross-fade of two would double every page): the folder being left its
+   last one, the others their new one. Only the title fades, from the card's words into the tab. */
+::view-transition-old(*) { animation: none; opacity: 0; }
+::view-transition-new(*) { animation: none; }
+::view-transition-old(folder-out) { opacity: 1; }
+::view-transition-new(folder-out) { opacity: 0; }
+::view-transition-group(case-title) { z-index: 1; animation-duration: var(--t-move); animation-timing-function: var(--ease-out); }
+::view-transition-old(case-title), ::view-transition-new(case-title) { width: auto; height: 100%; object-fit: none; object-position: left center; }
+::view-transition-old(case-title) { opacity: 1; animation: mo-out var(--t-move) var(--ease-out) both; }
+::view-transition-new(case-title) { animation: mo-fade var(--t-move) var(--ease-out) both; }
+@keyframes mo-out { to { opacity: 0; } }
+
+/* ------------------------------------------- the tag beside the pointer (site.js, startPointerTag) */
+.pointer-tag {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  padding: 5px 11px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #f4f4f2;
+  font: 600 12px/1.2 var(--sans);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 100ms var(--ease-out);
+}
+.pointer-tag.is-on { opacity: 1; }
+/* "Click to scroll" has the floor while it shows. */
+body:has(.scroll-hint.is-on) .pointer-tag { opacity: 0; }
+
+/* ------------------------------------------- "things": the four app icons fan out from behind the word */
+.things-fan { position: absolute; top: var(--fy); left: var(--fx); width: 0; height: 0; pointer-events: none; }
+.things-fan img {
+  position: absolute;
+  left: -36px;
+  top: -48px;
+  width: 72px;
+  height: 72px;
+  border-radius: 22%;
+  box-shadow: var(--elevation-low), 0 12px 28px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  scale: .92;
+  transition: opacity 160ms var(--ease-out), translate var(--t-move) var(--spring), rotate var(--t-move) var(--spring), scale var(--t-move) var(--spring);
+}
+.things-fan img:nth-child(1) { translate: -40px 0; rotate: -6deg; }
+.things-fan img:nth-child(2) { translate: -13px 0; rotate: -2deg; }
+.things-fan img:nth-child(3) { translate: 13px 0; rotate: 2deg; }
+.things-fan img:nth-child(4) { translate: 40px 0; rotate: 6deg; }
+.things-fan.is-open img { opacity: 1; scale: 1; }
+.things-fan.is-open img:nth-child(1) { translate: -102px 10px; rotate: -12deg; }
+.things-fan.is-open img:nth-child(2) { translate: -34px -4px; rotate: -4deg; transition-delay: 30ms; }
+.things-fan.is-open img:nth-child(3) { translate: 34px -4px; rotate: 4deg; transition-delay: 60ms; }
+.things-fan.is-open img:nth-child(4) { translate: 102px 10px; rotate: 12deg; transition-delay: 90ms; }
+#root:has(.gallery.is-focused) .things-fan { display: none; }
+
+/* ------------------------------------------- Chengel's prototype: a tag that says it can be played */
+.work .pmx .pm-proto-live .pm-phone, .work .pmx .pm-pwrap { position: relative; }
+/* Where the still phone stands in for the live prototype (playmate-frames.css), there is nothing to try. */
+@media (max-width: 900px), (hover: none) { .work .pmx .pm-pwrap > .proto-tip { display: none; } }
+.work .pmx .proto-tip {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: var(--pm-ac);
+  color: var(--pm-on);
+  font: 700 12px/1.2 var(--sans);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out);
+}
+.work .pmx .proto-tip.is-gone { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .has-reveals .work .pmx .proto-tip:not(.is-seen) { opacity: 0; }
+  .work .pmx .proto-tip.is-seen:not(.is-gone) { animation: mo-tip-in 300ms var(--ease-out) 400ms backwards; }
+}
+@keyframes mo-tip-in { from { opacity: 0; translate: -50% 8px; } }
+
+/* ------------------------------------------- the pages' own yellow buttons get the rising fill too */
+.work .pmx .pm-pbtn { position: relative; overflow: hidden; isolation: isolate; transition: scale 120ms var(--ease-out); }
+.work .pmx .pm-pbtn::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: -15%;
+  right: -15%;
+  height: 220%;
+  border-radius: 50%;
+  background: var(--pm-hd);
+  translate: 0 100%;
+  transition: translate var(--t-hover) var(--ease-press);
+  pointer-events: none;
+}
+.work .pmx .pm-pbtn:focus-visible::before { translate: 0 -30%; }
+@media (hover: hover) {
+  .work .pmx .pm-pbtn:hover::before { translate: 0 -30%; }
+  .work .pmx .pm-pbtn:hover { background-color: var(--pm-hd); transition: scale 120ms var(--ease-out), background-color 0s linear var(--t-hover); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .work .pmx .pm-pbtn:active { scale: .96; }
+}
+
+/* ------------------------------------------- Chengel: the folder brightens while the light-mode screens are in view */
+/* A light layer over the folder's dark sheet, faded by the scroll; only the folder itself, the pages stay as they are. It
+   stops at 12%: above that the progress labels on the folder drop below 4.5:1. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
+    #chengel.is-active { timeline-scope: --day; }
+    #chengel.is-active .work > figure.pmx[aria-label="Final screens · light"] { view-timeline: --frame inline, --day inline; }
+    #chengel.is-active .card-sheet::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: #c9d2e6;
+      opacity: 0;
+      pointer-events: none;
+      animation: mo-day linear both;
+      animation-timeline: --day;
+      animation-range: entry 30% exit 70%;
+    }
+  }
+}
+@keyframes mo-day { 0%, 100% { opacity: 0; } 35%, 65% { opacity: .12; } }

@@ -1359,6 +1359,15 @@ body.is-scroll { overflow-x: clip; }
 .about .bio-links { margin: 0; }
 .about .bio-links > .link.primary { flex-basis: 100%; background: var(--accent); color: var(--on-accent); }
 .about .bio-links > .link.primary h3 { color: var(--on-accent); }
+/* Say hello: the address itself, copied on a click (site.js, startContact); "Copied" comes in like the contact menu's. */
+.about .bio-links > .copy-mail { position: relative; }
+.copy-mail h3 { transition: opacity 200ms var(--ease), transform 200ms var(--ease), filter 200ms var(--ease); }
+.copy-mail .copy-addr { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.copy-mail .copy-done { position: absolute; left: var(--pad); opacity: 0; transform: scale(1.2); filter: blur(4px); pointer-events: none; }
+.copy-mail.copied .copy-addr { opacity: 0; filter: blur(4px); transform: scale(0.9); }
+.copy-mail.copied .copy-done { opacity: 1; transform: none; filter: none; }
+/* Stacked (1280px and narrower), the half-width basis of the buttons would set their height and squash them to one line. */
+@media (max-width: 1280px) { .bio-links > .link, .about .bio-links > .link.primary { flex: 0 0 auto; } }
 @media (max-width: 700px) {
   .about { padding: calc(var(--pad) * 1.5); gap: calc(var(--pad) * 1.5); }
   .about p { font-size: 14px; line-height: 1.5; }
@@ -1398,8 +1407,8 @@ body.is-scroll { overflow-x: clip; }
 .email a h3 { font-size: 15px; }
 
 /* Reading progress of the open folder */
-.read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 4px; border-radius: 4px; background: hsla(0, 0%, 100%, 0.1); overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
-.read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 4px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
+.read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 2px; border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+.read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 2px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
 .gallery.is-focused .card.is-active .read-progress { opacity: 1; }
 /* Start, numbered steps and End under the bar: each scrolls the folder to that place */
 .read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); height: 24px; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
@@ -1407,6 +1416,28 @@ body.is-scroll { overflow-x: clip; }
 .read-stop.start { transform: none; padding-left: 0; }
 .read-stop.end { transform: translateX(-100%); padding-right: 0; }
 .read-stop:hover, .read-stop.is-on { color: var(--accent); }
+/* Screen and tablet: the band above the pages is the same 44px at every width, and the labels, the line and its dots sit
+   inside it (labels 8-30px, line 36-38px, dots down to 41px), clear of the page edge. With a 2 x pad band the line ran
+   9px into the pages at 1024px and narrower. The phone keeps its own band (below). */
+@media (min-width: 701px) {
+  .card-content { padding-top: 44px; }
+  .read-nav { top: 8px; }
+  .read-progress { top: 36px; }
+}
+/* A dot for every page, 8px, sitting on the progress line: no outline, faint yellow, and solid once you have read past
+   that page (site.js, startProgress sets --a from 0.2 to 1 as you move through the page). The button around it is 16px so
+   it is still easy to hit; its centre is the line's centre (29px below the top of the row). */
+.read-stop:is(.num, .dot) { top: 21px; display: grid; place-items: center; width: 16px; height: 16px; padding: 0; border-radius: 50%; }
+.read-stop:is(.num, .dot)::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 209, 0, var(--a, 0.2)); transition: background-color 160ms var(--ease), box-shadow 160ms var(--ease); }
+.read-stop:is(.num, .dot):hover::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.18); }
+.read-stop:is(.num, .dot).is-on::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.3); }
+@media (prefers-reduced-motion: reduce) { .read-stop:is(.num, .dot)::before { transition: none; } }
+/* Phone: the row scrolls sideways, so it grows tall enough to hold the dots down on the line; Start and End stay on top. */
+@media (max-width: 700px) {
+  .read-nav { height: 40px; align-items: flex-start; }
+  .read-stop:is(.num, .dot) { align-self: flex-start; margin: 21px 1px 0; }
+  .read-stop.end { margin-left: auto; }
+}
 .gallery.is-focused .card.is-active .read-nav { opacity: 1; }
 .gallery.is-focused .card.is-active .read-stop { pointer-events: auto; }
 
@@ -1435,6 +1466,20 @@ body.is-scroll { overflow-x: clip; }
 
 .work .pmx .pm-pmid:not(.is-live), .work .pmx .pm-wsc:not(.is-live), .work .pmx .pm-wmid:not(.is-live), .work .pmx .pm-bscroll:not(.is-live), .work .device-scroll:not(.is-live) { overflow-y: hidden !important; }
 .work .is-live { overflow-y: auto !important; overscroll-behavior: contain; outline: 2px solid var(--accent); outline-offset: -2px; }
+/* First screen of each case: the year and how long it took, under the tags ("year, duration"). */
+.work .pmx .pm-when { margin-top: 12px; font-size: 13px; line-height: 1.45; color: var(--pm-tx2); }
+.work .pmx .pm-when strong { color: var(--pm-tx); font-weight: 500; }
+.work .pmx .pm-ch-who .pm-when { margin-top: 0; }
+/* The tags sit side by side with the year at the end of their row ("yanyana koyalım"), instead of a column that left the
+   bottom of the first screen empty. */
+.work .pmx .pm-hero-t .pm-hfoot.pm-wp .pm-chips { flex: 1 1 auto; min-width: 0; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
+.work .pmx .pm-hero-t .pm-chips .pm-when { margin: 0 0 0 6px; }
+/* While the strip moves, a prototype it carries under the pointer lets the wheel through (site.js, startStripMotion). */
+.card-content.is-moving iframe { pointer-events: none; }
+/* PlayMate's prototype is Figma's page, so its wheel cannot be passed on: it takes the pointer only after a click. */
+.work .pmx .proto-gate:not(.is-on) { cursor: pointer; }
+.work .pmx .proto-gate:not(.is-on) > iframe { pointer-events: none; }
+.work .pmx .proto-gate.is-on { outline: 2px solid var(--accent); outline-offset: 2px; }
 .scroll-hint { position: fixed; z-index: 200; transform: translateX(-50%); padding: 5px 11px; border-radius: 99px; background: rgba(0, 0, 0, 0.72); color: #f4f4f2; font: 600 12px/1.2 var(--sans, inherit); letter-spacing: 0.02em; pointer-events: none; opacity: 0; transition: opacity 120ms var(--ease); }
 .scroll-hint.is-on { opacity: 1; }
 @media (hover: none) { .scroll-hint { display: none; } }
