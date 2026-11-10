@@ -105,7 +105,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <div class="gallery-stage">
         <button class="hi-card" type="button" aria-label="About Yagmur" data-open-book><span aria-hidden="true">Hi</span></button>
         <section class="book" id="about" tabindex="0" aria-label="About Yagmur" data-book>
-          <div class="book-stage">
+          <div class="book-stage" inert>
             <div class="book-leaf">
               <div class="book-face book-cover"><h2>Hi</h2></div>
               <div class="book-face book-left"><img src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" width="1824" height="1273" decoding="async" /></div>
@@ -178,7 +178,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
             <section class="card" id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
               <div class="card-tab"><h2 class:list={{ "has-note": !!d.tabNote }}><span>{d.title}</span>{d.tabNote && <small class="tab-note">{d.tabNote}</small>}</h2></div>
               <div class="card-sheet">
-                <article class="card-content">
+                <article class="card-content" inert>
                   <div class="work">
                     {d.hero?.frame && (
                       <figure class="pmx" aria-label="Overview" set:html={frameHtml[`../content/playmate-frames/${d.hero.frame}.html`]}></figure>

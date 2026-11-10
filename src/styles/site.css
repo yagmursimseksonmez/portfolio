@@ -251,14 +251,17 @@ nav h3 { white-space: nowrap; }
   font-size: 13px;
 }
 .gallery-keys span:first-child { grid-column: 2; }
+/* Hidden (not only transparent) while no folder is open, so Tab never lands on the invisible Close; visibility flips
+   after the fade out and at once on the way in. */
 .gallery-dismiss, .gallery-keys {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: scale(0.8) translateY(24px);
-  transition: opacity 300ms var(--ease), transform 300ms var(--ease), filter 120ms var(--ease);
+  transition: opacity 300ms var(--ease), transform 300ms var(--ease), filter 120ms var(--ease), visibility 0s linear 300ms;
 }
-.gallery.is-focused .gallery-dismiss { opacity: 1; pointer-events: auto; transform: none; }
-.gallery.is-focused .gallery-keys { opacity: 0.66; transform: none; }
+.gallery.is-focused .gallery-dismiss { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
+.gallery.is-focused .gallery-keys { opacity: 0.66; visibility: visible; transform: none; transition-delay: 0s; }
 
 /* A folder: a tab with sloped ears on top of a full-screen sheet. */
 .card {
@@ -1410,8 +1413,9 @@ body.is-scroll { overflow-x: clip; }
 .read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 2px; border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
 .read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 2px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
 .gallery.is-focused .card.is-active .read-progress { opacity: 1; }
-/* Start, numbered steps and End under the bar: each scrolls the folder to that place */
-.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); height: 24px; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
+/* Start, numbered steps and End under the bar: each scrolls the folder to that place. Hidden, not only transparent, in a
+   closed folder so Tab skips its stops. */
+.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); height: 24px; opacity: 0; visibility: hidden; transition: opacity var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); pointer-events: none; z-index: 6; }
 .read-stop { position: absolute; top: 0; transform: translateX(-50%); font: 600 11px/1 var(--sans, inherit); letter-spacing: 0.04em; color: hsla(0, 0%, 100%, 0.6); background: none; border: 0; padding: 5px 6px; border-radius: 99px; cursor: pointer; }
 .read-stop.start { transform: none; padding-left: 0; }
 .read-stop.end { transform: translateX(-100%); padding-right: 0; }
@@ -1432,20 +1436,24 @@ body.is-scroll { overflow-x: clip; }
 .read-stop:is(.num, .dot):hover::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.18); }
 .read-stop:is(.num, .dot).is-on::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.3); }
 @media (prefers-reduced-motion: reduce) { .read-stop:is(.num, .dot)::before { transition: none; } }
-/* Phone: the row scrolls sideways, so it grows tall enough to hold the dots down on the line; Start and End stay on top. */
+/* Phone: the whole row fits the width, so nothing slides or gets cut. Start and End sit on top at the two ends; the dots
+   share the line below them evenly (21 dots, PlayMate, still fit 351px). At that spacing a dot is too small to tap, so on
+   a phone the dots only show progress and Start and End are the buttons, 24px tall. */
 @media (max-width: 700px) {
-  .read-nav { height: 40px; align-items: flex-start; }
-  .read-stop:is(.num, .dot) { align-self: flex-start; margin: 21px 1px 0; }
-  .read-stop.end { margin-left: auto; }
+  .read-nav { height: 40px; align-items: flex-start; justify-content: space-between; }
+  .read-stop.start, .read-stop.end { position: absolute; top: 0; padding-block: 6px; }
+  .read-stop.start { left: 0; }
+  .read-stop.end { right: 0; padding-right: 0; }
+  .read-stop:is(.num, .dot) { flex: 0 1 16px; min-width: 10px; margin-top: 21px; }
+  .gallery.is-focused .card.is-active .read-stop:is(.num, .dot) { pointer-events: none; }
 }
-.gallery.is-focused .card.is-active .read-nav { opacity: 1; }
+.gallery.is-focused .card.is-active .read-nav { opacity: 1; visibility: visible; transition-delay: 0s; }
 .gallery.is-focused .card.is-active .read-stop { pointer-events: auto; }
 
 
 /* ------------------------------------------------------------ phone: a folder opens as one long page you scroll down */
 @media (max-width: 700px) {
-  .read-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; pointer-events: none; }
-  .read-nav::-webkit-scrollbar { display: none; }
+  .read-nav { display: flex; pointer-events: none; }
   .read-stop { position: static; flex: none; transform: none !important; font-size: 12px; padding: 5px 9px; }
   .read-stop.start { padding-left: 0; }
   .gallery.is-focused .card.is-active .card-content {

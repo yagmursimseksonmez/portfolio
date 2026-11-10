@@ -341,6 +341,9 @@ function setFocus(next) {
     card.classList.toggle('is-back', focused && !isBook && k < next);
     card.setAttribute('aria-current', String(isActive));
     card.tabIndex = isActive ? -1 : 0;
+    // A closed folder is one Tab stop (the card); its links and frames sit under the other folders, so Tab skips them.
+    // Clicks on it still reach the sheet, which opens it.
+    card.querySelector('.card-content').inert = !isActive;
     const y = cardY(k, next);
     if (y === null) card.style.removeProperty('--y');
     else card.style.setProperty('--y', y);
@@ -349,13 +352,19 @@ function setFocus(next) {
 
   if (book) {
     book.tabIndex = isBook ? -1 : 0;
+    book.querySelector('.book-stage').inert = !isBook; // the same for the closed book: its links wait until it opens
     if (prev !== next && isBook) openBook(prev === null);
     else if (prev !== next && prev === BOOK) closeBook();
   }
 
   const hash = isBook ? '#about' : focused ? `#${cards[next].id}` : '';
   if (location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
-  if (!focused && gallery.contains(document.activeElement)) document.activeElement.blur();
+  if (!focused && gallery.contains(document.activeElement)) {
+    // Closing hands the focus back to the folder (or the book) that was open, so a keyboard user sees where they are.
+    const back = prev === BOOK ? book : prev !== null ? cards[prev] : null;
+    if (back && prev !== next) back.focus({ preventScroll: true });
+    else document.activeElement.blur();
+  }
 }
 
 // Closing the open book folds the cover first, then the stack settles.
@@ -1094,7 +1103,6 @@ function startProgress() {
       xs = px;
     };
     let xs = [];
-    let last = -1;
     const update = () => {
       const max = maxOf();
       const pos = posOf();
@@ -1116,14 +1124,11 @@ function startProgress() {
       // The line has no track: it grows from dot to dot, reaching a page's dot as that page begins.
       const w = nav.clientWidth;
       const at = (i) => (i >= stops.length - 1 ? w : i === 0 ? 0
-        : vert() ? stopsEls[i].offsetLeft + stopsEls[i].offsetWidth / 2 - nav.scrollLeft : xs[i]);
+        : vert() ? stopsEls[i].offsetLeft + stopsEls[i].offsetWidth / 2 : xs[i]);
       const x = cur >= stops.length - 1 ? w : at(cur) + read(cur) * (at(cur + 1) - at(cur));
       setVar(bar, '--p', w > 0 ? Math.max(0, Math.min(1, x / w)).toFixed(4) : '0');
-      if (vert() && cur !== last) nav.scrollTo({ left: Math.max(0, stopsEls[cur].offsetLeft - 40), behavior: 'smooth' });
-      last = cur;
     };
     content.addEventListener('scroll', update, { passive: true });
-    nav.addEventListener('scroll', update, { passive: true }); // phone: the row of dots slides, and the line follows it
     new ResizeObserver(() => { place(); update(); }).observe(content);
     new MutationObserver(() => { place(); update(); }).observe(content, { subtree: true, attributes: true, attributeFilter: ['style'] });
     window.addEventListener('resize', () => { place(); update(); });
