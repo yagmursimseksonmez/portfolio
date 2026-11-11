@@ -3,7 +3,7 @@ title: iKeep
 order: 4
 year: '2026'
 tabNote: 'Redesign shipped in a week'
-tile: { shot: /images/ikeep-feature-1-6-dk.webp, meta: '2026 · App Store', pos: 'center 9%', cover: /images/tiles/ikeep.webp, when: '2026 · 1 week' }
+tile: { cover: /images/tiles/ikeep.webp, when: '2026 · 1 week · App Store' }
 summary: A copy and paste vault for the values you type again and again.
 tags: [iOS, Product design, Live on App Store]
 status: complete

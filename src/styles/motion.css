@@ -101,10 +101,10 @@
    screens wide. startFocus marks the page you are on; the others are a tenth smaller and faded, each anchored on its edge
    next to the page you are on, so the seams between pages stay put. The page box itself never moves (the reading progress
    and the arrow keys measure it); only the designed page inside it does. */
-@media (min-width: 701px) {
+@media (min-width: 1025px) {
   .work > figure.pmx { height: min(100cqh, 85cqw); }
 }
-@media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 1025px) {
   .has-focus .work > figure.pmx > .pmf {
     border-radius: calc(var(--radius-card) / var(--pmz, 1));
     transform-origin: 0 50%;
@@ -125,7 +125,7 @@
   }
   /* Phone: the folder is one long page, so pages come up from below as it scrolls; the phone row is a swipe row there and
      stays put. */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 700px) {
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1024px) {
     .card.is-active .work > figure.pmx { view-timeline-axis: block; }
     .card.is-active .work > figure.pmx > .pmf { animation: mo-frame-up linear both; animation-timeline: --frame; animation-range: entry 0% entry 60%; }
     #playmate.is-active .work .pmx .pm-f-final > .pm-prow { animation: none; }
@@ -276,7 +276,7 @@ body:has(.scroll-hint.is-on) .pointer-tag { opacity: 0; }
 /* A light layer over the folder's dark sheet, faded by the scroll; only the folder itself, the pages stay as they are. It
    stops at 12%: above that the progress labels on the folder drop below 4.5:1. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1025px) {
     #chengel.is-active { timeline-scope: --day; }
     #chengel.is-active .work > figure.pmx[aria-label="Final screens · light"] { view-timeline: --frame inline, --day inline; }
     #chengel.is-active .card-sheet::before {

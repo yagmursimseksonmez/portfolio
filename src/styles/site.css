@@ -61,8 +61,8 @@ img { display: block; }
 .grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--gap); }
 
 /* ------------------------------------------------------------------ home */
-/* The homepage: the header, and on a phone the four project cards and the AI band. It scrolls on its own under the
-   folders; on a phone those only show once a project is open. */
+/* The homepage: the header, the four projects and the AI band. It scrolls on its own under the folders, which only
+   show once a project is open. */
 .home {
   position: absolute;
   inset: 0;
@@ -81,36 +81,74 @@ nav h3 { white-space: nowrap; }
 .hero { padding: 0 var(--pad); }
 .build { position: relative; width: 100%; height: 18vw; }
 .build canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* The intro sits under the headline on its left edge, and "Selected work ↓" right below it, as the cue into the folders
-   (on a phone, into the cards). */
+/* The intro sits under the headline on its left edge, and "Selected work ↓" right below it, as the cue into the
+   projects. */
 .subheader { display: flex; flex-direction: column; align-items: flex-start; gap: 36px; padding: 28px var(--pad) var(--pad); }
 .subheader p { max-width: 600px; text-wrap: pretty; }
 
 /* ------------------------------------------------------------------ project cards */
-/* All four at a glance: four in a row on a screen, two by two on a phone. Each card is a surface of its own, clearly
-   lighter than the page with an edge, so the four never blur together. */
-.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 0 var(--pad) var(--pad); }
-.tile {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  border-radius: var(--radius-card);
-  background: #2e302e;
-  box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.09);
-  color: var(--primary);
-  overflow: hidden;
-  transition: background 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease);
+/* All four at a glance, as discs: the cover in a circle, the year and how long it took, and the name. On a screen they
+   are big and scattered at different heights under the headline, all in the first screen (the homepage does not scroll
+   there); pointing at one brings it forward, dims the other discs and shows its one-line summary on it. On a phone and
+   a tablet they sit in two columns, the right one a little lower (below), and the summary is only read out. */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding: 10px var(--pad) var(--pad); }
+.tile { display: flex; flex-direction: column; align-items: center; min-width: 0; text-align: center; color: var(--primary); }
+.tile:focus-visible { outline: none; }
+.tile:focus-visible .tile-shot { outline: 2px solid var(--accent); outline-offset: 4px; }
+.tile-shot { display: block; flex: none; width: var(--disc); height: var(--disc); border-radius: 50%; background: #1c1d1c; overflow: hidden; transition: transform 400ms var(--ease), opacity 300ms var(--ease); }
+.tile-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 1025px) {
+  /* The intro floats over the top left of the space under the headline; the discs fill that space around it. */
+  /* It does not scroll as long as everything fits; in a very short window it still can, so nothing is out of reach. */
+  .home { display: flex; flex-direction: column; overflow: hidden auto; }
+  /* In a short window the headline gets smaller, so the discs keep about 200px (site.js startHero reads this). */
+  .build { max-height: max(110px, 100dvh - 480px); }
+  .subheader { position: absolute; top: 100%; left: 0; z-index: 1; padding-bottom: 0; }
+  .subheader p { font-size: 14px; line-height: 1.45; }
+  .subheader h3, .ai-band { display: none; }
+  /* The summary shows on the lower half of the disc, over a dark fade, while the disc is pointed at or focused. It is
+     always in the page, so a screen reader reads it. */
+  .tile-shot { position: relative; }
+  .tile-shot::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(22, 23, 22, 0.92) 0%, rgba(22, 23, 22, 0.84) 45%, rgba(22, 23, 22, 0) 72%); opacity: 0; transition: opacity 250ms var(--ease); }
+  .tiles .tile p { position: absolute; top: calc(var(--disc) * 0.52); left: 50%; width: calc(var(--disc) * 0.72); translate: -50% 0; font-size: clamp(13px, calc(var(--disc) * 0.045), 15px); line-height: 1.35; color: var(--foreground); opacity: 0; pointer-events: none; transition: opacity 250ms var(--ease); }
+  .tile:is(:hover, :focus-visible) .tile-shot::after, .tiles .tile:is(:hover, :focus-visible) p { opacity: 1; }
+  .tiles { position: relative; flex: 1; display: block; padding: 0; container-type: size; }
+  /* A disc is 22.5% of the width, or less when the space is short: the text under it takes about 70px, and a disc whose
+     left edge is under the intro (640px wide, 90px tall) starts below it. --free is how far a disc can move down and
+     still keep its text on screen. The third disc drops below the intro only when the screen is narrow enough for it to
+     reach under the text (the min(…, × 99) is a switch: 0 when it clears the intro, 90px when it does not). */
+  .tile { --disc: clamp(160px, min(22.5cqw, 100cqh - 172px), 420px); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { left: calc(13cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.55); }
+  .tile:nth-child(2) { left: calc(37.67cqw - var(--disc) / 2); top: var(--free); }
+  .tile:nth-child(3) { left: calc(62.33cqw - var(--disc) / 2); top: max(var(--free) * 0.05, min(90px, (640px - 62.33cqw + var(--disc) / 2) * 99)); }
+  .tile:nth-child(4) { left: calc(87cqw - var(--disc) / 2); top: calc(var(--free) * 0.45); }
 }
-.tile:hover { background: #353835; box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.18); transform: translateY(-4px); }
-.tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.tile-shot { display: block; height: clamp(120px, 20vh, 240px); margin: 12px 12px 0; border-radius: 12px; background: #1c1d1c; overflow: hidden; }
-.tile-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 400ms var(--ease); }
-.tile:hover .tile-shot img { transform: scale(1.03); }
-.tile-text { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px 16px; }
-.tile-meta { order: -1; font-size: 12px; letter-spacing: 0.04em; color: rgba(214, 214, 214, 0.72); }
-.tm-when { display: none; }
-.tile h2 { font-size: 20px; line-height: 1.2; font-weight: 600; color: var(--foreground); }
-.tile p { font-size: 14px; line-height: 1.4; color: rgba(214, 214, 214, 0.8); }
+/* Only with a mouse: a tap on a touch screen would leave :hover stuck, and the other three dimmed after the case closes. */
+@media (hover: hover) and (pointer: fine) {
+  .tiles:has(.tile:hover) .tile:not(:hover) .tile-shot { opacity: 0.5; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .tile:hover .tile-shot { transform: scale(1.07); }
+}
+/* The discs drift slowly from side to side, each on its own path and pace, like the discs in the headline, and their
+   names go with them; the one under the pointer holds still so it is easy to click. */
+@media (prefers-reduced-motion: no-preference) {
+  .tile { animation: disc-drift calc(7s + var(--k) * 0.9s) ease-in-out calc(var(--k) * -2.3s) infinite; }
+}
+/* Only with a mouse: on a touch screen :hover sticks after a tap, and that disc would stay still once its case closes. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .tile:hover { animation-play-state: paused; }
+}
+@keyframes disc-drift {
+  0%, 100% { translate: 0 0; }
+  25% { translate: calc(var(--disc) * 0.035) calc(var(--disc) * -0.02); }
+  50% { translate: calc(var(--disc) * 0.012) calc(var(--disc) * 0.01); }
+  75% { translate: calc(var(--disc) * -0.035) calc(var(--disc) * -0.01); }
+}
+.tile-text { display: flex; flex-direction: column; gap: 4px; max-width: 300px; padding: 18px 8px 0; }
+.tile-meta { order: -1; font-size: 13px; letter-spacing: 0.04em; color: rgba(214, 214, 214, 0.72); }
+.tile h2 { font-size: 22px; line-height: 1.2; font-weight: 600; color: var(--foreground); }
+.tile p { font-size: 15px; line-height: 1.4; color: rgba(214, 214, 214, 0.8); }
 
 /* ------------------------------------------------------------------ AI band */
 /* Below the cards and set apart from them (no picture, a rule above), so it never reads as a fifth project. */
@@ -124,13 +162,21 @@ nav h3 { white-space: nowrap; }
 .ai-rows dt { font-size: 14px; font-weight: 600; color: var(--accent); }
 .ai-rows dd { margin: 6px 0 0; font-size: 15px; line-height: 1.45; color: var(--primary); }
 .ai-tools { margin-top: 26px; font-size: 14px; color: var(--secondary); }
+/* The panel the band opens in on a screen (site.js startAi); on a phone and a tablet the band is on the page instead. */
+.ai-link { white-space: nowrap; }
+.ai-dialog { width: min(600px, 92vw); max-height: 88dvh; margin: auto; padding: 0; border: 0; border-radius: var(--radius-card); background: #2e302e; color: var(--primary); box-shadow: var(--inset-stroke), 0 30px 80px rgba(0, 0, 0, 0.5); overflow: auto; }
+.ai-dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+.ai-dialog .ai-band { display: block; margin: 0; padding: 40px 36px 36px; border-top: 0; }
+.ai-dialog .ai-rows { grid-template-columns: 1fr; gap: 18px; }
+.ai-dialog .ai-flow .ai-lab { flex-basis: 100%; }
+.ai-dialog .ai-flow span:not(.ai-lab) { background: #3a3c3a; }
+.ai-close { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--accent); color: var(--on-accent); cursor: pointer; }
+.ai-close svg { width: 16px; height: 16px; fill: currentColor; transform: rotate(45deg); }
+.ai-close:focus-visible { outline: 2px solid var(--foreground); outline-offset: 3px; }
+@media (max-width: 1024px) { .ai-link { display: none; } }
 
-/* For now the cards and the AI band are the phone's homepage: a screen still opens on the stack of folders. On a phone
-   the folders and the book wait out of sight until a project or the About opens; visibility flips after they fade. */
-@media (min-width: 701px) { .tiles, .ai-band { display: none; } }
-@media (max-width: 700px) {
-  .gallery:not(.is-focused) :is(.card, .book) { opacity: 0; visibility: hidden; transition: opacity 240ms var(--ease), visibility 0s linear 240ms, transform var(--time-cards) var(--ease); }
-}
+/* The folders and the book wait out of sight until a project or the About opens; visibility flips after they fade. */
+.gallery:not(.is-focused) :is(.card, .book) { opacity: 0; visibility: hidden; transition: opacity 240ms var(--ease), visibility 0s linear 240ms, transform var(--time-cards) var(--ease); }
 
 /* ------------------------------------------------------------------ contact */
 .contact {
@@ -173,7 +219,7 @@ nav h3 { white-space: nowrap; }
   padding: 0 12px 0 16px;
   transition: transform var(--dur) var(--ease);
 }
-.contact-toggle h3 { transition: opacity var(--dur) var(--ease), color 100ms; }
+.contact-toggle h3 { font-size: 16px; transition: opacity var(--dur) var(--ease), color 100ms; }
 .contact-toggle svg { width: 20px; height: 20px; fill: var(--primary); transition: transform var(--dur) var(--ease), fill 100ms; }
 .contact-toggle:hover h3 { color: var(--accent); }
 .contact-toggle:hover svg { fill: var(--accent); }
@@ -211,9 +257,14 @@ nav h3 { white-space: nowrap; }
 .clock .hand-s { stroke: var(--accent); }
 .is-open-hours .clock { background: #d6d6d6; }
 .is-open-hours .clock .tick, .is-open-hours .clock .hand-h, .is-open-hours .clock .hand-m { stroke: #202020; }
-.contact-foot { display: flex; flex-direction: column; gap: 8px; padding: 0 var(--pad) var(--pad); }
-.contact-foot h4 { color: var(--secondary); }
+/* The panel's text is small at every width, so the illustration gets the room. */
+.contact-foot { display: flex; flex-direction: column; gap: 6px; padding: 0 var(--pad) var(--pad); }
+.contact-foot h3 { font-size: 15px; line-height: 1.3; }
+/* at these sizes the usual grey is too faint on the panel: 0.76 keeps 5.8:1 here and 5:1 on the address row */
+.contact-foot h4 { font-size: 13px; line-height: 1.35; color: rgba(214, 214, 214, 0.76); }
 .contact-menu .link, .contact-menu .email { flex: 0 0 auto; height: 60px; margin-top: var(--gap); padding: 0 var(--pad); }
+.contact-menu .link h3 { font-size: 15px; }
+.contact-menu .link .arrow { width: 16px; height: 16px; }
 
 .link {
   display: flex;
@@ -235,20 +286,23 @@ nav h3 { white-space: nowrap; }
 .link:not(.primary):hover h3 { transform: translateX(10px); color: var(--accent); }
 .link:hover .arrow { transform: translateX(14px); }
 .link:not(.primary):hover .arrow { color: var(--accent); }
-.email { position: relative; display: flex; align-items: center; justify-content: space-between; width: 100%; border-radius: 36px; overflow: hidden; }
-.email button { display: flex; align-items: center; gap: var(--gap); height: 100%; color: var(--secondary); }
-.email button:hover { color: var(--accent); }
-.email a, .email button, .email::after { transition: opacity 200ms var(--ease), transform 200ms var(--ease), filter 200ms var(--ease); }
+/* The whole row is one button: a click anywhere on it copies the address (site.js, startContact). */
+.email { position: relative; display: flex; align-items: center; justify-content: space-between; width: 100%; border-radius: 36px; overflow: hidden; text-align: left; transition: background 150ms var(--ease); }
+.email-addr, .email-copy, .email::after { transition: opacity 200ms var(--ease), transform 200ms var(--ease), filter 200ms var(--ease), color 100ms var(--ease); }
 .email::after {
-  content: 'Copied';
+  content: 'Copied!';
+  /* shown only: kept out of the button's name (the status line reads it out); older browsers keep the line above */
+  content: 'Copied!' / '';
   position: absolute;
   left: var(--pad);
+  font-size: 14px;
+  color: #4ade80; /* green: 6:1 on the row, 5.3:1 while pointed at */
   opacity: 0;
   transform: scale(1.2);
   filter: blur(4px);
   pointer-events: none;
 }
-.email.copied a, .email.copied button { opacity: 0; filter: blur(4px); transform: scale(0.9); }
+.email.copied .email-addr, .email.copied .email-copy { opacity: 0; filter: blur(4px); transform: scale(0.9); }
 .email.copied::after { opacity: 1; transform: none; filter: none; }
 
 /* ----------------------------------------------------------------- gallery */
@@ -1009,10 +1063,6 @@ html.is-intro .card, html.is-intro .book, html.is-intro .tile { opacity: 0; tran
 html.is-intro .contact, html.is-intro nav, html.is-intro .subheader { opacity: 0; filter: blur(4px); }
 html.is-intro-play .hero { animation: intro-hero var(--intro-hero) var(--ease) both; }
 html.is-intro-play .tile { animation: intro-tile var(--intro-card) var(--ease) calc(var(--intro-start) + var(--k) * var(--intro-stagger)) both; }
-@media (min-width: 701px) {
-  html.is-intro-play .card { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) + (var(--count) - 1 - var(--i)) * var(--intro-stagger)) both; }
-  html.is-intro-play .book { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) - var(--intro-stagger)) both; }
-}
 html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .subheader {
   opacity: 1;
   filter: none;
@@ -1022,10 +1072,6 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   0% { opacity: 0; transform: translateY(var(--intro-y, 0px)) scale(0.9); filter: blur(10px); }
   50% { opacity: 1; transform: translateY(var(--intro-y, 0px)) scale(1); filter: blur(0); }
   100% { opacity: 1; transform: none; filter: none; }
-}
-@keyframes intro-card {
-  0% { opacity: 0; transform: translate3d(0, calc(var(--y) + 50vh), 0) rotateX(-5deg) scale(1.1); }
-  100% { opacity: 1; transform: translate3d(0, var(--y), 0) rotateX(-20deg); }
 }
 @keyframes intro-tile {
   0% { opacity: 0; transform: translateY(40px); }
@@ -1049,7 +1095,7 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   :root { --pad: 12px; --size-body: 18px; }
   .timeline { grid-template-columns: 44px 80px minmax(0, 1fr); padding: 0 calc(var(--pad) * 2); }
 }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   /* phone type scale: display number 32, stat 24, title 22 / 19 / 16, lede 16, body 14, small 13, label 11 */
   :root { --size-body: 16px; --size-caption: 14px; }
   .gallery-stage { perspective: 800px; }
@@ -1058,18 +1104,18 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   nav h3:nth-of-type(2), nav h3:nth-of-type(3), nav h3:nth-of-type(4) { display: none; }
   .subheader { gap: 8px; padding: 14px var(--pad) 10px; }
   .subheader h3 { margin-top: 6px; font-size: 13px; color: var(--secondary); }
-  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0 12px 12px; }
-  .tile { border-radius: 16px; }
-  .tile:hover { transform: none; }
-  /* On a phone the card shows its cover (a phone on the project's colour) as big as the first screen allows. */
-  .tile-shot { height: clamp(120px, calc((100dvh - 500px) / 2), 220px); margin: 8px 8px 0; border-radius: 10px; }
-  .tile-shot img { object-position: center !important; }
-  .tm-status { display: none; }
-  .tm-when { display: inline; }
-  .tile-text { gap: 2px; padding: 8px 10px 10px; }
+  /* Two columns of discs, the right one a little lower so they read as scattered, with the year and the name under each
+     (the summary is only read out). The disc is as big as the first screen allows: the header grows with the width
+     (about 19vw + 175px), the text under a disc takes about 50px, and the lower column adds a quarter of a disc.
+     --row keeps a name at least twice as far from the disc below it as from its own, even while they drift. */
+  .tiles { --row: 28px; --disc: clamp(120px, min(44vw, (100dvh - 19vw - 289px - var(--row)) / 2.25), 400px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--row) 8px; padding: 4px 12px calc(12px + var(--disc) * 0.25); }
+  .tile:nth-child(even) { position: relative; top: calc(var(--disc) * 0.25); }
+  .tiles:has(.tile:hover) .tile:not(:hover) .tile-shot { opacity: 1; }
+  .tile:hover .tile-shot { transform: none; }
+  .tile-text { gap: 2px; max-width: none; padding: 10px 4px 0; }
   .tile-meta { font-size: 11px; letter-spacing: 0.02em; }
   .tile h2 { font-size: 16px; }
-  .tile p { font-size: 12px; line-height: 1.35; }
+  .tile p { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .ai-band { margin-top: 20px; padding: 28px 0 44px; }
   .ai-band h2 { font-size: 22px; }
   .ai-flow { font-size: 14px; gap: 6px; }
@@ -1084,6 +1130,18 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .book.is-open .book-leaf { visibility: hidden; transition: visibility 0s linear var(--open-dur); }
   .info { width: 86vw; }
   .contact { --w: calc(100vw - 20px); }
+}
+/* A tablet in portrait gets the phone layout with bigger text. Held sideways (or in a short window), the four discs sit
+   in one row, every other one a little lower. */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .tiles { --row: 40px; }
+  .tile-text { gap: 4px; max-width: 360px; padding: 14px 8px 0; }
+  .tile-meta { font-size: 13px; }
+  .tile h2 { font-size: 20px; }
+}
+@media (min-width: 701px) and (max-width: 1024px) and (orientation: landscape) {
+  .tiles { --disc: clamp(140px, min(21vw, 100dvh - 19vw - 290px), 300px); grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: calc(12px + var(--disc) * 0.2); }
+  .tile:nth-child(even) { top: calc(var(--disc) * 0.2); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
@@ -1303,7 +1361,7 @@ body.is-scroll { overflow-x: clip; }
   .beat-points li { padding-top: 8px; }
   .beat-points span { font-size: 13px; line-height: 1.35; }
 }
-@media (max-width: 700px), (max-height: 630px) {
+@media (max-width: 1024px), (max-height: 630px) {
   .work figure.hero { gap: 14px; padding: 12px; }
   .hero-copy { width: min(78vw, 360px); gap: 8px; }
   .hero-top h4 { font-size: 10px; }
@@ -1423,7 +1481,7 @@ body.is-scroll { overflow-x: clip; }
 .about-photo img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: var(--inset-stroke); }
 .about-photo figcaption { margin-top: 8px; font-size: 13px; color: var(--secondary); }
 .about-portrait { display: none; }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   /* Phone: the About shows her portrait (the left page of the book on a desktop), not the conference photos. */
   .about-portrait { display: block; width: 100%; height: auto; aspect-ratio: 1824 / 1273; object-fit: cover; border-radius: 14px; box-shadow: var(--inset-stroke); }
   .about-photo { display: none; }
@@ -1449,7 +1507,7 @@ body.is-scroll { overflow-x: clip; }
 .copy-mail.copied .copy-done { opacity: 1; transform: none; filter: none; }
 /* Stacked (1280px and narrower), the half-width basis of the buttons would set their height and squash them to one line. */
 @media (max-width: 1280px) { .bio-links > .link, .about .bio-links > .link.primary { flex: 0 0 auto; } }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .about { padding: calc(var(--pad) * 1.5); gap: calc(var(--pad) * 1.5); }
   .about p { font-size: 14px; line-height: 1.5; }
   .about-head h2 { font-size: 28px; }
@@ -1470,7 +1528,7 @@ body.is-scroll { overflow-x: clip; }
 .about-work time { flex: none; font-size: 14px; color: var(--secondary); font-variant-numeric: tabular-nums; }
 .about-photo + .about-photo { margin-top: calc(var(--pad) * -1); }
 .about-photo img[src*="ecgbl"] { aspect-ratio: 4 / 3; object-fit: cover; object-position: center 45%; }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .about-work li { flex-direction: row; align-items: flex-start; }
   .about-work li > div span, .about-work time { font-size: 13px; }
 }
@@ -1479,13 +1537,17 @@ body.is-scroll { overflow-x: clip; }
 .card-tab h2.has-note { flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; }
 .card-tab h2 .tab-note { font-size: 12.5px; line-height: 1.2; letter-spacing: 0.01em; color: var(--tertiary); white-space: nowrap; }
 @media (max-width: 1024px) { .card-tab h2 .tab-note { display: none; } .card-tab h2.has-note { flex-direction: row; align-items: center; } }
-.clock.avatar-wrap { background: none; overflow: hidden; }
+/* a little smaller than its box, so it has room to float (site.js, floatAvatar) */
+.clock.avatar-wrap { width: calc(min(100cqw, 100cqh) * 0.94); background: none; overflow: hidden; }
 /* The email and its Copy button share one row: a smaller Copy, so the address never runs under it. */
 .email { gap: 10px; }
-.email a { min-width: 0; overflow: hidden; }
-.email a h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.email button { flex: none; font-size: 13px; letter-spacing: 0.02em; padding: 0 2px; }
-.email a h3 { font-size: 15px; }
+.email-addr { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; }
+.email-copy { flex: none; font-size: 12px; letter-spacing: 0.02em; padding: 0 2px; }
+.contact-menu .email .email-copy { color: rgba(214, 214, 214, 0.76); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-menu .email:hover { background: rgba(255, 255, 255, 0.1); }
+  .contact-menu .email:hover .email-copy { color: var(--accent); }
+}
 
 /* Reading progress of the open folder */
 .read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 2px; border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
@@ -1501,7 +1563,7 @@ body.is-scroll { overflow-x: clip; }
 /* Screen and tablet: the band above the pages is the same 44px at every width, and the labels, the line and its dots sit
    inside it (labels 8-30px, line 36-38px, dots down to 41px), clear of the page edge. With a 2 x pad band the line ran
    9px into the pages at 1024px and narrower. The phone keeps its own band (below). */
-@media (min-width: 701px) {
+@media (min-width: 1025px) {
   .card-content { padding-top: 44px; }
   .read-nav { top: 8px; }
   .read-progress { top: 36px; }
@@ -1517,7 +1579,7 @@ body.is-scroll { overflow-x: clip; }
 /* Phone: the whole row fits the width, so nothing slides or gets cut. Start and End sit on top at the two ends; the dots
    share the line below them evenly (21 dots, PlayMate, still fit 351px). At that spacing a dot is too small to tap, so on
    a phone the dots only show progress and Start and End are the buttons, 24px tall. */
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .read-nav { height: 40px; align-items: flex-start; justify-content: space-between; }
   .read-stop.start, .read-stop.end { position: absolute; top: 0; padding-block: 6px; }
   .read-stop.start { left: 0; }
@@ -1530,7 +1592,7 @@ body.is-scroll { overflow-x: clip; }
 
 
 /* ------------------------------------------------------------ phone: a folder opens as one long page you scroll down */
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .read-nav { display: flex; pointer-events: none; }
   .read-stop { position: static; flex: none; transform: none !important; font-size: 12px; padding: 5px 9px; }
   .read-stop.start { padding-left: 0; }
@@ -1546,7 +1608,7 @@ body.is-scroll { overflow-x: clip; }
   .work figure.pmx .pmf { width: max-content; }
   .work figure.pmx.is-wide::after { content: 'swipe →'; position: sticky; left: calc(100% - 70px); bottom: 6px; display: block; width: 62px; margin-top: -22px; padding: 3px 7px; border-radius: 99px; background: rgba(0, 0, 0, 0.55); color: #d6d6d6; font: 600 10px/1.4 var(--sans, inherit); text-align: center; pointer-events: none; }
 }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .gallery.is-focused .card.is-active .card-sheet::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--pad) * 0.6 + 36px); background: var(--fill); border-radius: 12px 12px 0 0; z-index: 5; pointer-events: none; }
 }
 
@@ -1575,14 +1637,14 @@ body.is-scroll { overflow-x: clip; }
 
 /* Phone: the book only shows open, without the page turn (the turning page's back was a second copy of her photo that
    flashed by before the About's own photo). "Wanna know me better?" opens it. */
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .book { --closed-x: 0%; --closed-scale: 0.96; opacity: 0; transition: transform var(--time-cards) var(--ease), opacity 240ms var(--ease); }
   .gallery.is-book .book { opacity: 1; }
   .book-leaf { display: none; }
 }
 
 /* ------------------------------------------------ phone: designed pages reflow into one column (site.js marks them .is-reflow) */
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   .card.is-active .work figure.pmx.is-reflow { height: auto; overflow: visible; }
   .card.is-active .work .pmx.is-reflow > .pmf { display: flex !important; flex-direction: column !important; align-items: stretch !important; width: 100% !important; height: auto !important; gap: 16px !important; padding: 20px 16px !important; overflow: visible !important; }
   .card.is-active .work .pmx.is-reflow .pmf [style*="width"]:not(img):not(video):not(iframe) { width: auto !important; max-width: 100%; }
@@ -1701,11 +1763,16 @@ body.is-scroll { overflow-x: clip; }
   .card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
   .card.is-active .work .pmx.is-chart :is(.pm-bh, .pm-fmh) { display: none !important; }
 }
-@media (min-width: 701px) { .chart-cap, .swipe-dots { display: none; } }
+/* A tablet reads the case in a centred column with slightly bigger text, so the lines stay under about 80 characters. */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .card.is-active .work { max-width: 640px; margin-inline: auto; }
+  .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; }
+}
+@media (min-width: 1025px) { .chart-cap, .swipe-dots { display: none; } }
 
 /* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
 .hero-static { display: none; }
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   /* The moving lettering runs on a phone too, on one line like on a screen (site.js startHero), with room under the
      Contact button. */
   .build { width: auto; margin: 14px var(--pad) 0; }
@@ -1739,7 +1806,7 @@ body.is-scroll { overflow-x: clip; }
   .card-sheet { border-radius: 0; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1024px) {
   /* The overview page at the end of each folder: one column of cards at reading size, no scaling */
   .card.is-active .work figure.pmx.is-sum { height: auto; overflow: visible; }
   .work figure.pmx.is-sum .pmf { width: 100% !important; height: auto; padding: 18px 16px; gap: 12px; }

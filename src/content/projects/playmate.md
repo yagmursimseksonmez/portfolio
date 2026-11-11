@@ -3,7 +3,7 @@ title: PlayMate
 order: 3
 year: '2026'
 tabNote: 'Deepest UX research'
-tile: { shot: /images/playmate-app-home-1.webp, meta: '2026 · Case study', cover: /images/tiles/playmate.webp, when: '2026 · 3 months' }
+tile: { cover: /images/tiles/playmate.webp, when: '2026 · 3 months' }
 summary: A community-driven sports matchmaking app.
 tags: [Case study, User interviews, Usability testing]
 status: complete

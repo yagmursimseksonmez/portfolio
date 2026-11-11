@@ -1,6 +1,6 @@
 const root = document.documentElement;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const mobile = matchMedia('(max-width: 700px)');
+const mobile = matchMedia('(max-width: 1024px)');
 
 function cssMs(el, name) {
   if (reduceMotion.matches) return 0;
@@ -102,7 +102,11 @@ function startHero() {
     if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * 100}px`;
     const m = text.map((t) => ctx.measureText(t));
     const inkW = Math.max(...m.map((x) => x.actualBoundingBoxLeft + x.actualBoundingBoxRight));
-    const size = (100 * cssW) / inkW;
+    // The lettering spans the width, unless that would make it taller than the CSS max-height allows (a short window
+    // on a screen, so the projects below still fit): then it is smaller and starts on the left.
+    const inkH = m[0].actualBoundingBoxAscent + Math.max(...m.map((x) => x.actualBoundingBoxDescent));
+    const maxH = parseFloat(getComputedStyle(wrap).maxHeight) || Infinity;
+    const size = Math.min((100 * cssW) / inkW, (100 * maxH) / inkH);
     const k = size / 100;
     const ascent = m[0].actualBoundingBoxAscent * k;
     const descent = Math.max(...m.map((x) => x.actualBoundingBoxDescent)) * k;
@@ -201,6 +205,8 @@ function startHero() {
 
   const relayout = () => { layout(); if (!running) draw(); };
   new ResizeObserver(relayout).observe(wrap.parentElement);
+  // The height cap follows the window's height, which the observer above does not see.
+  addEventListener('resize', relayout, { passive: true });
   mobile.addEventListener('change', relayout);
   document.fonts.ready.then(relayout);
   layout();
@@ -229,24 +235,65 @@ function setContact(open) {
   contact.classList.toggle('is-open', open);
   contactToggle.setAttribute('aria-expanded', String(open));
   contactMenu.setAttribute('aria-hidden', String(!open));
+  floatAvatar(open);
+}
+
+// While the panel is open the illustration floats like a balloon: a slow swing sideways and a quicker bob, leaning a
+// little into its way, and her eyes look where it is going. It eases in from rest each time the panel opens. The eyes
+// follow the drift slowly (smoothed over 2 s, so about a second behind) and mostly sideways (her "gozler biraz daha yavas
+// hareket etmeli").
+const balloon = contact?.querySelector('.avatar-wrap');
+const balloonFace = balloon?.querySelector('.avatar');
+let balloonFrame = 0;
+function floatAvatar(open) {
+  cancelAnimationFrame(balloonFrame);
+  if (!open || !balloonFace || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const t0 = performance.now(), wx = (2 * Math.PI) / 7.4, wy = (2 * Math.PI) / 4.9;
+  let last = t0, lx = 0, ly = 0;
+  const frame = (now) => {
+    const t = Math.max(0, now - t0) / 1000, e = Math.min(1, t / 1.6), k = e * e * (3 - 2 * e), size = balloon.offsetWidth;
+    const x = 0.024 * size * Math.sin(wx * t), y = 0.028 * size * Math.sin(wy * t + 0.6);
+    const vx = Math.cos(wx * t), vy = Math.cos(wy * t + 0.6);
+    // (a long pause between frames, a hidden tab, counts as a tenth of a second, so the eyes never jump)
+    const lag = 1 - Math.exp(-Math.min(100, Math.max(0, now - last)) / 2000);
+    last = now;
+    lx += (vx * k - lx) * lag;
+    ly += (0.6 * vy * k - ly) * lag;
+    balloon.style.transform = `translate(${(x * k).toFixed(2)}px, ${(y * k).toFixed(2)}px) rotate(${(2 * vx * k).toFixed(2)}deg)`;
+    balloonFace.style.setProperty('--look-x', lx.toFixed(3));
+    balloonFace.style.setProperty('--look-y', ly.toFixed(3));
+    balloonFrame = requestAnimationFrame(frame);
+  };
+  balloonFrame = requestAnimationFrame(frame);
 }
 
 function startContact() {
   if (!contact) return;
-  const measure = () => contact.style.setProperty('--btn-w', `${Math.ceil(contactToggle.offsetWidth)}px`);
-  measure();
-  document.fonts.ready.then(measure);
+  // The closed panel is clipped to the button; measured again whenever the button's width changes (the font loading,
+  // the window crossing a breakpoint).
+  // (the observer's box size, not the on-screen one: the panel is scaled down while a folder is open)
+  const measure = (w) => contact.style.setProperty('--btn-w', `${Math.ceil(w)}px`);
+  measure(contactToggle.getBoundingClientRect().width);
+  new ResizeObserver(([e]) => measure(e.borderBoxSize[0].inlineSize)).observe(contactToggle);
   contactToggle.addEventListener('click', (e) => { e.stopPropagation(); setContact(!contactOpen()); });
   document.addEventListener('pointerdown', (e) => { if (contactOpen() && !contact.contains(e.target)) setContact(false); });
-  // The address in the contact menu and the one under "Say hello" in the book.
+  // The address in the contact menu and the one under "Say hello" in the book. "Copied" shows on the button and is read
+  // out from one hidden status line; with no clipboard (an older browser, no permission) the click writes an email.
+  const copyStatus = document.querySelector('[data-copy-status]');
   document.querySelectorAll('[data-copy]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const box = btn.closest('.email') || btn;
       try {
         await navigator.clipboard.writeText(btn.dataset.copy);
         box.classList.add('copied');
-        setTimeout(() => box.classList.remove('copied'), 1000);
-      } catch { /* clipboard unavailable */ }
+        if (copyStatus) copyStatus.textContent = 'Email address copied';
+        setTimeout(() => {
+          box.classList.remove('copied');
+          if (copyStatus) copyStatus.textContent = '';
+        }, 1000);
+      } catch {
+        location.href = `mailto:${btn.dataset.copy}`;
+      }
     });
   });
 }
@@ -368,10 +415,9 @@ function setFocus(next) {
     if (focused && prev !== next && leaving) (isBook ? book : cards[next]).focus({ preventScroll: true });
   }
   if (!focused && gallery.contains(document.activeElement)) {
-    // Closing hands the focus back to what opened it (the project's card on a phone, the folder itself on a screen, or
-    // "Wanna know me better?"), so a keyboard user sees where they are.
-    const tile = prev !== null && prev !== BOOK ? document.querySelector(`[data-open-case="${prev}"]`) : null;
-    const back = prev === BOOK ? document.querySelector('.subheader [data-open-book]') : tile?.offsetParent ? tile : prev !== null ? cards[prev] : null;
+    // Closing hands the focus back to what opened it (the project on the homepage, or "Wanna know me better?"), so a
+    // keyboard user sees where they are.
+    const back = prev === BOOK ? document.querySelector('.subheader [data-open-book]') : prev !== null ? document.querySelector(`[data-open-case="${prev}"]`) : null;
     if (back && prev !== next) back.focus({ preventScroll: true });
     else document.activeElement.blur();
   }
@@ -829,8 +875,7 @@ function playIntro() {
   const heroEl = document.querySelector('.hero');
   const ready = Promise.all([
     document.fonts.ready,
-    // The pictures the intro brings in: the cards' covers on a phone, the first picture in each folder on a screen.
-    ...(mobile.matches ? [...document.querySelectorAll('.tile img')] : cards.map((c) => c.querySelector('.work img')).filter(Boolean)).map((img) => img.decode().catch(() => {})),
+    ...[...document.querySelectorAll('.tile img')].map((img) => img.decode().catch(() => {})),
   ]);
   const timeout = new Promise((r) => setTimeout(r, 3000));
   // Never leave the page blank: a hidden tab gets no animation frames, so finish on a timer regardless.
@@ -849,6 +894,27 @@ function playIntro() {
   });
 }
 
+// "How I work with AI" (screens only; on a phone and a tablet the band is on the page): the homepage does not scroll on a
+// screen, so the band moves into a panel while it is open and goes back in place when it closes. The panel hands the
+// focus back to the link itself.
+function startAi() {
+  const band = document.getElementById('ai');
+  const dialog = document.querySelector('[data-ai-dialog]');
+  const link = document.querySelector('[data-to-ai]');
+  if (!band || !dialog?.showModal || !link) return;
+  const home = band.parentElement;
+  const after = band.nextSibling;
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    dialog.append(band);
+    dialog.showModal();
+  });
+  dialog.querySelector('[data-ai-close]').addEventListener('click', () => dialog.close());
+  // A click on the dimmed page around the panel closes it too.
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => home.insertBefore(band, after));
+}
+
 startClock();
 hero = startHero();
 
@@ -863,6 +929,7 @@ addEventListener('resize', markSubBottom);
 document.fonts.ready.then(markSubBottom);
 markSubBottom();
 startContact();
+startAi();
 startGallery();
 startDragScroll();
 startCompare();
@@ -1381,6 +1448,8 @@ function startPointerTag() {
     if (next) tag.style.transform = `translate3d(${e.clientX + 14}px, ${e.clientY + 18}px, 0)`;
   }, { passive: true });
   root.addEventListener('mouseleave', () => show(''));
+  // A click opens or closes something under the pointer: drop the tag until the pointer moves again.
+  document.addEventListener('pointerdown', () => show(''), { passive: true });
 }
 
 // ------------------------------------------------------------ "things"

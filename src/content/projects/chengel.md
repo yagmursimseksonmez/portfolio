@@ -3,7 +3,7 @@ title: Chengel
 order: 1
 year: '2026'
 tabNote: 'Latest work · on the App Store'
-tile: { shot: /images/chengel-dark-home.webp, meta: '2026 · App Store', cover: /images/tiles/chengel.webp, when: '2026 · 3 weeks' }
+tile: { cover: /images/tiles/chengel.webp, when: '2026 · 3 weeks · App Store' }
 summary: A crossword for learning vocabulary, written in my own handwriting.
 tags: [iOS, Design system, Light and dark]
 status: complete

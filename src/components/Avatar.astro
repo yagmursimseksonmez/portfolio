@@ -1,10 +1,18 @@
 ---
-// Yagmur's own illustration in the site's colours, in three layers so the brows and the smile can move.
-// In the contact panel: on open she raises her brows, smiles wider and tilts her head hello.
+// Yagmur's own illustration in the site's colours, in layers so the smile and the eyes can move.
+// In the contact panel: on open she smiles wider; while it is open the circle floats and her eyes look the way it drifts
+// (site.js, floatAvatar, sets --look-x and --look-y from -1 to 1). The brows stay still and the head no longer tilts
+// (her "kaşları kaldırıp yana dogru sallanma hareketini kaldır").
+// The irises are lifted out of the drawing by tools/avatar/eyes.mjs: the face with white eyes, the eye openings as a mask,
+// and each iris as a circle in the 1105 x 1105 artwork.
+import eyes from './avatar-eyes.json';
 ---
 <div class="avatar" role="img" aria-label="Illustration of Yagmur smiling">
   <div class="av-head">
-    <img class="av-base" src="/images/avatar-base.webp" alt="" width="1105" height="1105" />
+    <img class="av-base" src="/images/avatar-face.webp" alt="" width="1105" height="1105" />
+    <svg class="av-eyes" viewBox="0 0 1105 1105" aria-hidden="true">
+      {eyes.map((e) => <circle class="av-iris" cx={e.cx} cy={e.cy} r={e.r} />)}
+    </svg>
     <img class="av-brows" src="/images/avatar-brows.webp" alt="" width="380" height="73" />
     <img class="av-mouth" src="/images/avatar-mouth.webp" alt="" width="160" height="74" />
   </div>
@@ -12,22 +20,22 @@
 
 <style>
   .avatar { position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #d6d6d6; }
-  .av-head { position: absolute; inset: 0; transform-origin: 50% 90%; }
+  .av-head { position: absolute; inset: 0; }
   .av-head img { position: absolute; display: block; height: auto; }
   .av-base { inset: 0; width: 100%; }
+  .av-eyes {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    -webkit-mask: url(/images/avatar-eyes.webp) 0 0 / 100% 100% no-repeat;
+    mask: url(/images/avatar-eyes.webp) 0 0 / 100% 100% no-repeat;
+  }
+  /* lengths in the artwork's units (the look itself stays near half of this: site.js smooths it) */
+  .av-iris { fill: #1f1f1f; transform: translate(calc(var(--look-x, 0) * 20px), calc(var(--look-y, 0) * 6px)); }
   .av-brows { left: 32.85%; top: 28.69%; width: 34.39%; }
   .av-mouth { left: 46.15%; top: 48.14%; width: 14.48%; transform-origin: 50% 40%; }
 
-  :global(.contact.is-open) .av-brows { animation: av-brows 1.8s cubic-bezier(.25,.46,.45,.94) 300ms both; }
   :global(.contact.is-open) .av-mouth { animation: av-smile 1.8s cubic-bezier(.25,.46,.45,.94) 300ms both; }
-  :global(.contact.is-open) .av-head { animation: av-hello 1.6s ease-in-out 300ms both; }
-  @keyframes av-brows { 0% { transform: none; } 22%, 65% { transform: translateY(-22%); } 100% { transform: translateY(-6%); } }
   @keyframes av-smile { 0% { transform: none; } 25%, 100% { transform: scale(1.14, 1.2); } }
-  @keyframes av-hello {
-    0%, 100% { transform: none; }
-    20% { transform: rotate(-5deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-3deg); } 80% { transform: rotate(1deg); }
-  }
   @media (prefers-reduced-motion: reduce) {
-    :global(.contact.is-open) .av-brows, :global(.contact.is-open) .av-mouth, :global(.contact.is-open) .av-head { animation: none; }
+    :global(.contact.is-open) .av-mouth { animation: none; }
   }
 </style>

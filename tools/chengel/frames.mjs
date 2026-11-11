@@ -22,7 +22,7 @@ const page = (style, inner, cls = '') => `<div class="pmf pm-ch${cls ? ` ${cls}`
 write('hero', `
 <div class="pmf pm-f-hero pm-narrow" style="width:1000px">
   <div class="pm-hero-v pm-ph" style="background:transparent;width:310px;justify-content:center">
-    <div class="pm-phone pm-static" style="--pw:282;box-shadow:0 18px 40px rgba(0,0,0,.4)"><div class="pm-scr"><video src="/videos/chengel-demo.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Chengel in dark mode: first launch, a puzzle in my handwriting, the word folders and flash cards, the awards and the garden" style="width:100%!important;height:100%!important;object-fit:cover;display:block;border-radius:0!important;box-shadow:none!important;margin:0!important"></video></div></div>
+    <div class="pm-phone pm-static" style="--pw:282;box-shadow:0 18px 40px rgba(0,0,0,.4)"><div class="pm-scr"><video src="/videos/chengel-demo.mp4" poster="/images/posters/chengel-demo.webp" autoplay muted loop playsinline preload="metadata" aria-label="Chengel in dark mode: first launch, a puzzle in my handwriting, the word folders and flash cards, the awards and the garden" style="width:100%!important;height:100%!important;object-fit:cover;display:block;border-radius:0!important;box-shadow:none!important;margin:0!important"></video></div></div>
   </div>
   <div class="pm-hero-t">
     <div class="pm-lab">Chengel · iOS · Freelance · Konkret</div>
