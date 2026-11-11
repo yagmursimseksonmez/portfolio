@@ -15,7 +15,7 @@ facts:
   - { label: Tools, value: Figma · Claude · Stitch }
 hero:
   kicker: PlayMate · solo project · community sports app
-  title: "Wanna do sports but don't have a team/partner? I have a solution!"
+  title: "Find people to play sport with."
   compact: true
   frame: hero
   lede: 'PlayMate is a mobile app that matches people for sport. Instead of a group chat, you join a game room that shows the time, place, cost and who’s playing. Profiles show each player’s skill level, peer ratings and no-show penalties, so you can trust them before you meet.'
