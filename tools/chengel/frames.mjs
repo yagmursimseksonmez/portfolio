@@ -34,7 +34,7 @@ write('hero', `
       <div class="pm-card"><div class="pm-lab">ACTION</div><h4>A crossword in my handwriting</h4><p>I tried <strong>four keyboards</strong> in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.</p></div>
       <div class="pm-card"><div class="pm-lab">RESULT</div><p>Every text pair passes <strong>4.5:1 contrast</strong>. It has not been tested with learners yet.</p></div>
     </div>
-    <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span><p class="pm-when"><strong>2026</strong> · 3 weeks</p></div><span class="pm-pbtn pm-sm" style="background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin-left:auto">In App Store review</span></div>
+    <div class="pm-hfoot pm-wp"><div class="pm-chips"><span>iOS</span><span>Design system</span><span>Light and dark</span><p class="pm-when"><strong>2026</strong> · 3 weeks</p></div><a class="pm-pbtn pm-sm" href="https://apps.apple.com/de/app/chengel-vocabulary-crossword/id6819309538?l=en-GB" target="_blank" rel="noopener noreferrer" style="margin-left:auto">App Store ↗</a></div>
   </div>
 </div>`);
 
@@ -303,7 +303,7 @@ write('getit', `
     <div class="pm-lab">Download from the App Store</div>
     <div style="display:flex;align-items:center;gap:18px"><img src="/images/chengel-icon.webp" alt="Chengel app icon" style="width:112px;height:112px;border-radius:0;box-shadow:none"><div><h2 style="font-size:34px;line-height:1.05">Chengel</h2><p style="font-size:14px;margin-top:4px">Learn words by solving crosswords</p></div></div>
     
-    <span class="pm-pbtn" style="align-self:flex-start;background:transparent;border:1.5px solid rgba(214,214,214,.45);color:var(--pm-tx);margin:0">In App Store review</span>
+    <a class="pm-pbtn" href="https://apps.apple.com/de/app/chengel-vocabulary-crossword/id6819309538?l=en-GB" target="_blank" rel="noopener noreferrer" style="align-self:flex-start;margin:0">Open in the App Store ↗</a>
   </div>
   <div class="pm-shots" style="display:flex;gap:16px;flex:none">${[['dark-home', 'Path'], ['dark-puzzle-4', 'Puzzle'], ['dark-words', 'Words'], ['dark-garden', 'Garden']].map(([n, t]) => `<div style="width:205px"><img src="/images/chengel-${n}.webp" alt="Chengel ${t}" style="width:205px;height:430px;object-fit:cover;object-position:top;border-radius:28px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.1)"></div>`).join('')}</div>
 </div>`);
@@ -321,15 +321,14 @@ write('getit', `
 write('outcome', `
 <div class="pmf pm-f-outcome pm-tight pm-side" style="width:1060px"><h2>What it achieved, and what I'd do next.</h2><div class="pm-oc2" style="align-content:start;margin-top:6px">
 <section class="pm-oc-col"><div class="pm-lab">IMPACT</div><div class="pm-oc-list">
-<div class="pm-oc-it"><b>Sent to the App Store</b><span>One iOS developer and I made it in <strong>3 weeks</strong>, Oct 1–20, 2026.</span></div>
+<div class="pm-oc-it"><b>On the App Store</b><span>One iOS developer and I made it in <strong>3 weeks</strong>, Oct 1–20, 2026.</span></div>
 <div class="pm-oc-it"><b>One system, two looks</b><span>Light and dark come from <strong>the same tokens</strong>. Every text pair stays above 4.5:1 contrast.</span></div>
 <div class="pm-oc-it"><b>Something people can try</b><span>The clickable prototype is on this page, so you can <strong>solve a puzzle yourself</strong>.</span></div>
 </div></section>
 <section class="pm-oc-col"><div class="pm-lab">NEXT</div><div class="pm-oc-grid">
-<div class="pm-oc-nx"><i>1</i><div><b>Go live</b><span>I will add the <strong>App Store link</strong> here when Apple approves it.</span></div></div>
-<div class="pm-oc-nx"><i>2</i><div><b>Test with learners</b><span>I want to watch a few <strong>learners solve a puzzle</strong> and see where they get stuck.</span></div></div>
-<div class="pm-oc-nx"><i>3</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides. They are still in design.</span></div></div>
-<div class="pm-oc-nx"><i>4</i><div><b>More puzzles</b><span>The path already has scenery up to <strong>C1</strong>. It needs more puzzles to walk through.</span></div></div>
+<div class="pm-oc-nx"><i>1</i><div><b>Test with learners</b><span>I want to watch a few <strong>learners solve a puzzle</strong> and see where they get stuck.</span></div></div>
+<div class="pm-oc-nx"><i>2</i><div><b>Seasonal themes</b><span><strong>Christmas, New Year, Easter and Halloween</strong> are set up as colour overrides. They are still in design.</span></div></div>
+<div class="pm-oc-nx"><i>3</i><div><b>More puzzles</b><span>The path already has scenery up to <strong>C1</strong>. It needs more puzzles to walk through.</span></div></div>
 </div></section></div></div>`);
 
 // ---------------------------------------------------------------- summary

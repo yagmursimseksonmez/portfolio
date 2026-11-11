@@ -29,6 +29,10 @@ const projects = defineCollection({
     summary: z.string(),
     // A short hint on the folder tab, next to the title: what a recruiter will find inside.
     tabNote: z.string().optional(),
+    // The project's card on the homepage: a screen from the app, and one line on when it was made and where it is now.
+    // `pos` moves the crop (CSS object-position), e.g. past an iOS status bar. On a phone the card shows `cover` (a phone
+    // on the project's colour, tools/tiles/covers.mjs) and `when` (the year and how long it took) instead.
+    tile: z.object({ shot: z.string(), meta: z.string(), pos: z.string().optional(), cover: z.string().optional(), when: z.string().optional() }).optional(),
     tags: z.array(z.string()),
     // complete: full case study. rewriting / in-progress: short stub page.
     status: z.enum(['complete', 'rewriting', 'in-progress']),

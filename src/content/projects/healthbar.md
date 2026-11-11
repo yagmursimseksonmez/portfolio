@@ -3,6 +3,7 @@ title: HealthBar
 order: 2
 year: '2025 → now'
 tabNote: 'Most complex work · research to App Store'
+tile: { shot: /images/healthbar-home-1.webp, meta: '2025 → now · App Store', pos: 'center 9%', cover: /images/tiles/healthbar.webp, when: '2026 · ongoing' }
 summary: An RPG-style companion that turns Apple Health data into a game.
 tags: [iOS, Apple Watch, UX research]
 status: complete

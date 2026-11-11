@@ -60,24 +60,77 @@ img { display: block; }
 #root { position: relative; height: 100dvh; overflow: hidden; overflow: clip; }
 .grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: var(--gap); }
 
-/* ------------------------------------------------------------------ header */
-header {
-  position: relative;
+/* ------------------------------------------------------------------ home */
+/* The homepage: the header, and on a phone the four project cards and the AI band. It scrolls on its own under the
+   folders; on a phone those only show once a project is open. */
+.home {
+  position: absolute;
+  inset: 0;
   z-index: 0;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
   transform-origin: center top;
   transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease);
 }
-#root:has(.gallery.is-focused) header { transform: translateY(-60px) scale(0.98); opacity: 0; }
+#root:has(.gallery.is-focused) .home { transform: translateY(-60px) scale(0.98); opacity: 0; pointer-events: none; }
+
+/* ------------------------------------------------------------------ header */
+header { position: relative; display: flex; flex-direction: column; }
 nav { height: 60px; padding: 0 var(--pad); align-items: center; }
 nav h3 { white-space: nowrap; }
 .hero { padding: 0 var(--pad); }
 .build { position: relative; width: 100%; height: 18vw; }
 .build canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* The intro sits under the headline on its left edge, and "Selected work ↓" right below it, as the cue into the folders. */
-.subheader { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 36px; padding: 28px var(--pad) var(--pad); }
+/* The intro sits under the headline on its left edge, and "Selected work ↓" right below it, as the cue into the folders
+   (on a phone, into the cards). */
+.subheader { display: flex; flex-direction: column; align-items: flex-start; gap: 36px; padding: 28px var(--pad) var(--pad); }
 .subheader p { max-width: 600px; text-wrap: pretty; }
+
+/* ------------------------------------------------------------------ project cards */
+/* All four at a glance: four in a row on a screen, two by two on a phone. Each card is a surface of its own, clearly
+   lighter than the page with an edge, so the four never blur together. */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 0 var(--pad) var(--pad); }
+.tile {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-card);
+  background: #2e302e;
+  box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.09);
+  color: var(--primary);
+  overflow: hidden;
+  transition: background 200ms var(--ease), box-shadow 200ms var(--ease), transform 200ms var(--ease);
+}
+.tile:hover { background: #353835; box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.18); transform: translateY(-4px); }
+.tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tile-shot { display: block; height: clamp(120px, 20vh, 240px); margin: 12px 12px 0; border-radius: 12px; background: #1c1d1c; overflow: hidden; }
+.tile-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 400ms var(--ease); }
+.tile:hover .tile-shot img { transform: scale(1.03); }
+.tile-text { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px 16px; }
+.tile-meta { order: -1; font-size: 12px; letter-spacing: 0.04em; color: rgba(214, 214, 214, 0.72); }
+.tm-when { display: none; }
+.tile h2 { font-size: 20px; line-height: 1.2; font-weight: 600; color: var(--foreground); }
+.tile p { font-size: 14px; line-height: 1.4; color: rgba(214, 214, 214, 0.8); }
+
+/* ------------------------------------------------------------------ AI band */
+/* Below the cards and set apart from them (no picture, a rule above), so it never reads as a fifth project. */
+.ai-band { margin: 28px var(--pad) 0; padding: 36px 0 56px; border-top: 1px solid hsla(0, 0%, 100%, 0.14); }
+.ai-band h2 { font-size: var(--size-title); line-height: 1.15; font-weight: 600; letter-spacing: -0.015em; color: var(--foreground); }
+.ai-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; font-size: 15px; }
+.ai-flow .ai-lab { color: var(--secondary); margin-right: 2px; }
+.ai-flow span:not(.ai-lab) { padding: 6px 12px; border-radius: 99px; background: #2e302e; box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.09); color: var(--foreground); }
+.ai-flow i { font-style: normal; color: var(--accent); }
+.ai-rows { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 28px; margin-top: 26px; max-width: 1100px; }
+.ai-rows dt { font-size: 14px; font-weight: 600; color: var(--accent); }
+.ai-rows dd { margin: 6px 0 0; font-size: 15px; line-height: 1.45; color: var(--primary); }
+.ai-tools { margin-top: 26px; font-size: 14px; color: var(--secondary); }
+
+/* For now the cards and the AI band are the phone's homepage: a screen still opens on the stack of folders. On a phone
+   the folders and the book wait out of sight until a project or the About opens; visibility flips after they fade. */
+@media (min-width: 701px) { .tiles, .ai-band { display: none; } }
+@media (max-width: 700px) {
+  .gallery:not(.is-focused) :is(.card, .book) { opacity: 0; visibility: hidden; transition: opacity 240ms var(--ease), visibility 0s linear 240ms, transform var(--time-cards) var(--ease); }
+}
 
 /* ------------------------------------------------------------------ contact */
 .contact {
@@ -950,13 +1003,16 @@ nav h3 { white-space: nowrap; }
 
 /* ------------------------------------------------------------------- intro */
 html.is-intro { --intro-hero: 600ms; --intro-card: 450ms; --intro-stagger: 100ms; --intro-chrome: 450ms; --intro-start: 250ms; }
-html.is-intro .gallery, html.is-intro .contact, html.is-intro .contact-panel { pointer-events: none; }
+html.is-intro .gallery, html.is-intro .contact, html.is-intro .contact-panel, html.is-intro .tiles { pointer-events: none; }
 html.is-intro .hero { opacity: 0; filter: blur(10px); transform: translateY(var(--intro-y, 0px)) scale(0.9); }
-html.is-intro .card, html.is-intro .book { opacity: 0; transition: none; }
+html.is-intro .card, html.is-intro .book, html.is-intro .tile { opacity: 0; transition: none; }
 html.is-intro .contact, html.is-intro nav, html.is-intro .subheader { opacity: 0; filter: blur(4px); }
 html.is-intro-play .hero { animation: intro-hero var(--intro-hero) var(--ease) both; }
-html.is-intro-play .card { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) + (var(--count) - 1 - var(--i)) * var(--intro-stagger)) both; }
-html.is-intro-play .book { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) - var(--intro-stagger)) both; }
+html.is-intro-play .tile { animation: intro-tile var(--intro-card) var(--ease) calc(var(--intro-start) + var(--k) * var(--intro-stagger)) both; }
+@media (min-width: 701px) {
+  html.is-intro-play .card { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) + (var(--count) - 1 - var(--i)) * var(--intro-stagger)) both; }
+  html.is-intro-play .book { animation: intro-card var(--intro-card) var(--ease) calc(var(--intro-start) - var(--intro-stagger)) both; }
+}
 html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .subheader {
   opacity: 1;
   filter: none;
@@ -970,6 +1026,10 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
 @keyframes intro-card {
   0% { opacity: 0; transform: translate3d(0, calc(var(--y) + 50vh), 0) rotateX(-5deg) scale(1.1); }
   100% { opacity: 1; transform: translate3d(0, var(--y), 0) rotateX(-20deg); }
+}
+@keyframes intro-tile {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: none; }
 }
 
 /* -------------------------------------------------------------- responsive */
@@ -996,8 +1056,26 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .grid { grid-template-columns: repeat(2, 1fr); }
   nav { height: 48px; }
   nav h3:nth-of-type(2), nav h3:nth-of-type(3), nav h3:nth-of-type(4) { display: none; }
-  .subheader { display: flex; flex-direction: column-reverse; gap: 12px; }
-  .subheader h3 { color: var(--secondary); }
+  .subheader { gap: 8px; padding: 14px var(--pad) 10px; }
+  .subheader h3 { margin-top: 6px; font-size: 13px; color: var(--secondary); }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 0 12px 12px; }
+  .tile { border-radius: 16px; }
+  .tile:hover { transform: none; }
+  /* On a phone the card shows its cover (a phone on the project's colour) as big as the first screen allows. */
+  .tile-shot { height: clamp(120px, calc((100dvh - 500px) / 2), 220px); margin: 8px 8px 0; border-radius: 10px; }
+  .tile-shot img { object-position: center !important; }
+  .tm-status { display: none; }
+  .tm-when { display: inline; }
+  .tile-text { gap: 2px; padding: 8px 10px 10px; }
+  .tile-meta { font-size: 11px; letter-spacing: 0.02em; }
+  .tile h2 { font-size: 16px; }
+  .tile p { font-size: 12px; line-height: 1.35; }
+  .ai-band { margin-top: 20px; padding: 28px 0 44px; }
+  .ai-band h2 { font-size: 22px; }
+  .ai-flow { font-size: 14px; gap: 6px; }
+  .ai-rows { grid-template-columns: 1fr; gap: 16px; margin-top: 22px; }
+  .ai-rows dd { font-size: 14px; }
+  .ai-tools { font-size: 13px; }
   .card { --t-pad: 28px; --t-w: calc((100% - var(--t-pad) * 2) / 2); --slot: 0 !important; --ear: 29px; }
   .book { --closed-x: -25%; --inset: var(--pad); --h: calc(100dvh - var(--tab) - 2 * var(--pad)); }
   .gallery.is-book .book { --y: var(--pad); }
@@ -1495,30 +1573,13 @@ body.is-scroll { overflow-x: clip; }
 .scroll-hint.is-on { opacity: 1; }
 @media (hover: none) { .scroll-hint { display: none; } }
 
-/* Phone: the closed "Hi" is a card of its own, from the text's left edge to just under the folder tabs; it opens the
-   About. The book itself only shows open, without the page turn (the turning page's back was a second copy of her photo
-   that flashed by before the About's own photo). */
-.hi-card { display: none; }
+/* Phone: the book only shows open, without the page turn (the turning page's back was a second copy of her photo that
+   flashed by before the About's own photo). "Wanna know me better?" opens it. */
 @media (max-width: 700px) {
-  .hi-card {
-    position: absolute; z-index: 1; left: var(--pad); width: calc(100% - var(--pad) - var(--hw) + 24px);
-    top: calc(var(--list-top) + 18px); bottom: 16px; container-type: size;
-    display: flex; align-items: center; justify-content: center; padding: 0 24px 0 0;
-    border: 0; border-radius: var(--radius-card); background: var(--accent); color: var(--on-accent);
-    font: 700 64px / 1 var(--sans, inherit); letter-spacing: -0.04em;
-    box-shadow: var(--inset-stroke), var(--elevation-low); pointer-events: auto; cursor: pointer;
-    transition: opacity 240ms var(--ease), transform 240ms var(--ease);
-  }
-  .hi-card span { font-size: min(62cqw, 78cqh); }
-  .hi-card:active { transform: scale(0.98); }
-  .gallery.is-focused .hi-card, .gallery.is-book .hi-card { opacity: 0; pointer-events: none; z-index: 0; }
   .book { --closed-x: 0%; --closed-scale: 0.96; opacity: 0; transition: transform var(--time-cards) var(--ease), opacity 240ms var(--ease); }
   .gallery.is-book .book { opacity: 1; }
   .book-leaf { display: none; }
-  html.is-intro .hi-card { opacity: 0; }
-  html.is-intro-play .hi-card { animation: hi-in var(--intro-card) var(--ease) var(--intro-start) both; }
 }
-@keyframes hi-in { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: none; } }
 
 /* ------------------------------------------------ phone: designed pages reflow into one column (site.js marks them .is-reflow) */
 @media (max-width: 700px) {
@@ -1645,7 +1706,8 @@ body.is-scroll { overflow-x: clip; }
 /* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
 .hero-static { display: none; }
 @media (max-width: 700px) {
-  /* The moving lettering runs on a phone too, on two lines (site.js startHero), with room under the Contact button. */
+  /* The moving lettering runs on a phone too, on one line like on a screen (site.js startHero), with room under the
+     Contact button. */
   .build { width: auto; margin: 14px var(--pad) 0; }
 
   /* The folder list sits near the bottom, but never above the end of the intro text (site.js sets --sub-bottom). */
@@ -1678,9 +1740,6 @@ body.is-scroll { overflow-x: clip; }
 }
 
 @media (max-width: 700px) {
-  /* "Selected work" sits right above the folder list, on the right */
-  .subheader h3 { position: fixed; right: var(--pad); top: calc(var(--list-top) - 34px); margin: 0; width: max-content; font-size: 13px; text-align: right; z-index: 2; transition: opacity 200ms var(--ease); }
-  #root:has(.gallery.is-focused) .subheader h3 { opacity: 0; }
   /* The overview page at the end of each folder: one column of cards at reading size, no scaling */
   .card.is-active .work figure.pmx.is-sum { height: auto; overflow: visible; }
   .work figure.pmx.is-sum .pmf { width: 100% !important; height: auto; padding: 18px 16px; gap: 12px; }

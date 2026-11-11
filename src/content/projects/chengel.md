@@ -2,7 +2,8 @@
 title: Chengel
 order: 1
 year: '2026'
-tabNote: 'Latest work · in App Store review'
+tabNote: 'Latest work · on the App Store'
+tile: { shot: /images/chengel-dark-home.webp, meta: '2026 · App Store', cover: /images/tiles/chengel.webp, when: '2026 · 3 weeks' }
 summary: A crossword for learning vocabulary, written in my own handwriting.
 tags: [iOS, Design system, Light and dark]
 status: complete
@@ -13,14 +14,14 @@ facts:
   - { label: Tools, value: Claude Design }
 hero:
   frame: chengel-hero
-  kicker: Chengel · iOS · Freelance · Konkret · submitted to the App Store
+  kicker: Chengel · iOS · Freelance · Konkret · on the App Store
   title: Learn words by solving crosswords.
   lede: Chengel is an iOS app for learning vocabulary. The clue is in your language and the answer is in the one you are learning. You write it in my own handwriting, like filling in a newspaper crossword.
   points:
     - { label: Situation, title: 'Word apps feel like homework', text: 'Lists and flash cards work, but they feel like studying. I wanted learning words to feel like a game you already know.' }
     - { label: Task, title: 'Designer, with one iOS developer', text: 'I designed the app, the design system, the icons and the illustrations. One iOS developer built it.' }
     - { label: Action, title: 'A crossword in my handwriting', text: 'I tried four keyboards in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.' }
-    - { label: Result, title: 'Built in 3 weeks, now in review', text: 'It was designed and built Oct 1–20, 2026. Every text pair passes 4.5:1 contrast, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.' }
+    - { label: Result, title: 'Built in 3 weeks, now on the App Store', text: 'It was designed and built Oct 1–20, 2026. Every text pair passes 4.5:1 contrast, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.' }
   chips: [iOS, Design system, Light and dark]
 gallery:
   - label: The app
@@ -69,4 +70,4 @@ I designed Chengel, an iOS crossword for learning vocabulary, and built it with 
 
 - **Handwriting** The letters you write in the puzzle are my own handwriting, turned into a typeface.
 - **Design system** Light and dark come from the same tokens, with components, icons and illustrations I drew.
-- **Status** Sent to the App Store in October 2026 and waiting for review.
+- **Status** On the App Store since November 2026.

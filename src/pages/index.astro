@@ -62,7 +62,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
             </div>
             <div class="contact-foot">
               <h3>Open to product design roles and selected freelance projects</h3>
-              <h4>Based in Berlin · working in English, Turkish and German</h4>
+              <h4>Based in Berlin · English, Turkish, German (A2)</h4>
             </div>
           </div>
           <a class="link primary" href="mailto:n.yagmur.simsek@gmail.com"><h3>Get in touch</h3><Fragment set:html={arrow} /></a>
@@ -75,6 +75,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       </div>
     </div>
 
+    <div class="home" data-home>
     <header>
       <nav class="grid">
         <h3>Yagmur Şimşek Sönmez</h3>
@@ -88,13 +89,47 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
         <p class="hero-static" aria-hidden="true"><span>I design</span><span>things</span></p>
       </div>
       <div class="subheader grid" style={`--count:${count}`}>
-        <h3>Selected work ↓</h3>
         <p>
           Designer. Researcher. Crafter. Constant learner. PhD in architectural history, Master’s in visual communication design.{' '}
           <a class="inline" href="#about" data-open-book>Wanna know me better?</a>
         </p>
+        <h3>Selected work ↓</h3>
       </div>
     </header>
+
+    <!-- The four projects at a glance: each card opens its folder (the case) below. -->
+    <section class="tiles" aria-label="Selected work">
+      {projects.map((p, k) => (
+        <a class="tile" href={`#${p.id}`} style={`--k:${k}`} data-open-case={k}>
+          {p.data.tile && (
+            <span class="tile-shot">
+              <picture>
+                {p.data.tile.cover && <source media="(max-width: 700px)" srcset={p.data.tile.cover} />}
+                <img src={p.data.tile.shot} alt="" decoding="async" style={p.data.tile.pos && `object-position:${p.data.tile.pos}`} />
+              </picture>
+            </span>
+          )}
+          {/* The name first for screen readers; the status line still shows above it (order: -1). */}
+          <span class="tile-text">
+            <h2>{p.data.title}</h2>
+            <p>{p.data.summary}</p>
+            {p.data.tile && <span class="tile-meta"><span class="tm-status">{p.data.tile.meta}</span>{p.data.tile.when && <span class="tm-when">{p.data.tile.when}</span>}</span>}
+          </span>
+        </a>
+      ))}
+    </section>
+
+    <section class="ai-band" id="ai" aria-labelledby="ai-title">
+      <h2 id="ai-title">How I work with AI</h2>
+      <p class="ai-flow"><span class="ai-lab">My workflow:</span> <span>BMAD</span> <i aria-hidden="true">→</i> <span>Claude Design</span> <i aria-hidden="true">→</i> <span>Figma</span> <i aria-hidden="true">→</i> <span>Claude Code</span></p>
+      <dl class="ai-rows">
+        <div><dt>This site</dt><dd>Built with Claude Code. The first version took 1 to 2 weeks.</dd></div>
+        <div><dt>iKeep</dt><dd>I redesigned it in a week and coded the new interface with Claude.</dd></div>
+        <div><dt>Chengel</dt><dd>I designed it with Claude Design and Figma, and an iOS developer built it. It took 3 weeks.</dd></div>
+      </dl>
+      <p class="ai-tools">Tools: Claude (desktop app), Claude Code, BMAD, Claude Design, Figma, Stitch.</p>
+    </section>
+    </div>
 
     <main class="gallery" id="gallery" style={`--count:${count}`} data-gallery>
       <button class="gallery-dismiss" type="button" aria-label="Close" data-dismiss>
@@ -103,7 +138,6 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <div class="gallery-keys" aria-hidden="true"><span>↑</span><span>←</span><span>↓</span><span>→</span></div>
 
       <div class="gallery-stage">
-        <button class="hi-card" type="button" aria-label="About Yagmur" data-open-book><span aria-hidden="true">Hi</span></button>
         <section class="book" id="about" tabindex="0" aria-label="About Yagmur" data-book>
           <div class="book-stage" inert>
             <div class="book-leaf">
@@ -119,10 +153,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                     <p class="about-lede">I’m a product designer in Berlin. I design apps from the first user interview to the App Store.</p>
                   </div>
                   <ul class="about-facts" aria-label="In short">
-                    <li><span>Speaks</span>English, German, Turkish</li>
+                    <li><span>Speaks</span>English, Turkish, German (A2)</li>
                     <li><span>PhD</span>History and theory of architecture</li>
                     <li><span>Master’s</span>Visual communication design</li>
-                    <li><span>Shipped</span><div>3 apps on the App Store, 1 in review</div><div><a class="inline" href="https://apps.apple.com/de/app/healthbar-daily-hp-tracker/id6773367246?l=en-GB" target="_blank" rel="noopener noreferrer">HealthBar</a> · <a class="inline" href="https://apps.apple.com/app/id6502346775" target="_blank" rel="noopener noreferrer">iKeep</a> · <a class="inline" href="https://apps.apple.com/us/app/bubbles-daily-tasks/id6738212806" target="_blank" rel="noopener noreferrer">Bubbles</a></div></li>
+                    <li><span>Shipped</span><div>4 apps on the App Store</div><div><a class="inline" href="https://apps.apple.com/de/app/chengel-vocabulary-crossword/id6819309538?l=en-GB" target="_blank" rel="noopener noreferrer">Chengel</a> · <a class="inline" href="https://apps.apple.com/de/app/healthbar-daily-hp-tracker/id6773367246?l=en-GB" target="_blank" rel="noopener noreferrer">HealthBar</a> · <a class="inline" href="https://apps.apple.com/app/id6502346775" target="_blank" rel="noopener noreferrer">iKeep</a> · <a class="inline" href="https://apps.apple.com/us/app/bubbles-daily-tasks/id6738212806" target="_blank" rel="noopener noreferrer">Bubbles</a></div></li>
                     <li><span>Outside work</span>I dance Lindy Hop</li>
                   </ul>
                   <section class="about-story">

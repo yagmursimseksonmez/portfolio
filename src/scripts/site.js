@@ -96,7 +96,7 @@ function startHero() {
   }
 
   function layout() {
-    const text = mobile.matches ? ['I design', 'things'] : ['I design things'];
+    const text = ['I design things'];
     const cssW = wrap.clientWidth;
     ctx.font = font(100);
     if ('letterSpacing' in ctx) ctx.letterSpacing = `${tracking * 100}px`;
@@ -257,6 +257,7 @@ function startContact() {
 const BOOK = 'book';
 const gallery = document.querySelector('[data-gallery]');
 const header = document.querySelector('header');
+const home = document.querySelector('[data-home]');
 const cards = gallery ? [...gallery.querySelectorAll('[data-card]')] : [];
 const book = gallery?.querySelector('[data-book]');
 const bookScroll = book?.querySelector('[data-book-scroll]');
@@ -359,9 +360,18 @@ function setFocus(next) {
 
   const hash = isBook ? '#about' : focused ? `#${cards[next].id}` : '';
   if (location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
+  // The homepage sits faded out behind an open folder: Tab must not walk through it, and a keyboard user who opened a
+  // card from there carries on inside the folder.
+  if (home) {
+    const leaving = home.contains(document.activeElement);
+    home.inert = focused;
+    if (focused && prev !== next && leaving) (isBook ? book : cards[next]).focus({ preventScroll: true });
+  }
   if (!focused && gallery.contains(document.activeElement)) {
-    // Closing hands the focus back to the folder (or the book) that was open, so a keyboard user sees where they are.
-    const back = prev === BOOK ? book : prev !== null ? cards[prev] : null;
+    // Closing hands the focus back to what opened it (the project's card on a phone, the folder itself on a screen, or
+    // "Wanna know me better?"), so a keyboard user sees where they are.
+    const tile = prev !== null && prev !== BOOK ? document.querySelector(`[data-open-case="${prev}"]`) : null;
+    const back = prev === BOOK ? document.querySelector('.subheader [data-open-book]') : tile?.offsetParent ? tile : prev !== null ? cards[prev] : null;
     if (back && prev !== next) back.focus({ preventScroll: true });
     else document.activeElement.blur();
   }
@@ -491,6 +501,10 @@ function startGallery() {
   });
   document.querySelectorAll('[data-open-book]').forEach((a) =>
     a.addEventListener('click', (e) => { e.preventDefault(); focusGallery(BOOK); }),
+  );
+  // The project cards on the homepage open their folders.
+  document.querySelectorAll('[data-open-case]').forEach((a) =>
+    a.addEventListener('click', (e) => { e.preventDefault(); focusGallery(Number(a.dataset.openCase)); }),
   );
   gallery.querySelector('[data-dismiss]').addEventListener('click', () => focusGallery(null));
 
@@ -815,7 +829,8 @@ function playIntro() {
   const heroEl = document.querySelector('.hero');
   const ready = Promise.all([
     document.fonts.ready,
-    ...cards.map((c) => c.querySelector('.work img')).filter(Boolean).map((img) => img.decode().catch(() => {})),
+    // The pictures the intro brings in: the cards' covers on a phone, the first picture in each folder on a screen.
+    ...(mobile.matches ? [...document.querySelectorAll('.tile img')] : cards.map((c) => c.querySelector('.work img')).filter(Boolean)).map((img) => img.decode().catch(() => {})),
   ]);
   const timeout = new Promise((r) => setTimeout(r, 3000));
   // Never leave the page blank: a hidden tab gets no animation frames, so finish on a timer regardless.
