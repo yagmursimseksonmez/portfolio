@@ -95,44 +95,14 @@
 @keyframes mo-from-right { from { opacity: 0; translate: 48px 0; } }
 @keyframes mo-ring { from { box-shadow: inset 0 0 0 2px var(--pm-ac); } to { box-shadow: inset 0 0 0 2px transparent; } }
 
-/* ------------------------------------------- the strip: the page you are on fills the folder, the pages beside it step back */
-/* The pages fill the folder's height. They were held to 800px and to the window's width, which left a band of empty folder
-   on a big window and on a narrow one; a narrow window still keeps them below 85% of its width, or one page would be several
-   screens wide. startFocus marks the page you are on; the others are a tenth smaller and faded, each anchored on its edge
-   next to the page you are on, so the seams between pages stay put. The page box itself never moves (the reading progress
-   and the arrow keys measure it); only the designed page inside it does. */
-@media (min-width: 1025px) {
-  .work > figure.pmx { height: min(100cqh, 85cqw); }
-}
-@media (prefers-reduced-motion: no-preference) and (min-width: 1025px) {
-  .has-focus .work > figure.pmx > .pmf {
-    border-radius: calc(var(--radius-card) / var(--pmz, 1));
-    transform-origin: 0 50%;
-    transition: scale var(--t-move) var(--ease-out), opacity var(--t-move) var(--ease-out);
-  }
-  .has-focus .work > figure.pmx.is-before > .pmf { transform-origin: 100% 50%; }
-  .has-focus .gallery.is-focused .card.is-active .work > figure.pmx:not(.is-cur) > .pmf { scale: .9; opacity: .2; }
-  /* A prototype (an embedded page) shows only on the page you are on, once that page has grown: drawn faded and scaled,
-     Figma's prototype held the strip still for 100-230ms as it came in. */
-  .has-focus .work > figure.pmx iframe { transition: visibility 0s linear var(--t-move); }
-  .has-focus .gallery.is-focused .card.is-active .work > figure.pmx:not(.is-cur) iframe { visibility: hidden; transition: none; }
-}
+/* ------------------------------------------- the case is one long page: pages come up from below as it scrolls */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .card.is-active .work > figure.pmx { view-timeline: --frame inline; }
-    /* PlayMate's final screens: the row of phones drifts a little slower than the strip. */
-    #playmate.is-active .work .pmx .pm-f-final > .pm-prow { animation: mo-drift linear both; animation-timeline: --frame; animation-range: cover 0% cover 100%; }
-  }
-  /* Phone: the folder is one long page, so pages come up from below as it scrolls; the phone row is a swipe row there and
-     stays put. */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 1024px) {
-    .card.is-active .work > figure.pmx { view-timeline-axis: block; }
+    .card.is-active .work > figure.pmx { view-timeline: --frame block; }
     .card.is-active .work > figure.pmx > .pmf { animation: mo-frame-up linear both; animation-timeline: --frame; animation-range: entry 0% entry 60%; }
-    #playmate.is-active .work .pmx .pm-f-final > .pm-prow { animation: none; }
   }
 }
 @keyframes mo-frame-up { from { opacity: .35; translate: 0 48px; scale: .97; } }
-@keyframes mo-drift { from { translate: -40px 0; } to { translate: 40px 0; } }
 
 /* ------------------------------------------- numbers that count up once seen (HealthBar's survey and test results) */
 @media (prefers-reduced-motion: no-preference) {
@@ -197,31 +167,6 @@
 /* "Click to scroll" has the floor while it shows. */
 body:has(.scroll-hint.is-on) .pointer-tag { opacity: 0; }
 
-/* ------------------------------------------- "things": the four app icons fan out from behind the word */
-.things-fan { position: absolute; top: var(--fy); left: var(--fx); width: 0; height: 0; pointer-events: none; }
-.things-fan img {
-  position: absolute;
-  left: -36px;
-  top: -48px;
-  width: 72px;
-  height: 72px;
-  border-radius: 22%;
-  box-shadow: var(--elevation-low), 0 12px 28px rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  scale: .92;
-  transition: opacity 160ms var(--ease-out), translate var(--t-move) var(--spring), rotate var(--t-move) var(--spring), scale var(--t-move) var(--spring);
-}
-.things-fan img:nth-child(1) { translate: -40px 0; rotate: -6deg; }
-.things-fan img:nth-child(2) { translate: -13px 0; rotate: -2deg; }
-.things-fan img:nth-child(3) { translate: 13px 0; rotate: 2deg; }
-.things-fan img:nth-child(4) { translate: 40px 0; rotate: 6deg; }
-.things-fan.is-open img { opacity: 1; scale: 1; }
-.things-fan.is-open img:nth-child(1) { translate: -102px 10px; rotate: -12deg; }
-.things-fan.is-open img:nth-child(2) { translate: -34px -4px; rotate: -4deg; transition-delay: 30ms; }
-.things-fan.is-open img:nth-child(3) { translate: 34px -4px; rotate: 4deg; transition-delay: 60ms; }
-.things-fan.is-open img:nth-child(4) { translate: 102px 10px; rotate: 12deg; transition-delay: 90ms; }
-#root:has(.gallery.is-focused) .things-fan { display: none; }
-
 /* ------------------------------------------- Chengel's prototype: a tag that says it can be played */
 .work .pmx .pm-proto-live .pm-phone, .work .pmx .pm-pwrap { position: relative; }
 /* Where the still phone stands in for the live prototype (playmate-frames.css), there is nothing to try. */
@@ -274,11 +219,12 @@ body:has(.scroll-hint.is-on) .pointer-tag { opacity: 0; }
 
 /* ------------------------------------------- Chengel: the folder brightens while the light-mode screens are in view */
 /* A light layer over the folder's dark sheet, faded by the scroll; only the folder itself, the pages stay as they are. It
-   stops at 12%: above that the progress labels on the folder drop below 4.5:1. */
+   stops at 12%, where the list of pages beside the column still has 4.89:1. Only from 940px, with the list: narrower,
+   the band under the reading progress is the sheet's ::before. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1025px) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 940px) {
     #chengel.is-active { timeline-scope: --day; }
-    #chengel.is-active .work > figure.pmx[aria-label="Final screens · light"] { view-timeline: --frame inline, --day inline; }
+    #chengel.is-active .work > figure.pmx[aria-label="Final screens · light"] { view-timeline: --frame block, --day block; }
     #chengel.is-active .card-sheet::before {
       content: '';
       position: absolute;

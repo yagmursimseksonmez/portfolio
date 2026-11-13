@@ -1,6 +1,6 @@
 ---
 title: PlayMate
-order: 3
+order: 4
 year: '2026'
 tabNote: 'Deepest UX research'
 tile: { cover: /images/tiles/playmate.webp, when: '2026 · 3 months' }

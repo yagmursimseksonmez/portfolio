@@ -97,6 +97,13 @@ nav h3 { white-space: nowrap; }
 .tile:focus-visible .tile-shot { outline: 2px solid var(--accent); outline-offset: 4px; }
 .tile-shot { display: block; flex: none; width: var(--disc); height: var(--disc); border-radius: 50%; background: #1c1d1c; overflow: hidden; transition: transform 400ms var(--ease), opacity 300ms var(--ease); }
 .tile-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* The project she most wants opened comes first and largest, then each a step smaller (her "en cok tıklanmasını istedigim
+   appler sırayla; chengel, ikeep, healthbar ve playmate"): the order is the projects' own `order`, the size is the place's,
+   --f times the largest disc, --D. On a screen the steps are wider and the places follow where the eye lands (below). */
+.tile:nth-child(1) { --f: 1; }
+.tile:nth-child(2) { --f: 0.86; }
+.tile:nth-child(3) { --f: 0.76; }
+.tile:nth-child(4) { --f: 0.68; }
 @media (min-width: 1025px) {
   /* The intro floats over the top left of the space under the headline; the discs fill that space around it. */
   /* It does not scroll as long as everything fits; in a very short window it still can, so nothing is out of reach. */
@@ -113,15 +120,25 @@ nav h3 { white-space: nowrap; }
   .tiles .tile p { position: absolute; top: calc(var(--disc) * 0.52); left: 50%; width: calc(var(--disc) * 0.72); translate: -50% 0; font-size: clamp(13px, calc(var(--disc) * 0.045), 15px); line-height: 1.35; color: var(--foreground); opacity: 0; pointer-events: none; transition: opacity 250ms var(--ease); }
   .tile:is(:hover, :focus-visible) .tile-shot::after, .tiles .tile:is(:hover, :focus-visible) p { opacity: 1; }
   .tiles { position: relative; flex: 1; display: block; padding: 0; container-type: size; }
-  /* A disc is 22.5% of the width, or less when the space is short: the text under it takes about 70px, and a disc whose
-     left edge is under the intro (640px wide, 90px tall) starts below it. --free is how far a disc can move down and
-     still keep its text on screen. The third disc drops below the intro only when the screen is narrow enough for it to
-     reach under the text (the min(…, × 99) is a switch: 0 when it clears the intro, 90px when it does not). */
-  .tile { --disc: clamp(160px, min(22.5cqw, 100cqh - 172px), 420px); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
-  .tile:nth-child(1) { left: calc(13cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.55); }
-  .tile:nth-child(2) { left: calc(37.67cqw - var(--disc) / 2); top: var(--free); }
-  .tile:nth-child(3) { left: calc(62.33cqw - var(--disc) / 2); top: max(var(--free) * 0.05, min(90px, (640px - 62.33cqw + var(--disc) / 2) * 99)); }
-  .tile:nth-child(4) { left: calc(87cqw - var(--disc) / 2); top: calc(var(--free) * 0.45); }
+  /* Where the eye lands (her "bu sitenin hot pointi neresidir … aradaki boyut farkı biraz daha açılabilir"): from the
+     headline straight down to the middle, so the first project sits there and largest, the second to its right, the last
+     two, smallest, on the left under the intro. Then she drew where each should be (her "daireler bu sekilde dizilsin"):
+     all larger, the first high, right under the headline, the second large and a little lower. Middles at 10.9, 29.4,
+     55.6 and 85.1% of the width; sizes 1, .8, .62, .55 of the largest, 28.5% of the width or what the height allows. A
+     disc whose left edge is under the intro (640px wide, 90px tall) starts below it; --free is how far a disc can move
+     down and still keep its text (about 70px) on screen. */
+  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 172px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 90px; }
+  .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
+  .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.2); }
+  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.85); }
+  .tile-meta { white-space: nowrap; } /* (a small disc would break its year line in two; it may run a little past it) */
+}
+/* Wide enough for the largest disc to clear the intro beside it (its round edge stays right of the text): it rises to the
+   top, right under the headline, and has the full height. */
+@media (min-width: 1440px) {
+  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 82px), 520px); }
+  .tile:nth-child(1) { top: 0; }
 }
 /* Only with a mouse: a tap on a touch screen would leave :hover stuck, and the other three dimmed after the case closes. */
 @media (hover: hover) and (pointer: fine) {
@@ -444,6 +461,41 @@ nav h3 { white-space: nowrap; }
 .gallery.is-focused .card.is-front:hover, .gallery.is-focused .card.is-back:hover { --fill: var(--hover); }
 .gallery.is-focused .card.is-active .card-tab h2 { pointer-events: none; cursor: default; }
 .gallery:not(.is-focused) .card-sheet { pointer-events: auto; cursor: pointer; }
+/* An open project is a page, not a folder (her "klasor gibi. o sekilde olmamalı"): on a screen too it fills the window under
+   a plain bar with its name, and the other projects stay out of sight, as on a phone. */
+@media (min-width: 1025px) {
+  .gallery.is-focused .card:not(.is-active) { opacity: 0; visibility: hidden; }
+  .gallery.has-front { --peek-offset: 0px; }
+  .gallery.is-focused .card.is-active .card-tab h2 { left: 0; width: 100%; padding-left: 64px; }
+  .gallery.is-focused .card.is-active .card-tab h2::before, .gallery.is-focused .card.is-active .card-tab h2::after { display: none; }
+  .gallery.is-focused .card.is-active .card-sheet { border-radius: 0; }
+}
+.gallery.is-focused:not(.is-book) .book { opacity: 0; visibility: hidden; }
+
+/* A disc opening its project is a balloon (site.js, popOpen): it swells from its middle with a soft shine there, above the
+   other discs and holding still, pops into a ring and a few scraps, and the page spreads out from where it was. While that
+   runs the folders do not slide (they are where they will be). */
+.tile.is-popped { z-index: 3; animation-play-state: paused; }
+.tile.is-popped .tile-shot { position: relative; transition: none; }
+.tile.is-popped .tile-shot::after { opacity: 0; }
+.tile.is-popped .tile-shot::before { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: 50%; background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 62%); pointer-events: none; animation: pop-shine 300ms var(--ease) both; }
+@keyframes pop-shine { from { opacity: 0; } }
+.balloon-pop { position: fixed; z-index: 121; width: 0; height: 0; pointer-events: none; }
+.balloon-pop i { position: absolute; left: 0; top: 0; }
+.balloon-pop .pop-ring { border: 3px solid var(--c); border-radius: 50%; }
+.balloon-pop .pop-bit { width: 10px; height: 18px; margin: -9px 0 0 -5px; border-radius: 5px; background: var(--c); }
+.balloon-pop .pop-bit.is-accent { background: var(--accent); }
+.tiles.is-popping .tile:not(.is-popped) { opacity: 0.25; transition: opacity 300ms var(--ease); }
+.tile.is-popped .tile-text { opacity: 0; transition: opacity 200ms var(--ease); }
+.gallery.is-popping :is(.card, .card-tab h2) { transition: none !important; }
+.gallery.is-popping :is(.gallery-dismiss, .gallery-keys) { transition-delay: 260ms; }
+/* Closing draws the page back into its disc. The homepage is back at once behind it (the page still covers it), so the disc
+   is measured where it really is; Contact sits above the folders, so it comes back only once the page is gone. */
+#root:has(.gallery.is-shrinking) .home { transform: none; opacity: 1; transition: none; pointer-events: none; }
+/* While the balloon swells the page is already open under it, clipped to nothing (site.js, popOpen): the homepage, Contact
+   and Close stay as they were until it pops. */
+#root:has(.gallery.is-inflating) :is(.home, .contact) { transform: none; opacity: 1; transition: none; }
+.gallery.is-inflating :is(.gallery-dismiss, .gallery-keys) { opacity: 0; visibility: hidden; transition: none; }
 
 .card-content {
   position: relative;
@@ -464,18 +516,22 @@ nav h3 { white-space: nowrap; }
   transition: opacity var(--time-cards) var(--ease);
 }
 .card.is-active .card-content::after { opacity: 0; }
+/* An open case is one long page you scroll down, at every width (her "Dikey olsun", 2026-11-12; the sideways strip it
+   replaced on a screen is in 73af828). The top padding leaves room for the reading progress above the pages. */
 .gallery.is-focused .card.is-active .card-content {
   pointer-events: auto;
-  overflow: auto hidden;
+  align-items: flex-start;
+  padding: calc(var(--pad) * 0.6 + 42px) 0 calc(var(--pad) * 2 + var(--peek-offset) + 40px);
+  overflow: hidden auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  touch-action: pan-x;
+  touch-action: pan-y;
 }
 .card-content::-webkit-scrollbar { display: none; }
-/* With a mouse the open folder can be dragged sideways (site.js, startDragScroll). */
+/* With a mouse a chart wider than the column can be dragged sideways (site.js, startDragScroll). */
 @media (hover: hover) and (pointer: fine) {
-  .gallery.is-focused .card.is-active .card-content { cursor: grab; }
-  .gallery.is-focused .card.is-active .card-content.is-dragging { cursor: grabbing; user-select: none; }
+  .card.is-active .work figure.pmx.is-wide { cursor: grab; }
+  .card.is-active .work figure.pmx.is-wide.is-dragging { cursor: grabbing; user-select: none; }
 }
 
 .work {
@@ -1109,9 +1165,11 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   /* Two columns of discs, the right one a little lower so they read as scattered, with the year and the name under each
      (the summary is only read out). The disc is as big as the first screen allows: the header grows with the width
      (about 19vw + 175px), the text under a disc takes about 50px, and the lower column adds a quarter of a disc.
-     --row keeps a name at least twice as far from the disc below it as from its own, even while they drift. */
-  .tiles { --row: 28px; --disc: clamp(120px, min(44vw, (100dvh - 19vw - 289px - var(--row)) / 2.25), 400px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--row) 8px; padding: 4px 12px calc(12px + var(--disc) * 0.25); }
-  .tile:nth-child(even) { position: relative; top: calc(var(--disc) * 0.25); }
+     --row keeps a name at least twice as far from the disc below it as from its own, even while they drift. --D is the
+     first, largest disc; the others are a step smaller each (above). */
+  .tiles { --row: 28px; --D: clamp(120px, min(44vw, (100dvh - 19vw - 289px - var(--row)) / 2.25), 400px); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--row) 8px; padding: 4px 12px calc(12px + var(--D) * 0.25); }
+  .tile { --disc: calc(var(--D) * var(--f, 1)); }
+  .tile:nth-child(even) { position: relative; top: calc(var(--D) * 0.25); }
   .tiles:has(.tile:hover) .tile:not(:hover) .tile-shot { opacity: 1; }
   .tile:hover .tile-shot { transform: none; }
   .tile-text { gap: 2px; max-width: none; padding: 10px 4px 0; }
@@ -1142,8 +1200,8 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .tile h2 { font-size: 20px; }
 }
 @media (min-width: 701px) and (max-width: 1024px) and (orientation: landscape) {
-  .tiles { --disc: clamp(140px, min(21vw, 100dvh - 19vw - 290px), 300px); grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: calc(12px + var(--disc) * 0.2); }
-  .tile:nth-child(even) { top: calc(var(--disc) * 0.2); }
+  .tiles { --D: clamp(140px, min(21vw, 100dvh - 19vw - 290px), 300px); grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: calc(12px + var(--D) * 0.2); }
+  .tile:nth-child(even) { top: calc(var(--D) * 0.2); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
@@ -1553,71 +1611,77 @@ body.is-scroll { overflow-x: clip; }
   .contact-menu .email:hover .email-copy { color: var(--accent); }
 }
 
-/* Reading progress of the open folder */
+/* Reading progress of the open case: a line along the top that grows as you read, with Start and End above its two ends
+   and a dot for every page on it. Start and End scroll the page there. The whole row fits the width, so nothing slides or
+   gets cut: the dots share the line evenly (21 dots, PlayMate, still fit 351px), and at that spacing a dot is too small to
+   tap, so the dots only show progress. Hidden, not only transparent, in a closed folder so Tab skips its stops. */
 .read-progress { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 + 26px); height: 2px; border-radius: 2px; overflow: hidden; opacity: 0; transition: opacity var(--time-cards) var(--ease); pointer-events: none; z-index: 6; }
 .read-progress i { position: absolute; inset: 0; background: var(--accent); border-radius: 2px; transform-origin: left center; transform: scaleX(var(--p, 0)); }
 .gallery.is-focused .card.is-active .read-progress { opacity: 1; }
-/* Start, numbered steps and End under the bar: each scrolls the folder to that place. Hidden, not only transparent, in a
-   closed folder so Tab skips its stops. */
-.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); height: 24px; opacity: 0; visibility: hidden; transition: opacity var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); pointer-events: none; z-index: 6; }
-.read-stop { position: absolute; top: 0; transform: translateX(-50%); font: 600 11px/1 var(--sans, inherit); letter-spacing: 0.04em; color: hsla(0, 0%, 100%, 0.6); background: none; border: 0; padding: 5px 6px; border-radius: 99px; cursor: pointer; }
-.read-stop.start { transform: none; padding-left: 0; }
-.read-stop.end { transform: translateX(-100%); padding-right: 0; }
+.read-nav { position: absolute; left: var(--pad); right: var(--pad); top: calc(var(--pad) * 0.6 - 2px); display: flex; align-items: flex-start; justify-content: space-between; height: 40px; opacity: 0; visibility: hidden; transition: opacity var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); pointer-events: none; z-index: 6; }
+.read-stop { flex: none; font: 600 12px/1 var(--sans, inherit); letter-spacing: 0.04em; color: hsla(0, 0%, 100%, 0.6); background: none; border: 0; padding: 5px 9px; border-radius: 99px; cursor: pointer; }
+.read-stop.start, .read-stop.end { position: absolute; top: 0; padding-block: 6px; }
+.read-stop.start { left: 0; padding-left: 0; }
+.read-stop.end { right: 0; padding-right: 0; }
 .read-stop:hover, .read-stop.is-on { color: var(--accent); }
-/* Screen and tablet: the band above the pages is the same 44px at every width, and the labels, the line and its dots sit
-   inside it (labels 8-30px, line 36-38px, dots down to 41px), clear of the page edge. With a 2 x pad band the line ran
-   9px into the pages at 1024px and narrower. The phone keeps its own band (below). */
-@media (min-width: 1025px) {
-  .card-content { padding-top: 44px; }
-  .read-nav { top: 8px; }
-  .read-progress { top: 36px; }
-}
-/* A dot for every page, 8px, sitting on the progress line: no outline, faint yellow, and solid once you have read past
-   that page (site.js, startProgress sets --a from 0.2 to 1 as you move through the page). The button around it is 16px so
-   it is still easy to hit; its centre is the line's centre (29px below the top of the row). */
-.read-stop:is(.num, .dot) { top: 21px; display: grid; place-items: center; width: 16px; height: 16px; padding: 0; border-radius: 50%; }
+.read-name { display: none; }
+/* A page's dot: 8px, faint yellow, and solid once you have read past that page (site.js, startProgress sets --a from 0.2
+   to 1 as you move through the page). Its centre is the line's centre (29px below the top of the row). */
+.read-stop:is(.num, .dot) { display: grid; place-items: center; flex: 0 1 16px; min-width: 10px; height: 16px; margin-top: 21px; padding: 0; border-radius: 50%; }
 .read-stop:is(.num, .dot)::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 209, 0, var(--a, 0.2)); transition: background-color 160ms var(--ease), box-shadow 160ms var(--ease); }
-.read-stop:is(.num, .dot):hover::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.18); }
 .read-stop:is(.num, .dot).is-on::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.3); }
-@media (prefers-reduced-motion: reduce) { .read-stop:is(.num, .dot)::before { transition: none; } }
-/* Phone: the whole row fits the width, so nothing slides or gets cut. Start and End sit on top at the two ends; the dots
-   share the line below them evenly (21 dots, PlayMate, still fit 351px). At that spacing a dot is too small to tap, so on
-   a phone the dots only show progress and Start and End are the buttons, 24px tall. */
-@media (max-width: 1024px) {
-  .read-nav { height: 40px; align-items: flex-start; justify-content: space-between; }
-  .read-stop.start, .read-stop.end { position: absolute; top: 0; padding-block: 6px; }
-  .read-stop.start { left: 0; }
-  .read-stop.end { right: 0; padding-right: 0; }
-  .read-stop:is(.num, .dot) { flex: 0 1 16px; min-width: 10px; margin-top: 21px; }
-  .gallery.is-focused .card.is-active .read-stop:is(.num, .dot) { pointer-events: none; }
-}
+@media (prefers-reduced-motion: reduce) { .read-stop::before { transition: none !important; } }
 .gallery.is-focused .card.is-active .read-nav { opacity: 1; visibility: visible; transition-delay: 0s; }
-.gallery.is-focused .card.is-active .read-stop { pointer-events: auto; }
-
-
-/* ------------------------------------------------------------ phone: a folder opens as one long page you scroll down */
-@media (max-width: 1024px) {
-  .read-nav { display: flex; pointer-events: none; }
-  .read-stop { position: static; flex: none; transform: none !important; font-size: 12px; padding: 5px 9px; }
-  .read-stop.start { padding-left: 0; }
-  .gallery.is-focused .card.is-active .card-content {
-    overflow: hidden auto;
-    touch-action: pan-y;
-    align-items: flex-start;
-    padding: calc(var(--pad) * 0.6 + 42px) 0 calc(var(--pad) * 2 + var(--peek-offset) + 40px);
-  }
-  .card.is-active .work { flex-direction: column; align-items: stretch; align-self: flex-start; width: 100%; height: auto; gap: 14px; padding-inline: var(--pad); }
-  .card.is-active .work figure.pmx { width: 100%; height: var(--pm-h, 440px); max-height: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; border-radius: 14px; position: relative; }
-  .card.is-active .work figure.pmx::-webkit-scrollbar { display: none; }
-  .work figure.pmx .pmf { width: max-content; }
-  .work figure.pmx.is-wide::after { content: 'swipe →'; position: sticky; left: calc(100% - 70px); bottom: 6px; display: block; width: 62px; margin-top: -22px; padding: 3px 7px; border-radius: 99px; background: rgba(0, 0, 0, 0.55); color: #d6d6d6; font: 600 10px/1.4 var(--sans, inherit); text-align: center; pointer-events: none; }
-}
-@media (max-width: 1024px) {
+.gallery.is-focused .card.is-active .read-stop:is(.start, .end) { pointer-events: auto; }
+/* The band the row sits in: the pages scroll under it. */
+@media (max-width: 939px) {
   .gallery.is-focused .card.is-active .card-sheet::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: calc(var(--pad) * 0.6 + 36px); background: var(--fill); border-radius: 12px 12px 0 0; z-index: 5; pointer-events: none; }
 }
+/* From 940px there is room beside the column (680px, below): the row becomes a list of the case's pages on its left, each
+   one a button to its page, the page you are on in yellow, its dot filling up as you read. The line and its band go. Up
+   to 1199px the list keeps to the left edge and the column moves right of it (her "bu kadar daralana kadar nav bar solda
+   olabilir?", at about 950px); wider, the column is in the middle and the list beside it. */
+@media (min-width: 940px) {
+  .gallery.is-focused .card.is-active .card-content { padding-top: 32px; }
+  .read-progress { display: none; }
+  .read-nav { left: 24px; right: auto; top: 28px; flex-direction: column; justify-content: flex-start; gap: 2px; width: 200px; height: auto; max-height: calc(100% - 56px); padding: 4px; overflow-y: auto; scrollbar-width: none; }
+  .read-nav::-webkit-scrollbar { display: none; }
+  .read-stop, .read-stop.start, .read-stop:is(.num, .dot) { position: static; display: flex; align-items: flex-start; gap: 10px; flex: none; width: 100%; height: auto; min-width: 0; margin: 0; padding: 3px 0; border-radius: 4px; font: 400 13px/1.35 var(--sans, inherit); letter-spacing: 0; text-align: left; color: rgba(214, 214, 214, 0.82); }
+  .read-stop::before, .read-stop:is(.num, .dot)::before { content: ''; flex: none; width: 6px; height: 6px; margin-top: 6px; border-radius: 50%; background: rgba(255, 209, 0, var(--a, 0.2)); transition: box-shadow 160ms var(--ease); }
+  .read-stop.is-on::before { box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.3); }
+  .read-stop.end, .read-label { display: none; }
+  .read-name { display: inline; }
+  .read-stop:hover { color: var(--primary); }
+  .read-stop.is-on { color: var(--accent); }
+  .read-stop:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .gallery.is-focused .card.is-active :is(.read-nav, .read-stop) { pointer-events: auto; }
+}
+@media (min-width: 1200px) { .read-nav { left: auto; right: calc(50% + 380px); width: min(224px, 50% - 400px); } }
 
-.work .pmx .pm-pmid:not(.is-live), .work .pmx .pm-wsc:not(.is-live), .work .pmx .pm-wmid:not(.is-live), .work .pmx .pm-bscroll:not(.is-live), .work .device-scroll:not(.is-live) { overflow-y: hidden !important; }
-.work .is-live { overflow-y: auto !important; overscroll-behavior: contain; outline: 2px solid var(--accent); outline-offset: -2px; }
+/* ------------------------------------------------------------ the case: one long page you scroll down */
+.card.is-active .work { flex-direction: column; align-items: stretch; align-self: flex-start; width: 100%; height: auto; gap: 14px; padding-inline: var(--pad); }
+.card.is-active .work figure.pmx { width: 100%; height: var(--pm-h, 440px); max-height: none; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; border-radius: 14px; position: relative; }
+.card.is-active .work figure.pmx::-webkit-scrollbar { display: none; }
+.work figure.pmx .pmf { width: max-content; }
+.work figure.pmx.is-wide::after { content: 'swipe →'; position: sticky; left: calc(100% - 70px); bottom: 6px; display: block; width: 62px; margin-top: -22px; padding: 3px 7px; border-radius: 99px; background: rgba(0, 0, 0, 0.55); color: #d6d6d6; font: 600 10px/1.4 var(--sans, inherit); text-align: center; pointer-events: none; }
+@media (hover: hover) and (pointer: fine) { .work figure.pmx.is-wide::after { content: 'drag →'; } }
+
+/* A phone screen inside a page scrolls on its own. With a mouse it scrolls under the pointer (her "üstüne gelince scroll
+   edilsin"), except while the case itself is moving, so a wheel carrying the case past a screen goes on carrying it; at
+   its end a fresh gesture moves the case again (site.js, startScrollScreens). On a touch screen a tap lets it scroll until
+   the case moves, or a swipe meant for the case would be caught in it. No frame marks it (her "tıklayınca sarı cerceve
+   içine almasın"). */
+/* (a screen that does not scroll passes the wheel on to the case: `contain` from the pages' own styles kept it) */
+.work .pmx :is(.pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll):not(.is-live), .work .device-scroll:not(.is-live) { overflow-y: hidden !important; overscroll-behavior: auto; }
+@media (hover: hover) and (pointer: fine) {
+  .card-content:not(.is-moving) .work .pmx :is(.pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll), .card-content:not(.is-moving) .work .device-scroll { overflow-y: auto !important; overscroll-behavior: auto; }
+}
+.work .is-live { overflow-y: auto !important; overscroll-behavior: contain; }
+/* Secondary text on the case pages reaches 4.5:1 (the critique's measure: the pages' own .62 grey was 3.68:1 on the page
+   and 4.37:1 on its cards, smaller text made it show more; PlayMate's grey on its pale notes was 3.62:1). Only text uses
+   the grey. The swatches on HealthBar's design system page are the app's own colours and stay as they are. */
+.work .pmx { --pm-tx2: rgba(214, 214, 214, 0.78); }
+.work figure.pmx .pm-nl li { color: #555552; }
 /* First screen of each case: the year and how long it took, under the tags ("year, duration"). */
 .work .pmx .pm-when { margin-top: 12px; font-size: 13px; line-height: 1.45; color: var(--pm-tx2); }
 .work .pmx .pm-when strong { color: var(--pm-tx); font-weight: 500; }
@@ -1629,14 +1693,18 @@ body.is-scroll { overflow-x: clip; }
 /* HealthBar: the same row in its footer, beside the App Store button. */
 .work .pmx .pm-ch-who .pm-chips { flex: 1 1 auto; min-width: 0; align-items: center; }
 .work .pmx .pm-ch-who .pm-chips .pm-when { flex: none; }
-/* While the strip moves, a prototype it carries under the pointer lets the wheel through (site.js, startStripMotion). */
+/* While the case scrolls, a prototype it carries under the pointer lets the wheel through (site.js, startStripMotion). */
 .card-content.is-moving iframe { pointer-events: none; }
 /* PlayMate's prototype is Figma's page, so its wheel cannot be passed on: it takes the pointer only after a click. */
 .work .pmx .proto-gate:not(.is-on) { cursor: pointer; }
 .work .pmx .proto-gate:not(.is-on) > iframe { pointer-events: none; }
 .work .pmx .proto-gate.is-on { outline: 2px solid var(--accent); outline-offset: 2px; }
-.scroll-hint { position: fixed; z-index: 200; transform: translateX(-50%); padding: 5px 11px; border-radius: 99px; background: rgba(0, 0, 0, 0.72); color: #f4f4f2; font: 600 12px/1.2 var(--sans, inherit); letter-spacing: 0.02em; pointer-events: none; opacity: 0; transition: opacity 120ms var(--ease); }
-.scroll-hint.is-on { opacity: 1; }
+/* The tag in the middle of a screen that scrolls (site.js): yellow, larger, popping in, its arrow bobbing. */
+.scroll-hint { position: fixed; z-index: 200; translate: -50% -50%; padding: 11px 20px; border-radius: 99px; background: var(--accent); color: var(--on-accent); font: 700 17px/1.2 var(--sans, inherit); letter-spacing: 0.01em; white-space: nowrap; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(255, 209, 0, 0.22); pointer-events: none; opacity: 0; scale: 0.8; transition: opacity 160ms var(--ease), scale 260ms cubic-bezier(.3, 1.6, .5, 1); }
+.scroll-hint.is-on { opacity: 1; scale: 1; }
+.scroll-hint i { display: inline-block; margin-left: 4px; font-style: normal; animation: hint-bob 900ms ease-in-out infinite; }
+@keyframes hint-bob { 50% { translate: 0 4px; } }
+@media (prefers-reduced-motion: reduce) { .scroll-hint i { animation: none; } }
 @media (hover: none) { .scroll-hint { display: none; } }
 
 /* Phone: the book only shows open, without the page turn (the turning page's back was a second copy of her photo that
@@ -1647,132 +1715,198 @@ body.is-scroll { overflow-x: clip; }
   .book-leaf { display: none; }
 }
 
-/* ------------------------------------------------ phone: designed pages reflow into one column (site.js marks them .is-reflow) */
-@media (max-width: 1024px) {
-  .card.is-active .work figure.pmx.is-reflow { height: auto; overflow: visible; }
-  .card.is-active .work .pmx.is-reflow > .pmf { display: flex !important; flex-direction: column !important; align-items: stretch !important; width: 100% !important; height: auto !important; gap: 16px !important; padding: 20px 16px !important; overflow: visible !important; }
-  .card.is-active .work .pmx.is-reflow .pmf [style*="width"]:not(img):not(video):not(iframe) { width: auto !important; max-width: 100%; }
-  .card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 22px !important; line-height: 1.2 !important; }
-  .card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 19px !important; line-height: 1.25 !important; }
-  .card.is-active .work .pmx.is-reflow .pmf :is(h3, h4) { font-size: 16px !important; line-height: 1.3 !important; }
-  .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 14px !important; line-height: 1.45 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-big { font-size: 32px !important; line-height: 1 !important; }
-  /* (written to outrank the body-text rule above, which had kept the problem titles at body size) */
-  .card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 19px !important; line-height: 1.25 !important; font-weight: 700 !important; }
-  .card.is-active .work .pmx.is-reflow .pmf .pm-big-h > h3 { font-size: 14px !important; }
-  /* big number + label/title headers */
-  .card.is-active .work .pmx.is-reflow :is(.pm-hd, .pm-bhn) { gap: 12px !important; align-items: flex-start !important; }
-  /* first page: the phone on top, then the text */
-  .card.is-active .work .pmx.is-reflow .pm-f-hero { gap: 18px !important; }
-  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v { width: 100% !important; height: auto !important; aspect-ratio: auto !important; justify-content: center !important; align-self: stretch !important; }
-  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v.pm-ph > video { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
-  .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v:not(.pm-ph) > video { width: 100% !important; height: auto !important; }
-  .card.is-active .work .pmx.is-reflow .pm-hero-t { gap: 12px !important; padding: 0 !important; justify-content: flex-start !important; }
-  .card.is-active .work .pmx.is-reflow .pm-grid2 { grid-template-columns: 1fr !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-hfoot, .pm-ch-who) { flex-wrap: wrap !important; align-items: flex-start !important; gap: 12px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ch-who { flex-direction: column !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ch-list::before { left: 33px; }
-  .card.is-active .work .pmx.is-reflow .pm-ch-num { font-size: 24px !important; }
-  .card.is-active .work .pmx.is-reflow .hero-proof2 img { width: 180px !important; }
-  /* rows of phones: one row you swipe through */
-  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { display: flex !important; flex-wrap: nowrap !important; justify-content: flex-start !important; align-items: flex-start !important; gap: 14px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { scroll-padding-inline: 16px; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow)::-webkit-scrollbar { display: none; }
-  .card.is-active .work .pmx.is-reflow .pmf .pm-rcol.pm-rcol { flex: none !important; width: 214px !important; scroll-snap-align: start; }
-  /* the screens in a row line up whatever the length of the text above them: text at the top, screens at the bottom */
-  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-ba) { align-items: stretch !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-rcol, .pm-ba-s) { display: flex !important; flex-direction: column !important; height: auto !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-rcol > .pm-phone, .pm-ba-s > .pm-cpg) { margin-top: auto !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) > * { scroll-snap-align: start; }
-  .card.is-active .work .pmx.is-reflow .pm-phone { --pw: 200 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-cap p { min-height: 0 !important; }
-  /* numbers */
-  .card.is-active .work .pmx.is-reflow .pm-stg { grid-template-columns: 1fr !important; gap: 10px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-stv { font-size: 24px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-f-outcome b { font-size: 16px !important; line-height: 1.3 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-stc { padding: 16px 18px !important; }
-  /* the loop: the drawing goes, the steps stay as a numbered list */
-  .card.is-active .work .pmx.is-reflow .pm-f-cycle { display: block !important; }
-  .card.is-active .work .pmx.is-reflow .pm-cwrap { position: static !important; width: auto !important; height: auto !important; display: grid !important; grid-template-columns: 40px 1fr; gap: 16px 14px; align-items: start; }
-  .card.is-active .work .pmx.is-reflow .pm-ring { display: none !important; }
-  .card.is-active .work .pmx.is-reflow .pm-cmid { position: static !important; grid-column: 1 / -1; width: auto !important; text-align: left !important; transform: none !important; }
-  .card.is-active .work .pmx.is-reflow .pm-nd { position: static !important; margin: 0 !important; width: 40px !important; height: 40px !important; font-size: 18px !important; line-height: 40px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-nt { position: static !important; width: auto !important; height: auto !important; display: block !important; text-align: left !important; transform: none !important; }
-  /* boards and parts: images fit the width */
-  .card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-cgl, .pm-cgr, .pm-cgr .pm-cgi) { flex-direction: column !important; width: auto !important; }
-  .card.is-active .work .pmx.is-reflow .pm-cgi { flex-wrap: wrap !important; }
-  .card.is-active .work .pmx.is-reflow .pm-cmi img { max-width: 100% !important; height: auto !important; }
-  /* the get-it page: text first, then the phone */
-  .card.is-active .work .pmx.is-reflow .pm-f-proto { align-items: center !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ptxt { order: -1; align-self: stretch; }
-  /* Chengel's own pages: their inline rows stack; the download page's screenshots become a swipe row */
-  .card.is-active .work .pmx.is-reflow .pm-ch div[style*="display:flex"]:not(.pm-shots) { flex-direction: column !important; flex-wrap: nowrap !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ch img[style*="height:"] { max-width: 100%; height: auto !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ch [style*="flex:1"] { flex: none !important; }
-  .card.is-active .work .pmx.is-reflow .pm-f-getit { align-items: stretch !important; }
-  .card.is-active .work .pmx.is-reflow .pm-shots { flex-direction: row !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
-  .card.is-active .work .pmx.is-reflow .pm-shots > div { flex: none !important; width: 180px !important; scroll-snap-align: start; }
-  .card.is-active .work .pmx.is-reflow .pm-shots img { width: 180px !important; height: 378px !important; }
-  /* PlayMate's research boards: their columns stack, images fit the width, the wireframe phones become a swipe row */
-  .card.is-active .work .pmx.is-reflow :is(.pm-plan, .pm-ppl, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-duo, .pm-cpr, .pm-ut-r, .pm-sa, .pm-sb, .pm-emt, .pm-wl) { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 14px !important; width: auto !important; height: auto !important; position: static !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-ncol, .pm-pcol, .pm-duo1, .pm-cpc, .pm-board, .pm-shot, .pm-rawb, .pm-emi, .pm-panel) { width: auto !important; height: auto !important; max-width: 100% !important; position: static !important; flex: none !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-emg, .pm-pbody, .pm-ut-g, .pm-themes, .pm-wns, .pm-legend) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; height: auto !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-board, .pm-shot, .pm-rawb, .pm-emi) img, .card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; max-height: none !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; justify-content: flex-start !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) > * { flex: none !important; scroll-snap-align: start; }
-  .card.is-active .work .pmx.is-chart > .pmf > .pm-ph { display: none !important; }
-  .card.is-active .work .pmx.is-reflow i.pm-sec { display: none !important; }
-  /* iKeep before and after: each pair is a row you swipe, before → after */
-  .card.is-active .work .pmx.is-reflow .pm-bar { display: flex !important; flex-direction: column !important; gap: 22px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ba { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: stretch !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
-  .card.is-active .work .pmx.is-reflow .pm-ba-s { flex: none !important; scroll-snap-align: start; }
-  .card.is-active .work .pmx.is-reflow .pm-cpg { display: flex !important; flex-wrap: nowrap !important; gap: 10px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-ar { flex: none !important; align-self: center !important; }
-  .card.is-active .work .pmx.is-reflow .pm-tag { position: static !important; align-self: flex-start; margin-top: -4px; }
-  /* decision panels and the kit: steps (label above text) first, then the screens; the kit rules full width */
-  .card.is-active .work .pmx.is-reflow :is(.pm-dec, .pm-kit) { flex-direction: column !important; gap: 18px !important; }
-  .card.is-active .work .pmx.is-reflow :is(.pm-dec-steps, .pm-kit-rules) { width: auto !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-s { grid-template-columns: 1fr !important; row-gap: 4px; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-pick { margin: 4px -10px !important; padding: 12px 10px !important; }
-  .card.is-active .work .pmx.is-reflow .pmf span.pm-dec-tag { font-size: 10px !important; line-height: 1.3 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) { flex-wrap: nowrap !important; gap: 12px !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) .pm-phone { --pw: 148 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-vis { flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-vis img[style*="height"] { height: auto !important; width: 100% !important; }
-  .card.is-active .work .pmx.is-reflow .pm-dec-vis > div:not(.pm-dec-ph) { flex: 1 1 100% !important; width: 100% !important; min-width: 0 !important; }
-  /* outcome: impact above next */
-  .card.is-active .work .pmx.is-reflow .pm-oc2 { grid-template-columns: 1fr !important; grid-auto-rows: auto !important; }
-  /* every row you swipe gets dots under it and a "Swipe" cue until it has been moved (site.js addSwipeDots) */
-  .swipe-dots { display: flex; align-items: center; gap: 6px; margin-top: -4px; }
-  .swipe-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(244, 244, 242, 0.28); transition: background 160ms, width 160ms; }
-  .swipe-dots i.on { width: 18px; border-radius: 3px; background: var(--accent); }
-  /* (the page's own span rules would otherwise size the cue like body text and drop its margin) */
-  .card.is-active .work .pmx.is-reflow .pmf div.swipe-dots > span:not(.pm-big) { margin-left: auto !important; font-size: 12px !important; line-height: 1 !important; font-weight: 600; color: var(--accent); transition: opacity 200ms; }
-  .swipe-dots.moved span { opacity: 0; }
-  /* first pages: chips, the store listing, the button and its note all start on the left */
-  .card.is-active .work .pmx.is-reflow .pm-hfoot { flex-direction: column !important; align-items: flex-start !important; }
-  .card.is-active .work .pmx.is-reflow .pm-hfoot > *, .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-pbtn { margin-left: 0 !important; }
-  .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-chips { flex-direction: row !important; flex-wrap: wrap !important; }
-  .card.is-active .work .pmx.is-reflow .pm-hstore { align-items: flex-start !important; }
-  .card.is-active .work .pmx.is-reflow .pm-hnote { text-align: left !important; max-width: none !important; }
-  /* charts: the title sits above at reading size, the drawing below scrolls sideways */
-  .chart-cap { display: flex; gap: 12px; align-items: flex-start; margin: 10px 4px -4px; }
-  .chart-cap > span { flex: none; color: var(--accent); font-size: 32px; font-weight: 700; line-height: 1; }
-  .chart-cap small { display: block; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-  .chart-cap h3 { margin-top: 4px; color: #f4f4f2; font-size: 19px; line-height: 1.25; font-weight: 700; }
-  .chart-cap a { display: inline-block; margin-top: 10px; padding: 9px 16px; border-radius: 99px; background: var(--accent); color: #202020; font-size: 14px; font-weight: 700; text-decoration: none; }
-  .card.is-active .work figure.pmx.is-chart { height: auto; }
-  .card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
-  .card.is-active .work .pmx.is-chart :is(.pm-bh, .pm-fmh) { display: none !important; }
-}
+/* ------------------------------------------------ designed pages reflow into one column (site.js marks them .is-reflow) */
+.card.is-active .work figure.pmx.is-reflow { height: auto; overflow: visible; }
+.card.is-active .work .pmx.is-reflow > .pmf { display: flex !important; flex-direction: column !important; align-items: stretch !important; width: 100% !important; height: auto !important; gap: 16px !important; padding: 20px 16px !important; overflow: visible !important; }
+.card.is-active .work .pmx.is-reflow .pmf [style*="width"]:not(img):not(video):not(iframe) { width: auto !important; max-width: 100%; }
+.card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 22px !important; line-height: 1.2 !important; }
+.card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 19px !important; line-height: 1.25 !important; }
+.card.is-active .work .pmx.is-reflow .pmf :is(h3, h4) { font-size: 16px !important; line-height: 1.3 !important; }
+.card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 14px !important; line-height: 1.45 !important; }
+.card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11px !important; }
+.card.is-active .work .pmx.is-reflow .pm-big { font-size: 32px !important; line-height: 1 !important; }
+/* (written to outrank the body-text rule above, which had kept the problem titles at body size) */
+.card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 19px !important; line-height: 1.25 !important; font-weight: 700 !important; }
+.card.is-active .work .pmx.is-reflow .pmf .pm-big-h > h3 { font-size: 14px !important; }
+/* big number + label/title headers */
+.card.is-active .work .pmx.is-reflow :is(.pm-hd, .pm-bhn) { gap: 12px !important; align-items: flex-start !important; }
+/* first page: the phone on top, then the text */
+.card.is-active .work .pmx.is-reflow .pm-f-hero { gap: 18px !important; }
+.card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v { width: 100% !important; height: auto !important; aspect-ratio: auto !important; justify-content: center !important; align-self: stretch !important; }
+.card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v.pm-ph > video { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
+.card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v:not(.pm-ph) > video { width: 100% !important; height: auto !important; }
+.card.is-active .work .pmx.is-reflow .pm-hero-t { gap: 12px !important; padding: 0 !important; justify-content: flex-start !important; }
+.card.is-active .work .pmx.is-reflow .pm-grid2 { grid-template-columns: 1fr !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-hfoot, .pm-ch-who) { flex-wrap: wrap !important; align-items: flex-start !important; gap: 12px !important; }
+.card.is-active .work .pmx.is-reflow .pm-ch-who { flex-direction: column !important; }
+.card.is-active .work .pmx.is-reflow .pm-ch-list::before { left: 33px; }
+.card.is-active .work .pmx.is-reflow .pm-ch-num { font-size: 24px !important; }
+.card.is-active .work .pmx.is-reflow .hero-proof2 img { width: 180px !important; }
+/* rows of phones: one row you swipe through */
+.card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { display: flex !important; flex-wrap: nowrap !important; justify-content: flex-start !important; align-items: flex-start !important; gap: 14px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { scroll-padding-inline: 16px; }
+.card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow)::-webkit-scrollbar { display: none; }
+.card.is-active .work .pmx.is-reflow .pmf .pm-rcol.pm-rcol { flex: none !important; width: 214px !important; scroll-snap-align: start; }
+/* the screens in a row line up whatever the length of the text above them: text at the top, screens at the bottom */
+.card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-ba) { align-items: stretch !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-rcol, .pm-ba-s) { display: flex !important; flex-direction: column !important; height: auto !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-rcol > .pm-phone, .pm-ba-s > .pm-cpg) { margin-top: auto !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) > * { scroll-snap-align: start; }
+.card.is-active .work .pmx.is-reflow .pm-phone { --pw: 200 !important; }
+.card.is-active .work .pmx.is-reflow .pm-cap p { min-height: 0 !important; }
+/* numbers */
+.card.is-active .work .pmx.is-reflow .pm-stg { grid-template-columns: 1fr !important; gap: 10px !important; }
+.card.is-active .work .pmx.is-reflow .pm-stv { font-size: 24px !important; }
+.card.is-active .work .pmx.is-reflow .pm-f-outcome b { font-size: 16px !important; line-height: 1.3 !important; }
+.card.is-active .work .pmx.is-reflow .pm-stc { padding: 16px 18px !important; }
+/* the loop: the drawing goes, the steps stay as a numbered list */
+.card.is-active .work .pmx.is-reflow .pm-f-cycle { display: block !important; }
+.card.is-active .work .pmx.is-reflow .pm-cwrap { position: static !important; width: auto !important; height: auto !important; display: grid !important; grid-template-columns: 40px 1fr; gap: 16px 14px; align-items: start; }
+.card.is-active .work .pmx.is-reflow .pm-ring { display: none !important; }
+.card.is-active .work .pmx.is-reflow .pm-cmid { position: static !important; grid-column: 1 / -1; width: auto !important; text-align: left !important; transform: none !important; }
+.card.is-active .work .pmx.is-reflow .pm-nd { position: static !important; margin: 0 !important; width: 40px !important; height: 40px !important; font-size: 18px !important; line-height: 40px !important; }
+.card.is-active .work .pmx.is-reflow .pm-nt { position: static !important; width: auto !important; height: auto !important; display: block !important; text-align: left !important; transform: none !important; }
+/* boards and parts: images fit the width */
+.card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-cgl, .pm-cgr, .pm-cgr .pm-cgi) { flex-direction: column !important; width: auto !important; }
+.card.is-active .work .pmx.is-reflow .pm-cgi { flex-wrap: wrap !important; }
+.card.is-active .work .pmx.is-reflow .pm-cmi img { max-width: 100% !important; height: auto !important; }
+/* the get-it page: text first, then the phone */
+.card.is-active .work .pmx.is-reflow .pm-f-proto { align-items: center !important; }
+.card.is-active .work .pmx.is-reflow .pm-ptxt { order: -1; align-self: stretch; }
+/* Chengel's own pages: their inline rows stack; the download page's screenshots become a swipe row */
+.card.is-active .work .pmx.is-reflow .pm-ch div[style*="display:flex"]:not(.pm-shots) { flex-direction: column !important; flex-wrap: nowrap !important; }
+.card.is-active .work .pmx.is-reflow .pm-ch img[style*="height:"] { max-width: 100%; height: auto !important; }
+.card.is-active .work .pmx.is-reflow .pm-ch [style*="flex:1"] { flex: none !important; }
+.card.is-active .work .pmx.is-reflow .pm-f-getit { align-items: stretch !important; }
+.card.is-active .work .pmx.is-reflow .pm-shots { flex-direction: row !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+.card.is-active .work .pmx.is-reflow .pm-shots > div { flex: none !important; width: 180px !important; scroll-snap-align: start; }
+.card.is-active .work .pmx.is-reflow .pm-shots img { width: 180px !important; height: 378px !important; }
+/* PlayMate's research boards: their columns stack, images fit the width, the wireframe phones become a swipe row */
+.card.is-active .work .pmx.is-reflow :is(.pm-plan, .pm-ppl, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-duo, .pm-cpr, .pm-ut-r, .pm-sa, .pm-sb, .pm-emt, .pm-wl) { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 14px !important; width: auto !important; height: auto !important; position: static !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-ncol, .pm-pcol, .pm-duo1, .pm-cpc, .pm-board, .pm-shot, .pm-rawb, .pm-emi, .pm-panel) { width: auto !important; height: auto !important; max-width: 100% !important; position: static !important; flex: none !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-emg, .pm-pbody, .pm-ut-g, .pm-themes, .pm-wns, .pm-legend) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; height: auto !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-board, .pm-shot, .pm-rawb, .pm-emi) img, .card.is-active .work .pmx.is-reflow img.pm-bimg { width: 100% !important; height: auto !important; max-height: none !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; justify-content: flex-start !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-wrow, .pm-cpp) > * { flex: none !important; scroll-snap-align: start; }
+.card.is-active .work .pmx.is-chart > .pmf > .pm-ph { display: none !important; }
+.card.is-active .work .pmx.is-reflow i.pm-sec { display: none !important; }
+/* iKeep before and after: each pair is a row you swipe, before → after */
+.card.is-active .work .pmx.is-reflow .pm-bar { display: flex !important; flex-direction: column !important; gap: 22px !important; }
+.card.is-active .work .pmx.is-reflow .pm-ba { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: stretch !important; gap: 12px !important; margin: 0 -16px !important; padding: 0 16px 4px !important; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+.card.is-active .work .pmx.is-reflow .pm-ba-s { flex: none !important; scroll-snap-align: start; }
+.card.is-active .work .pmx.is-reflow .pm-cpg { display: flex !important; flex-wrap: nowrap !important; gap: 10px !important; }
+.card.is-active .work .pmx.is-reflow .pm-ar { flex: none !important; align-self: center !important; }
+.card.is-active .work .pmx.is-reflow .pm-tag { position: static !important; align-self: flex-start; margin-top: -4px; }
+/* decision panels and the kit: steps (label above text) first, then the screens; the kit rules full width */
+.card.is-active .work .pmx.is-reflow :is(.pm-dec, .pm-kit) { flex-direction: column !important; gap: 18px !important; }
+.card.is-active .work .pmx.is-reflow :is(.pm-dec-steps, .pm-kit-rules) { width: auto !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-s { grid-template-columns: 1fr !important; row-gap: 4px; }
+.card.is-active .work .pmx.is-reflow .pm-dec-pick { margin: 4px -10px !important; padding: 12px 10px !important; }
+.card.is-active .work .pmx.is-reflow .pmf span.pm-dec-tag { font-size: 10px !important; line-height: 1.3 !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) { flex-wrap: nowrap !important; gap: 12px !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) .pm-phone { --pw: 148 !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-vis { flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-vis img[style*="height"] { height: auto !important; width: 100% !important; }
+.card.is-active .work .pmx.is-reflow .pm-dec-vis > div:not(.pm-dec-ph) { flex: 1 1 100% !important; width: 100% !important; min-width: 0 !important; }
+/* outcome: impact above next */
+.card.is-active .work .pmx.is-reflow .pm-oc2 { grid-template-columns: 1fr !important; grid-auto-rows: auto !important; }
+/* every row you swipe gets dots under it and a "Swipe" cue until it has been moved (site.js addSwipeDots) */
+.swipe-dots { display: flex; align-items: center; gap: 6px; margin-top: -4px; }
+.swipe-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(244, 244, 242, 0.28); transition: background 160ms, width 160ms; }
+.swipe-dots i.on { width: 18px; border-radius: 3px; background: var(--accent); }
+/* (the page's own span rules would otherwise size the cue like body text and drop its margin) */
+.card.is-active .work .pmx.is-reflow .pmf div.swipe-dots > span:not(.pm-big) { margin-left: auto !important; font-size: 12px !important; line-height: 1 !important; font-weight: 600; color: var(--accent); transition: opacity 200ms; }
+.swipe-dots.moved span { opacity: 0; }
+/* first pages: chips, the store listing, the button and its note all start on the left */
+.card.is-active .work .pmx.is-reflow .pm-hfoot { flex-direction: column !important; align-items: flex-start !important; }
+.card.is-active .work .pmx.is-reflow .pm-hfoot > *, .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-pbtn { margin-left: 0 !important; }
+.card.is-active .work .pmx.is-reflow .pm-hfoot .pm-chips { flex-direction: row !important; flex-wrap: wrap !important; }
+.card.is-active .work .pmx.is-reflow .pm-hstore { align-items: flex-start !important; }
+.card.is-active .work .pmx.is-reflow .pm-hnote { text-align: left !important; max-width: none !important; }
+/* charts: the title sits above at reading size, the drawing below scrolls sideways */
+.chart-cap { display: flex; gap: 12px; align-items: flex-start; margin: 10px 4px -4px; }
+.chart-cap > span { flex: none; color: var(--accent); font-size: 32px; font-weight: 700; line-height: 1; }
+.chart-cap small { display: block; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.chart-cap h3 { margin-top: 4px; color: #f4f4f2; font-size: 19px; line-height: 1.25; font-weight: 700; }
+.chart-cap a { display: inline-block; margin-top: 10px; padding: 9px 16px; border-radius: 99px; background: var(--accent); color: #202020; font-size: 14px; font-weight: 700; text-decoration: none; }
+.card.is-active .work figure.pmx.is-chart { height: auto; }
+.card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
+.card.is-active .work .pmx.is-chart :is(.pm-bh, .pm-fmh) { display: none !important; }
+/* The overview page at the end of each folder: one column of cards at reading size, no scaling */
+.card.is-active .work figure.pmx.is-sum { height: auto; overflow: visible; }
+.work figure.pmx.is-sum .pmf { width: 100% !important; height: auto; padding: 18px 16px; gap: 12px; }
+.work figure.pmx.is-sum .pm-sumtop { display: flex; flex-direction: column; gap: 10px; }
+.work figure.pmx.is-sum .pm-card { width: auto; }
+.work figure.pmx.is-sum .pm-card h3 { font-size: 13px; }
+.work figure.pmx.is-sum .pm-card p { font-size: 14px; line-height: 1.45; }
+.work figure.pmx.is-sum .pm-pill b { font-size: 14px; }
+.work figure.pmx.is-sum .pm-pills { display: flex; flex-direction: column; gap: 8px; }
+.work figure.pmx.is-sum .pm-pill { width: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
+/* The next-project card after it: reading size, the screen cut off at the bottom */
+.card.is-active .work figure.pmx.is-next { height: auto; overflow: hidden; }
+.work figure.pmx.is-next .pmf { width: 100% !important; height: 540px; padding: 30px 22px 0; }
+.work figure.pmx.is-next .pmf h2 { font-size: 34px !important; }
+.work figure.pmx.is-next .pmf h3 { margin-top: 16px; font-size: 26px; }
+.work figure.pmx.is-next .pm-nx-sum { font-size: 16px; }
+.work figure.pmx.is-next .pm-nx-peek { width: 200px; margin-top: 32px; }
+.work figure.pmx.is-next .pm-nx-peek.is-wide { width: 100%; }
 /* A tablet reads the case in a centred column with slightly bigger text, so the lines stay under about 80 characters. */
-@media (min-width: 701px) and (max-width: 1024px) {
+@media (min-width: 701px) and (max-width: 939px) {
   .card.is-active .work { max-width: 640px; margin-inline: auto; }
   .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; }
 }
-@media (min-width: 1025px) { .chart-cap, .swipe-dots { display: none; } }
+/* A screen reads it in a wider column with the text as on a tablet, 15px (her "yazılar cok buyuk geliyor gozume"; it was
+   16px in 720px), headings a step up from it; 680px keeps the lines as long as they were, median 64-73 characters. The
+   rows you swipe on a phone wrap into lines here instead, so nothing scrolls sideways but a chart. From 940px, where the
+   list of pages is beside it: up to 1199px the column starts right of the list (256px in) and fills what is left (at
+   940px still room for three phones in a row); wider, it is in the middle. */
+@media (min-width: 940px) {
+  .card.is-active .work { max-width: min(680px, 100% - 280px); margin-left: 256px; margin-right: auto; gap: 18px; }
+  .card.is-active .work .pmx.is-reflow > .pmf { gap: 18px !important; padding: 26px 24px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 24px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 20px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf :is(h3, h4) { font-size: 16px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; line-height: 1.5 !important; }
+  .card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 20px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11.5px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-big { font-size: 32px !important; }
+  /* rows of screens three across (two when there are four), the store screenshots four across, the rest centred; a before
+     and after reads downward, its arrow turned to point down */
+  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow, .pm-wrow, .pm-cpp, .pm-ba, .pm-shots) { flex-wrap: wrap !important; justify-content: center !important; margin: 0 !important; padding: 0 !important; overflow: visible; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow) { display: grid !important; grid-template-columns: repeat(3, auto); gap: 20px 12px !important; }
+  .card.is-active .work .pmx.is-reflow :is(.pm-rrow, .pm-prow):has(> :nth-child(4):last-child) { grid-template-columns: repeat(2, auto); }
+  .card.is-active .work .pmx.is-reflow .pmf .pm-rcol.pm-rcol { width: 188px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-phone { --pw: 180 !important; }
+  /* a before and after reads across, before → after, its phones a little smaller so the three fit one row (stacked, the
+     four pairs made iKeep's page 4,000px tall) */
+  .card.is-active .work .pmx.is-reflow .pm-ba { flex-wrap: nowrap !important; justify-content: safe center !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ba .pm-phone { --pw: 164 !important; }
+  .card.is-active .work .pmx.is-reflow .pm-ba-s { width: min-content !important; } /* (its caption wraps to its phones) */
+  /* the organisms of a components page: their groups were designed side by side, so here they share two balanced columns
+     instead of one narrow one under another (her "bunlar boyle tren gibi alt alta mı dizilecek?") */
+  .card.is-active .work .pmx.is-reflow .pm-cgr .pm-cgi { display: block !important; columns: 2; column-gap: 24px; }
+  .card.is-active .work .pmx.is-reflow .pm-cgr .pm-cgc { display: contents !important; }
+  .card.is-active .work .pmx.is-reflow .pm-cgr .pm-cgc > * { break-inside: avoid; margin-bottom: 20px; }
+  .card.is-active .work .pmx.is-reflow .pm-shots > div { width: 136px !important; }
+  .card.is-active .work .pmx.is-reflow .pm-shots img { width: 136px !important; height: 286px !important; }
+  .work figure.pmx.is-sum .pm-card p { font-size: 15px; }
+  .swipe-dots { display: none; }
+  /* A chart takes the room beside the column too, so most fit whole: from the column's left edge (the list of pages is on
+     the left) to 24px from the window's right edge. One still wider fades out at its right edge until it has been
+     scrolled there, and says so beside its title. */
+  .card.is-active .work figure.pmx.is-chart { width: calc(100cqw - 280px - var(--pad)); margin-left: 0; }
+  .card.is-active .work figure.pmx.is-wide:not(.at-end) { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent); }
+  .work figure.pmx.is-wide::after { display: none; }
+  .chart-cap:has(+ figure.pmx.is-wide) h3::after { content: 'swipe →' / ''; display: inline-block; margin-left: 10px; padding: 3px 9px; border-radius: 99px; background: rgba(255, 255, 255, 0.1); color: #d6d6d6; font: 600 11px/1.4 var(--sans, inherit); vertical-align: 3px; white-space: nowrap; }
+}
+@media (min-width: 940px) and (hover: hover) and (pointer: fine) { .chart-cap:has(+ figure.pmx.is-wide) h3::after { content: 'drag →' / ''; } }
+@media (min-width: 1200px) {
+  .card.is-active .work { max-width: 680px; margin-inline: auto; }
+  .card.is-active .work figure.pmx.is-chart { width: calc(50cqw + 316px - var(--pad)); }
+}
+/* A wide box is a Tab stop (its arrow keys scroll it); the ring sits inside, where the fade does not cut it. */
+.card.is-active .work figure.pmx.is-wide:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 
 /* ------------------------------------------------ phone: folders listed on the right edge; an opened folder grows to the left */
 .hero-static { display: none; }
@@ -1808,25 +1942,4 @@ body.is-scroll { overflow-x: clip; }
   .gallery.is-focused .card.is-active .card-tab h2 { top: 0; width: 100%; border-radius: 0; padding-left: 58px; }
   .gallery:not(.is-focused) .card-sheet { display: none; }
   .card-sheet { border-radius: 0; }
-}
-
-@media (max-width: 1024px) {
-  /* The overview page at the end of each folder: one column of cards at reading size, no scaling */
-  .card.is-active .work figure.pmx.is-sum { height: auto; overflow: visible; }
-  .work figure.pmx.is-sum .pmf { width: 100% !important; height: auto; padding: 18px 16px; gap: 12px; }
-  .work figure.pmx.is-sum .pm-sumtop { display: flex; flex-direction: column; gap: 10px; }
-  .work figure.pmx.is-sum .pm-card { width: auto; }
-  .work figure.pmx.is-sum .pm-card h3 { font-size: 13px; }
-  .work figure.pmx.is-sum .pm-card p { font-size: 14px; line-height: 1.45; }
-  .work figure.pmx.is-sum .pm-pill b { font-size: 14px; }
-  .work figure.pmx.is-sum .pm-pills { display: flex; flex-direction: column; gap: 8px; }
-  .work figure.pmx.is-sum .pm-pill { width: auto; flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; }
-  /* The next-project card after it: reading size, the screen cut off at the bottom */
-  .card.is-active .work figure.pmx.is-next { height: auto; overflow: hidden; }
-  .work figure.pmx.is-next .pmf { width: 100% !important; height: 540px; padding: 30px 22px 0; }
-  .work figure.pmx.is-next .pmf h2 { font-size: 34px !important; }
-  .work figure.pmx.is-next .pmf h3 { margin-top: 16px; font-size: 26px; }
-  .work figure.pmx.is-next .pm-nx-sum { font-size: 16px; }
-  .work figure.pmx.is-next .pm-nx-peek { width: 200px; margin-top: 32px; }
-  .work figure.pmx.is-next .pm-nx-peek.is-wide { width: 100%; }
 }

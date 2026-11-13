@@ -1,6 +1,6 @@
 ---
 title: iKeep
-order: 4
+order: 2
 year: '2026'
 tabNote: 'Redesign shipped in a week'
 tile: { cover: /images/tiles/ikeep.webp, when: '2026 · 1 week · App Store' }

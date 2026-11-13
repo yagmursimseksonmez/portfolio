@@ -1,6 +1,8 @@
 const root = document.documentElement;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const mobile = matchMedia('(max-width: 1024px)');
+// A case reads as on a screen from 940px (the list of pages beside its column, site.css), before the rest of the site does.
+const caseScreen = matchMedia('(min-width: 940px)');
 
 function cssMs(el, name) {
   if (reduceMotion.matches) return 0;
@@ -86,7 +88,6 @@ function startHero() {
   let raf = 0;
   let covered = false;
   let onScreen = true;
-  let word = null;
 
   const rand = (a, b) => Math.random() * (b - a) + a;
   function spawn(fromBottom) {
@@ -112,12 +113,6 @@ function startHero() {
     const descent = Math.max(...m.map((x) => x.actualBoundingBoxDescent)) * k;
     const leading = size * 0.86;
     const cssH = ascent + descent + leading * (text.length - 1);
-    // Where the last word ("things") sits, for the app icons that fan out over it (startThings). Measured here, while the
-    // context still has the font: resizing the canvas below resets it.
-    const lastLine = text[text.length - 1];
-    const lead = lastLine.slice(0, lastLine.lastIndexOf(' ') + 1);
-    const baseline = ascent + (text.length - 1) * leading;
-    word = { x: m[m.length - 1].actualBoundingBoxLeft * k + ctx.measureText(lead).width * k, w: ctx.measureText(lastLine.slice(lead.length)).width * k, top: baseline - ascent, bottom: baseline + descent };
     wrap.style.height = `${cssH}px`;
 
     const dpr = Math.min(2, devicePixelRatio || 1);
@@ -214,7 +209,6 @@ function startHero() {
 
   let coverTimer = 0;
   return {
-    wordBox: () => word,
     setCovered(next) {
       clearTimeout(coverTimer);
       if (!next) { covered = false; sync(); return; }
@@ -369,6 +363,9 @@ function cardY(k, next) {
 
 function setFocus(next) {
   const prev = active;
+  // (asked before anything changes: a folder that hides at once, as one does while its balloon swells, drops the focus
+  // as soon as the styles are worked out again)
+  const inside = gallery.contains(document.activeElement);
   active = next;
   if (prev !== next) document.querySelectorAll('[data-details].is-open').forEach((p) => setDetails(p, false));
   if (prev !== next) {
@@ -395,7 +392,6 @@ function setFocus(next) {
     const y = cardY(k, next);
     if (y === null) card.style.removeProperty('--y');
     else card.style.setProperty('--y', y);
-    if (!isActive || prev !== next) card.querySelector('.card-content').scrollLeft = 0;
   });
 
   if (book) {
@@ -414,7 +410,7 @@ function setFocus(next) {
     home.inert = focused;
     if (focused && prev !== next && leaving) (isBook ? book : cards[next]).focus({ preventScroll: true });
   }
-  if (!focused && gallery.contains(document.activeElement)) {
+  if (!focused && inside) {
     // Closing hands the focus back to what opened it (the project on the homepage, or "Wanna know me better?"), so a
     // keyboard user sees where they are.
     const back = prev === BOOK ? document.querySelector('.subheader [data-open-book]') : prev !== null ? document.querySelector(`[data-open-case="${prev}"]`) : null;
@@ -430,6 +426,7 @@ function focusGallery(next) {
     closeBook(() => { if (active === BOOK) setFocus(null); });
     return;
   }
+  if (next === null && popBack()) return;
   if (next !== null) setContact(false);
   setFocus(next);
 }
@@ -454,6 +451,165 @@ function openNext(to, title) {
     cards.forEach((c) => { c.style.viewTransitionName = ''; });
     gallery.classList.remove('is-swapping');
   });
+}
+
+// ------------------------------------------------------------------ balloon
+// A disc opens its project like a balloon (her "sanki bi balon büyüsün patlasın ve sayfaya donuserek case açılsın", then
+// "dogal bir balon şişmesi ve patlaması olsun. caselerin bulundugu küçük daireleri merkez al"): the disc blows up from its
+// own middle, faster as it goes, stretching a little one way and the other, trembles at its fullest and pops, gone at
+// once, its scraps flying out from that middle; the page grows out of the same point. Closing draws the page back into
+// that point and the disc blows up again in its place. Everything is a transform or opacity, run by the compositor. (The
+// page used to spread as a growing circle; from a disc near the right edge only its left side was ever in view, so it
+// looked as if it came in from the left.) With reduced motion the page simply opens and closes.
+const tilesEl = document.querySelector('.tiles');
+let popped = null; // { k, x, y }: the disc the open page came from, for the way back
+let popping = false;
+
+const circle = (r, x, y) => `circle(${r}px at ${x}px ${y}px)`;
+const origin = (x, y) => `${x}px ${y}px`;
+
+// The cover's average colour, for the scraps.
+function coverColour(img) {
+  try {
+    const c = document.createElement('canvas');
+    c.width = c.height = 1;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return `rgb(${r} ${g} ${b})`;
+  } catch { return 'var(--primary)'; }
+}
+
+// The pop: a ring that rushes out and fades, and a dozen scraps of the balloon flung out from its middle, tumbling and
+// dropping a little as they go.
+function burst(x, y, r, colour) {
+  const pop = document.createElement('div');
+  pop.className = 'balloon-pop';
+  pop.style.cssText = `left:${x}px;top:${y}px;--c:${colour}`;
+  const ring = document.createElement('i');
+  ring.className = 'pop-ring';
+  ring.style.cssText = `width:${2 * r}px;height:${2 * r}px;margin:${-r}px 0 0 ${-r}px`;
+  pop.append(ring);
+  const parts = [ring.animate([{ opacity: 0.85, scale: 0.9 }, { opacity: 0, scale: 1.6 }], { duration: 380, easing: 'cubic-bezier(.1,.7,.3,1)', fill: 'forwards' })];
+  const n = 12;
+  for (let i = 0; i < n; i++) {
+    const a = ((i + Math.random() * 0.6) / n) * Math.PI * 2;
+    const from = r * 0.7;
+    const far = r + 40 + Math.random() * 80;
+    const turn = (a * 180) / Math.PI + 90;
+    const bit = document.createElement('i');
+    bit.className = i % 4 === 1 ? 'pop-bit is-accent' : 'pop-bit';
+    pop.append(bit);
+    parts.push(bit.animate([
+      { transform: `translate(${Math.cos(a) * from}px, ${Math.sin(a) * from}px) rotate(${turn}deg) scale(1)`, opacity: 1 },
+      { transform: `translate(${Math.cos(a) * far}px, ${Math.sin(a) * far + 30}px) rotate(${turn + 200}deg) scale(.55)`, opacity: 0 },
+    ], { duration: 480 + Math.random() * 180, easing: 'cubic-bezier(.12,.75,.35,1)', fill: 'forwards' }));
+  }
+  document.body.append(pop);
+  Promise.all(parts.map((p) => p.finished)).finally(() => pop.remove());
+}
+
+async function popOpen(k, link) {
+  const shot = link.querySelector('.tile-shot');
+  if (reduceMotion.matches || !shot || !gallery || !document.body.animate) { focusGallery(k); return; }
+  if (popping) return;
+  popping = true;
+  const tile = link.closest('.tile');
+  const rect = shot.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  const r = rect.width / 2;
+  // The disc itself is the balloon (a copy laid over it had to decode its picture again, and showed a dark ball until it
+  // had). It starts from where it is (a disc under the pointer is already a little larger) and blows up to 1.55 times
+  // its size, less near an edge of the window, so the whole balloon stays in view.
+  const S = rect.width / shot.offsetWidth || 1;
+  const room = Math.min(x, innerWidth - x, y, innerHeight - y) - 6;
+  const PEAK = Math.max(1.2, Math.min(1.55, room / r));
+  const d = PEAK - 1;
+  const at = (sx, sy) => `scale(${S * (1 + sx * d)}, ${S * (1 + (sy ?? sx) * d)})`;
+  tile?.classList.add('is-popped');
+  tilesEl?.classList.add('is-popping');
+  // The blowing up and the page growing take 0.86 s together (her "balon açılışını biraz kısaltabilirsin").
+  const swell = shot.animate([
+    { transform: at(0) },
+    { transform: at(0.2, 0.1), offset: 0.3 },
+    { transform: at(0.38, 0.5), offset: 0.55 },
+    { transform: at(0.8, 0.7), offset: 0.78 },
+    { transform: at(1, 1), offset: 0.9 },
+    { transform: at(0.97, 1.02), offset: 0.95 },
+    { transform: at(1.03, 0.99) },
+  ], { duration: 420, easing: 'cubic-bezier(.45,0,.75,.55)', fill: 'forwards' });
+  // The page opens under it, out of sight (clipped to nothing, the homepage left as it is): laying out and fitting a case
+  // takes the main thread for 100-200 ms, which the swell (run by the compositor) does not feel (her "biraz kasıyor gibi
+  // gozukuyor"). Two frames on, so the swell is already running.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    cards[k].style.clipPath = circle(0, x, y);
+    gallery.classList.add('is-popping', 'is-inflating');
+    focusGallery(k);
+    fitFramesToWidth(); // (now, not a frame later, so the page has nothing left to wait for)
+  }));
+  const done = () => {
+    gallery.classList.remove('is-popping', 'is-inflating');
+    tilesEl?.classList.remove('is-popping');
+    tile?.classList.remove('is-popped');
+    shot.getAnimations().forEach((a) => a.cancel());
+    popping = false;
+  };
+  swell.finished.then(() => {
+    // (closed again while it swelled, with Escape: the disc settles back)
+    if (active !== k) {
+      cards[k].style.clipPath = '';
+      shot.animate([{ transform: at(1) }, { transform: 'scale(1)' }], { duration: 240, easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'forwards' })
+        .finished.then(done);
+      return;
+    }
+    const cover = shot.querySelector('img');
+    burst(x, y, r * PEAK, cover ? coverColour(cover) : 'var(--primary)');
+    // A balloon is gone the moment it pops; the homepage starts to go once it is.
+    shot.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 40, fill: 'forwards' })
+      .finished.then(() => gallery.classList.remove('is-inflating'));
+    popped = { k, x, y };
+    cards[k].style.clipPath = '';
+    const grow = cards[k].animate([
+      { transformOrigin: origin(x, y), scale: 0.62, opacity: 0 },
+      { transformOrigin: origin(x, y), opacity: 1, offset: 0.4 },
+      { transformOrigin: origin(x, y), scale: 1, opacity: 1 },
+    ], { duration: 440, easing: 'cubic-bezier(.2,.8,.25,1)' });
+    grow.finished.finally(done);
+  });
+}
+
+// The way back: the page shrinks into the disc it came from while the homepage returns behind it, and the disc blows up
+// again in its place. Only for a page opened from a disc, while no other project has been opened in between.
+function popBack() {
+  if (!popped || popped.k !== active || reduceMotion.matches || popping) return false;
+  const { k } = popped;
+  let { x, y } = popped;
+  popped = null;
+  popping = true;
+  gallery.classList.add('is-shrinking');
+  // The disc may have drifted, or the window changed size, since it opened: aim at where it is now.
+  const shot = document.querySelector(`[data-open-case="${k}"] .tile-shot`);
+  const now = shot?.getBoundingClientRect();
+  if (now?.width) ({ x, y } = { x: now.left + now.width / 2, y: now.top + now.height / 2 });
+  shot?.animate([{ scale: 0.3, opacity: 0 }, { scale: 1.12, opacity: 1, offset: 0.65 }, { scale: 0.97, offset: 0.85 }, { scale: 1, opacity: 1 }],
+    { duration: 460, delay: 180, easing: 'cubic-bezier(.3,.7,.4,1)', fill: 'backwards' });
+  cards[k].animate([
+    { transformOrigin: origin(x, y), scale: 1, opacity: 1 },
+    { transformOrigin: origin(x, y), opacity: 1, offset: 0.45 },
+    { transformOrigin: origin(x, y), scale: 0.6, opacity: 0 },
+  ], { duration: 300, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' })
+    .finished.then((shrink) => {
+      // The page hides at once here (no fade), which drops the focus before setFocus could hand it back, so do it here.
+      const back = gallery.contains(document.activeElement) ? document.querySelector(`[data-open-case="${k}"]`) : null;
+      gallery.classList.add('is-popping');
+      setFocus(null);
+      back?.focus({ preventScroll: true });
+      gallery.classList.remove('is-shrinking');
+      shrink.cancel();
+      requestAnimationFrame(() => { gallery.classList.remove('is-popping'); popping = false; });
+    });
+  return true;
 }
 
 let bookTimer = 0;
@@ -492,21 +648,18 @@ function workItems(card) {
   return [...card.querySelector('.work').children];
 }
 
+// Left and right step through the open case a page at a time (a chart with its caption), landing where the progress stops
+// land a page. Left from the middle of a page goes back to its top first.
 function stepWork(delta) {
   if (typeof active !== 'number') return false;
   const content = cards[active].querySelector('.card-content');
-  const items = workItems(cards[active]);
-  const origin = content.getBoundingClientRect().left;
-  let current = 0;
-  let best = Infinity;
-  items.forEach((item, i) => {
-    const d = Math.abs(item.getBoundingClientRect().left - origin - 20);
-    if (d < best) { best = d; current = i; }
-  });
-  const next = items[Math.max(0, Math.min(items.length - 1, current + delta))];
-  const max = content.scrollWidth - content.clientWidth;
-  const left = Math.max(0, Math.min(max, next.offsetLeft - parseFloat(getComputedStyle(next.parentElement).paddingLeft)));
-  content.scrollTo({ left, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  const origin = content.getBoundingClientRect().top + parseFloat(getComputedStyle(content).paddingTop) + 7;
+  const pages = workItems(cards[active]).filter((item) => !item.previousElementSibling?.classList.contains('chart-cap'));
+  const tops = pages.map((item) => item.getBoundingClientRect().top - origin);
+  const current = Math.max(0, tops.findLastIndex((t) => t <= 4));
+  const to = Math.max(0, Math.min(tops.length - 1, delta > 0 ? current + 1 : tops[current] < -4 ? current : current - 1));
+  const top = Math.max(0, Math.min(content.scrollHeight - content.clientHeight, content.scrollTop + tops[to]));
+  content.scrollTo({ top, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
   return true;
 }
 
@@ -531,14 +684,6 @@ function startGallery() {
     card.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && e.target === card && active !== k) { e.preventDefault(); focusGallery(k); }
     });
-    const content = card.querySelector('.card-content');
-    content.addEventListener('wheel', (e) => {
-      if (active !== k) return;
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      if (content.scrollWidth <= content.clientWidth) return;
-      e.preventDefault();
-      content.scrollLeft += e.deltaY;
-    }, { passive: false });
   });
 
   book?.addEventListener('click', () => { if (active !== BOOK) focusGallery(BOOK); });
@@ -548,9 +693,9 @@ function startGallery() {
   document.querySelectorAll('[data-open-book]').forEach((a) =>
     a.addEventListener('click', (e) => { e.preventDefault(); focusGallery(BOOK); }),
   );
-  // The project cards on the homepage open their folders.
+  // The discs on the homepage open their projects, as a balloon that pops.
   document.querySelectorAll('[data-open-case]').forEach((a) =>
-    a.addEventListener('click', (e) => { e.preventDefault(); focusGallery(Number(a.dataset.openCase)); }),
+    a.addEventListener('click', (e) => { e.preventDefault(); popOpen(Number(a.dataset.openCase), a); }),
   );
   gallery.querySelector('[data-dismiss]').addEventListener('click', () => focusGallery(null));
 
@@ -563,11 +708,22 @@ function startGallery() {
     }
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      // A box that scrolls sideways (a wide chart) and a text field keep these arrows for themselves.
+      if (document.activeElement?.closest('figure.pmx.is-wide, input, select, textarea, [contenteditable]:not([contenteditable="false"])')) return;
       if (stepWork(e.key === 'ArrowRight' ? 1 : -1)) e.preventDefault();
       return;
     }
     if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
     if (active === null && !gallery.contains(document.activeElement)) return;
+    // An open case reads downward, so there up and down scroll it: the browser does that while the focus is inside the
+    // page; from the folder itself (where opening it leaves the focus) or a progress stop, this does.
+    if (typeof active === 'number') {
+      const content = cards[active].querySelector('.card-content');
+      if (content.contains(document.activeElement)) return;
+      e.preventDefault();
+      content.scrollBy({ top: e.key === 'ArrowDown' ? 80 : -80, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      return;
+    }
     e.preventDefault();
     // Up walks toward the back of the pile and finally the book; down comes forward.
     if (e.key === 'ArrowUp') {
@@ -587,45 +743,45 @@ function startGallery() {
 }
 
 // ---------------------------------------------------------- drag to scroll
-// With a mouse, click and drag moves the open folder sideways, like a swipe on the phone. Links, buttons, the
-// before/after slider and a live screen keep their own clicks, and the click that ends a drag does nothing.
+// With a mouse, click and drag moves a chart wider than the column sideways, like a swipe on the phone. Links, buttons and
+// a live screen keep their own clicks, and the click that ends a drag does nothing.
 function startDragScroll() {
-  const own = 'a, button, input, select, textarea, iframe, [data-compare], .is-live';
-  cards.forEach((card) => {
-    const content = card.querySelector('.card-content');
+  const own = 'a, button, input, select, textarea, iframe, .is-live';
+  document.querySelectorAll('.work figure.pmx').forEach((fig) => {
     let drag = null;
     let dragged = false;
-    content.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'mouse' || e.button !== 0 || mobile.matches || !card.classList.contains('is-active')) return;
-      if (e.target.closest(own) || content.scrollWidth <= content.clientWidth) return;
-      drag = { id: e.pointerId, x: e.clientX, left: content.scrollLeft, moved: false };
+    fig.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || !fig.classList.contains('is-wide') || !fig.closest('.card.is-active')) return;
+      if (e.target.closest(own)) return;
+      drag = { id: e.pointerId, x: e.clientX, left: fig.scrollLeft, moved: false };
     });
-    content.addEventListener('pointermove', (e) => {
+    fig.addEventListener('pointermove', (e) => {
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.x;
       if (!drag.moved) {
         if (Math.abs(dx) < 6) return;
         drag.moved = true;
-        content.setPointerCapture(e.pointerId);
-        content.classList.add('is-dragging');
+        fig.setPointerCapture(e.pointerId);
+        fig.classList.add('is-dragging');
         getSelection()?.removeAllRanges();
       }
-      content.scrollLeft = drag.left - dx;
+      fig.scrollLeft = drag.left - dx;
     });
     const end = () => {
       if (!drag) return;
       if (drag.moved) {
-        content.classList.remove('is-dragging');
+        fig.classList.remove('is-dragging');
         dragged = true;
         setTimeout(() => { dragged = false; }, 0);
       }
       drag = null;
     };
-    content.addEventListener('pointerup', end);
-    content.addEventListener('pointercancel', end);
-    content.addEventListener('click', (e) => { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+    fig.addEventListener('pointerup', end);
+    fig.addEventListener('pointercancel', end);
+    fig.addEventListener('scroll', () => fig.classList.toggle('at-end', fig.scrollLeft >= fig.scrollWidth - fig.clientWidth - 2), { passive: true });
+    fig.addEventListener('click', (e) => { if (dragged) { e.preventDefault(); e.stopPropagation(); } }, true);
     // Images would otherwise start the browser's own drag and drop.
-    content.addEventListener('dragstart', (e) => { if (card.classList.contains('is-active')) e.preventDefault(); });
+    fig.addEventListener('dragstart', (e) => { if (fig.classList.contains('is-wide')) e.preventDefault(); });
   });
 }
 
@@ -706,16 +862,19 @@ function startTallBoards() {
 }
 
 // ------------------------------------------------------- scrolling screens
-// A wheel over a phone scrolls that screen. Once it reaches an end, a fresh gesture moves the folder sideways again.
+// A wheel over a phone screen scrolls that screen (with a mouse it does so on hover, site.css; on a touch screen after a
+// tap). Once it reaches an end, the rest of that gesture stops there and a fresh one moves the case again.
+const hoverScroll = matchMedia('(hover: hover) and (pointer: fine)');
 function startScrollScreens() {
-  document.querySelectorAll('.device-scroll, .beat-shot, .pm-pmid, .pm-wmid, .pm-bscroll').forEach((win) => {
+  document.querySelectorAll('.device-scroll, .beat-shot, .pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll').forEach((win) => {
     let last = 0;
     win.addEventListener('wheel', (e) => {
-      if (!win.closest('.card.is-active') || !win.classList.contains('is-live')) return;
+      if (!win.closest('.card.is-active') || win.closest('.card-content.is-moving')) return;
+      if (!win.classList.contains('is-live') && !hoverScroll.matches) return;
       if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
       const max = win.scrollHeight - win.clientHeight;
       const canScroll = (e.deltaY > 0 && win.scrollTop < max - 0.5) || (e.deltaY < 0 && win.scrollTop > 0.5);
-      if (canScroll) { last = e.timeStamp; e.stopPropagation(); return; }
+      if (canScroll) { last = e.timeStamp; win.dataset.moved = '1'; e.stopPropagation(); return; }
       if (e.timeStamp - last < 400) { e.preventDefault(); e.stopPropagation(); last = e.timeStamp; }
     }, { passive: false });
   });
@@ -749,8 +908,6 @@ function startDetails() {
   document.querySelectorAll('[data-details-close]').forEach((btn) =>
     btn.addEventListener('click', (e) => { e.stopPropagation(); setDetails(btn.closest('[data-details]'), false); }),
   );
-  // Scrolling inside the panel should not drive the sideways strip.
-  document.querySelectorAll('[data-details]').forEach((panel) => panel.addEventListener('wheel', (e) => e.stopPropagation()));
 }
 
 // -------------------------------------------------- before / after slider
@@ -954,41 +1111,16 @@ if (linked) {
 const setVar = (el, name, v) => { if (el.style.getPropertyValue(name) !== v) el.style.setProperty(name, v); };
 const addClass = (el, c) => { if (!el.classList.contains(c)) el.classList.add(c); };
 
-// The finished pages in src/content/playmate-frames are designed 700px tall; scale each to the strip's frame height.
-function fitPlaymateFrames() {
-  const fit = (target) => {
-    const page = target.firstElementChild;
-    if (!page || target.clientHeight <= 0) return;
-    // On a phone a reflowed page (and the overview page) is laid out at reading size, never zoomed.
-    if (mobile.matches && target.matches('.is-reflow, .is-sum, .is-next, .is-chart')) return;
-    let z = target.clientHeight / 700;
-    // A chart (information architecture, user flow) is read whole, so on a laptop it also fits the screen width, if
-    // that takes no more than 15% off. The whole folder shrinks with it, so every page keeps the same height.
-    const work = target.closest('.work');
-    if (!mobile.matches && work && innerWidth > 1024) {  // tablets get their own layout (responsive step 2)
-      const avail = target.closest('.card-content').clientWidth - 2 * parseFloat(getComputedStyle(work).paddingLeft);
-      let zc = z;
-      work.querySelectorAll(':scope > figure.pmx > .pm-f-iat, :scope > figure.pmx > .pm-f-fm').forEach((chart) => {
-        const w = parseFloat(chart.style.width);
-        if (w) zc = Math.min(zc, avail / w);
-      });
-      z = Math.max(z * 0.85, zc);
-    }
-    setVar(page, '--pmz', String(z));
-    // An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size:
-    // undo the zoom on the frame and give it the zoomed size instead.
-    page.querySelectorAll('iframe[data-w]').forEach((f) => {
-      f.style.zoom = String(1 / z);
-      f.style.width = `${f.dataset.w * z}px`;
-      f.style.height = `${f.dataset.h * z}px`;
-    });
-  };
-  const ro = new ResizeObserver((entries) => entries.forEach(({ target }) => fit(target)));
-  document.querySelectorAll('figure.pmx').forEach((fig) => ro.observe(fig));
-  // A narrower window leaves the frame height alone, so the pages are fitted again on resize.
-  addEventListener('resize', () => document.querySelectorAll('figure.pmx').forEach(fit));
+// An embedded page (the Figma prototype) must not be zoomed with the rest, or it lays itself out at the wrong size: undo
+// the zoom on the frame and give it the zoomed size instead.
+function zoomFrames(page, z) {
+  page.querySelectorAll('iframe[data-w]').forEach((f) => {
+    if (f.style.zoom === String(1 / z) && f.style.width === `${f.dataset.w * z}px`) return;
+    f.style.zoom = String(1 / z);
+    f.style.width = `${f.dataset.w * z}px`;
+    f.style.height = `${f.dataset.h * z}px`;
+  });
 }
-fitPlaymateFrames();
 
 // Chengel prototype: the button on the page flips the prototype between light and dark.
 document.addEventListener('click', (e) => {
@@ -1004,15 +1136,16 @@ document.addEventListener('click', (e) => {
 });
 
 
-// Phone: a folder opens as one long page. Pages led by text (first page, problem, numbers, loop, screens, outcome …)
-// reflow into one column at reading size (site.css, .is-reflow). The rest is scaled to the screen width (never below 70%);
-// a frame still wider than the screen, like a chart, scrolls sideways inside its own box.
+// A case is one long page. Pages led by text (first page, problem, numbers, loop, screens, outcome …) reflow into one
+// column at reading size (site.css, .is-reflow). The rest is scaled to the column's width (never below 70%); a frame still
+// wider than the column, like a chart, scrolls sideways inside its own box.
 const reflowPages = '.pm-f-hero, .pm-f-problem, .pm-f-stats, .pm-f-cycle, .pm-f-result, .pm-f-final, .pm-f-board, .pm-f-comp2, .pm-f-proto, .pm-f-outcome, .pm-f-getit, .pm-ch, '
   + '.pm-f-plan, .pm-f-people, .pm-f-synth, .pm-f-empathy, .pm-f-lofi, .pm-f-ut, .pm-f-board2, .pm-f-cmp, .pm-f-ba, .pm-f-dec';
 const chartPages = '.pm-f-iat, .pm-f-fm, .pm-f-wide, .pm-f-pers';
 const reflowCases = '#healthbar, #ikeep, #chengel, #playmate';
-// Phone: a row you swipe sideways (screens, before and after, the store screenshots) gets a dot per item under it and a
-// "Swipe →" cue that goes once the row has moved, so it is clear there is more to the right.
+// Phone and tablet: a row you swipe sideways (screens, before and after, the store screenshots) gets a dot per item under
+// it and a "Swipe →" cue that goes once the row has moved, so it is clear there is more to the right. (A screen wraps the
+// row instead and hides the dots, site.css.)
 function addSwipeDots(page) {
   page.querySelectorAll('.pm-rrow, .pm-prow, .pm-wrow, .pm-cpp, .pm-ba, .pm-shots').forEach((row) => {
     if (row.dataset.dots) return;
@@ -1024,105 +1157,142 @@ function addSwipeDots(page) {
     dots.setAttribute('aria-hidden', 'true');
     dots.innerHTML = `${items.map(() => '<i></i>').join('')}<span>Swipe →</span>`;
     row.after(dots);
+    dots.hidden = true; // (until the row is measured; on a screen, where rows wrap, it stays so without a write)
     const marks = [...dots.querySelectorAll('i')];
     const update = () => {
       const max = row.scrollWidth - row.clientWidth;
-      dots.hidden = max < 4;
+      if (dots.hidden !== max < 4) dots.hidden = max < 4;
       const k = max > 0 ? Math.round((row.scrollLeft / max) * (items.length - 1)) : 0;
       marks.forEach((m, i) => m.classList.toggle('on', i === k));
       if (row.scrollLeft > 8) addClass(dots, 'moved');
     };
     row.addEventListener('scroll', update, { passive: true });
+    // (the observer's first call measures the row once it is laid out; measuring here, between writes, forced a layout for
+    // every row as a folder opened)
     new ResizeObserver(update).observe(row);
-    update();
   });
 }
-// A page's width at zoom 1, measured once (it is a fixed-size board), so a refit has nothing to re-measure.
+// A page's width at zoom 1, measured once (it is a fixed-size board), so a refit has nothing to re-measure. (offsetWidth:
+// a closed folder is tilted, which bends its boxes on screen.)
 let naturalWidths = new WeakMap();
 function naturalWidth(page) {
   if (!naturalWidths.has(page)) {
     setVar(page, '--pmz', '1');
-    const w = page.getBoundingClientRect().width || page.scrollWidth;
+    const w = page.offsetWidth || page.scrollWidth;
     if (!w) return 0;
     naturalWidths.set(page, w);
   }
   return naturalWidths.get(page);
 }
+// The charts' widths, all at zoom 1 first and then read in one go, so the page is laid out once for all of them.
+function measureCharts() {
+  const pages = [...document.querySelectorAll('.work figure.pmx.is-chart > .pmf')];
+  naturalWidths = new WeakMap();
+  pages.forEach((page) => setVar(page, '--pmz', '1'));
+  pages.forEach((page) => naturalWidth(page));
+}
+// A frame wider than its box scrolls sideways: it is then a Tab stop, so the arrow keys can scroll it, and it is told when
+// it has been scrolled to its end (its right edge fades until then, site.css; startDragScroll).
+function setWide(fig, on) {
+  if (on === fig.classList.contains('is-wide')) return;
+  fig.classList.toggle('is-wide', on);
+  fig.classList.remove('at-end');
+  if (on) fig.tabIndex = 0;
+  else fig.removeAttribute('tabindex');
+}
+// What each page is never changes, so it is decided once for every case, before any opens: reflowed into the column, a
+// chart with its caption above it, the overview or the next-project card. (The classes only take effect in an open folder,
+// site.css. Deciding them as a folder opened laid the whole case out twice, once before and once after.)
+function prepareFrames() {
+  document.querySelectorAll('.work figure.pmx').forEach((fig) => {
+    const page = fig.firstElementChild;
+    if (!page) return;
+    if (page.classList.contains('pm-f-sum')) { addClass(fig, 'is-sum'); return; }
+    if (page.classList.contains('pm-f-next')) { addClass(fig, 'is-next'); return; }
+    if (!fig.closest(reflowCases)) return;
+    // A chart keeps its drawing and scrolls sideways if it must, a little larger than the rest; its title moves out above
+    // it at reading size.
+    const wideBoard = page.matches('.pm-f-board') && parseFloat(page.querySelector('img.pm-bimg')?.style.width) > 900;
+    if (page.matches(chartPages) || wideBoard) {
+      addClass(fig, 'is-chart');
+      const cap = document.createElement('div');
+      cap.className = 'chart-cap';
+      const num = page.querySelector('.pm-big')?.textContent.trim();
+      cap.innerHTML = `${num ? `<span>${num}</span>` : ''}<div><small></small><h3></h3></div>`;
+      cap.querySelector('small').textContent = page.querySelector('.pm-lab')?.textContent.trim() ?? '';
+      cap.querySelector('h3').textContent = page.querySelector('h2')?.textContent.trim() ?? '';
+      // a link in the hidden header (Chengel's View in Figma) comes along
+      page.querySelectorAll('.pm-bh a[href]').forEach((a) => {
+        const link = document.createElement('a');
+        link.href = a.href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = a.textContent;
+        cap.querySelector('div').append(link);
+      });
+      fig.before(cap);
+      return;
+    }
+    if (page.matches(reflowPages)) {
+      // The loop's numbers and texts sit absolutely on the designed page, so their order there does not matter; reflowed
+      // they become a list, so each number goes right before its text.
+      page.querySelectorAll('.pm-cwrap').forEach((wrap) => {
+        const nds = [...wrap.querySelectorAll(':scope > .pm-nd')];
+        const nts = [...wrap.querySelectorAll(':scope > .pm-nt')];
+        if (nds.length === nts.length && nds.some((nd, i) => nd.nextElementSibling !== nts[i])) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
+      });
+      addClass(fig, 'is-reflow');
+      addSwipeDots(page);
+      zoomFrames(page, 1);
+    }
+  });
+}
+// In the open folder a chart is scaled to its box (on a screen wider than the column, site.css), down to 0.72 when that
+// shows the whole chart. One that does not fit even then scrolls sideways: at 0.8 on a phone or a tablet, at full size
+// where the case reads as on a screen (from 940px), where shrinking it only made its text smaller (8.5px on PlayMate's
+// journey map) without sparing the scroll. A page that is none of the kinds above is scaled to the column (never below
+// 70%). Everything is measured first and written after, so the case is laid out once.
 function fitFramesToWidth() {
-  if (!mobile.matches) {
-    document.querySelectorAll('figure.pmx.is-reflow, figure.pmx.is-chart').forEach((fig) => fig.classList.remove('is-reflow', 'is-chart'));
-    return;
-  }
-  document.querySelectorAll('.card.is-active .card-content').forEach((content) => {
-    const avail = content.clientWidth - 24;
+  document.querySelectorAll('.card.is-active .work').forEach((work) => {
+    const figs = [...work.querySelectorAll('figure.pmx:not(.is-reflow, .is-sum, .is-next)')];
+    if (!figs.length) return;
+    const pad = getComputedStyle(work);
+    const avail = work.clientWidth - parseFloat(pad.paddingLeft) - parseFloat(pad.paddingRight);
     if (avail <= 0) return;
-    content.querySelectorAll('figure.pmx').forEach((fig) => {
+    const fits = figs.map((fig) => {
       const page = fig.firstElementChild;
-      if (!page) return;
-      if (page.classList.contains('pm-f-sum')) { addClass(fig, 'is-sum'); setVar(page, '--pmz', '1'); return; }
-      if (page.classList.contains('pm-f-next')) { addClass(fig, 'is-next'); setVar(page, '--pmz', '1'); return; }
-      // A chart keeps its drawing and scrolls sideways, a little larger than the rest; its title moves out above it at reading size.
-      const wideBoard = page.matches('.pm-f-board') && parseFloat(page.querySelector('img.pm-bimg')?.style.width) > 900;
-      if (fig.closest(reflowCases) && (page.matches(chartPages) || wideBoard)) {
-        addClass(fig, 'is-chart');
-        if (!fig.previousElementSibling?.classList.contains('chart-cap')) {
-          const cap = document.createElement('div');
-          cap.className = 'chart-cap';
-          const num = page.querySelector('.pm-big')?.textContent.trim();
-          cap.innerHTML = `${num ? `<span>${num}</span>` : ''}<div><small></small><h3></h3></div>`;
-          cap.querySelector('small').textContent = page.querySelector('.pm-lab')?.textContent.trim() ?? '';
-          cap.querySelector('h3').textContent = page.querySelector('h2')?.textContent.trim() ?? '';
-          // a link in the hidden header (Chengel's View in Figma) comes along
-          page.querySelectorAll('.pm-bh a[href]').forEach((a) => {
-            const link = document.createElement('a');
-            link.href = a.href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = a.textContent;
-            cap.querySelector('div').append(link);
-          });
-          fig.before(cap);
-        }
-        const w = naturalWidth(page);
-        if (!w) return;
-        const s = Math.min(1, Math.max(0.8, avail / w));
-        setVar(page, '--pmz', String(s));
-        fig.classList.toggle('is-wide', w * s > avail + 4);
-        return;
-      }
-      if (fig.closest(reflowCases) && page.matches(reflowPages)) {
-        // The loop's numbers and texts sit absolutely on a desktop, so their order there does not matter; on a phone
-        // they become a list, so each number goes right before its text.
-        page.querySelectorAll('.pm-cwrap').forEach((wrap) => {
-          const nds = [...wrap.querySelectorAll(':scope > .pm-nd')];
-          const nts = [...wrap.querySelectorAll(':scope > .pm-nt')];
-          if (nds.length === nts.length && nds.some((nd, i) => nd.nextElementSibling !== nts[i])) nds.forEach((nd, i) => wrap.append(nd, nts[i]));
-        });
-        addClass(fig, 'is-reflow');
-        addSwipeDots(page);
-        fig.classList.toggle('is-wide', false);
-        fig.style.removeProperty('--pm-h');
-        setVar(page, '--pmz', '1');
-        return;
-      }
-      const w = naturalWidth(page);
+      const box = getComputedStyle(fig);
+      const room = fig.classList.contains('is-chart') ? fig.clientWidth - parseFloat(box.paddingLeft) - parseFloat(box.paddingRight) : avail;
+      return { fig, page, room, w: page ? naturalWidth(page) : 0 };
+    });
+    fits.forEach(({ fig, page, room, w }) => {
       if (!w) return;
-      const s = Math.min(1, Math.max(0.7, avail / w));
+      if (fig.classList.contains('is-chart')) {
+        const s = room / w >= 0.72 ? Math.min(1, room / w) : caseScreen.matches ? 1 : 0.8;
+        setVar(page, '--pmz', String(s));
+        setWide(fig, w * s > room + 4);
+        return;
+      }
+      const s = Math.min(1, Math.max(0.7, room / w));
       setVar(fig, '--pm-h', `${700 * s}px`);
       setVar(page, '--pmz', String(s));
-      fig.classList.toggle('is-wide', w * s > avail + 4);
+      zoomFrames(page, s);
+      setWide(fig, w * s > room + 4);
     });
   });
 }
-mobile.addEventListener('change', fitFramesToWidth);
+prepareFrames();
+measureCharts();
 window.addEventListener('resize', fitFramesToWidth);
 // Fit again when a folder opens. Only the cards themselves are watched: the fitting changes classes inside them.
 document.querySelectorAll('[data-card]').forEach((card) => {
   new MutationObserver(() => requestAnimationFrame(fitFramesToWidth)).observe(card, { attributes: true, attributeFilter: ['class'] });
 });
-window.addEventListener('load', () => { naturalWidths = new WeakMap(); fitFramesToWidth(); });
+// Pictures can widen a board, so the charts are measured again once they have loaded.
+window.addEventListener('load', () => { measureCharts(); fitFramesToWidth(); });
 fitFramesToWidth();
 
 // ------------------------------------------------------- reading progress
-// A thin bar along the top of the open folder: how far through the case you have scrolled.
-// Under it: Start, the numbered research steps and End. Each one is a button that scrolls there.
+// A thin line along the top of the open case: how far down you have read. Above it Start and End, on it a dot for every
+// page after the first; on a wide screen these are a list of the case's pages beside the column (site.css). Each one is a
+// button that scrolls there.
 function startProgress() {
   document.querySelectorAll('[data-card]').forEach((card) => {
     const content = card.querySelector('.card-content');
@@ -1131,87 +1301,119 @@ function startProgress() {
 
     const nav = document.createElement('div');
     nav.className = 'read-nav';
+    nav.setAttribute('role', 'navigation');
+    nav.setAttribute('aria-label', 'Pages in this case');
     bar.after(nav);
-    // On a phone the folder is one long page (scrolls down); on a screen it is a strip (scrolls sideways).
-    const vert = () => mobile.matches;
-    const maxOf = () => Math.max(vert() ? content.scrollHeight - content.clientHeight : content.scrollWidth - content.clientWidth, 0);
-    const posOf = () => (vert() ? content.scrollTop : content.scrollLeft);
+    const work = content.querySelector('.work');
+    const maxOf = () => Math.max(content.scrollHeight - content.clientHeight, 0);
     let stops = [];
     const targets = () => {
       const figs = [...content.querySelectorAll('figure.pmx')];
-      const cr = content.getBoundingClientRect();
-      const at = (el) => { const r = el.getBoundingClientRect(); return vert() ? r.top - cr.top + content.scrollTop : r.left - cr.left + content.scrollLeft; };
-      const first = figs.length ? at(figs[0]) : 0;
-      const gap = vert() ? 56 : 0;
-      const list = [{ label: 'Start', left: 0, kind: 'start' }];
-      // Every page after the first gets a dot.
+      // A page lands just under the top padding (the band of the progress row), with its chart caption if it has one.
+      // Measured from the layout, not the screen, so nothing that moves the folder as it opens (the column sliding up from
+      // where it rested, the page growing out of its disc) counts.
+      const gap = parseFloat(getComputedStyle(content).paddingTop) + 7;
+      const at = (fig) => {
+        let top = 0;
+        for (let el = fig.previousElementSibling?.classList.contains('chart-cap') ? fig.previousElementSibling : fig; el && el !== content; el = el.offsetParent) top += el.offsetTop;
+        return top - gap;
+      };
+      const list = [{ label: 'Start', name: figs[0]?.getAttribute('aria-label') || '', top: 0, kind: 'start' }];
       figs.forEach((fig, k) => {
         if (k === 0) return;
         const n = fig.querySelector('.pm-hd > .pm-big, .pm-bhn > .pm-big, .pm-ph > .pm-big')?.textContent.trim();
         const num = n && /^\d+$/.test(n);
-        list.push({ label: num ? n : '', name: fig.getAttribute('aria-label') || '', left: at(fig) - (vert() ? gap : first), kind: num ? 'num' : 'dot' });
+        list.push({ label: num ? n : '', name: fig.getAttribute('aria-label') || '', top: at(fig), kind: num ? 'num' : 'dot' });
       });
-      list.push({ label: 'End', left: Infinity, kind: 'end' });
+      list.push({ label: 'End', name: '', top: Infinity, kind: 'end' });
       return list;
     };
+    // Pictures that load on the way down can move a page after the scroll has set off: each time the scroll stops where
+    // it was aimed, it aims again (up to three times), so it lands on the page.
+    const land = (i, tries = 3) => {
+      const top = Math.max(0, Math.min(targets()[i].top, maxOf()));
+      if (tries < 3 && Math.abs(top - content.scrollTop) <= 2) return;
+      content.scrollTo({ top, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      if (!tries) return;
+      let still = 0;
+      const settle = () => {
+        clearTimeout(still);
+        still = setTimeout(() => {
+          content.removeEventListener('scroll', settle);
+          if (Math.abs(content.scrollTop - top) <= 2) land(i, tries - 1);
+        }, 160);
+      };
+      content.addEventListener('scroll', settle, { passive: true });
+    };
     const place = () => {
-      const max = maxOf();
       const t = targets();
       if (nav.children.length !== t.length) {
         nav.textContent = '';
         t.forEach((x, i) => {
           const b = document.createElement('button');
           b.type = 'button';
-          b.textContent = x.kind === 'num' || x.kind === 'dot' ? '' : x.label; // a page dot is only a dot; the step number is in its label
           b.className = `read-stop ${x.kind}`;
-          if (x.name) b.title = x.name;
-          b.setAttribute('aria-label', x.kind === 'num' ? `Go to step ${x.label}: ${x.name}` : x.kind === 'dot' ? `Go to ${x.name}` : `Go to the ${x.label.toLowerCase()}`);
-          b.addEventListener('click', () => {
-            const to = Math.max(0, Math.min(targets()[i].left, maxOf()));
-            content.scrollTo(vert() ? { top: to, behavior: 'smooth' } : { left: to, behavior: 'smooth' });
-          });
+          // Start and End say so; a page's dot shows its name only in the list on a wide screen.
+          const add = (cls, text) => { const span = document.createElement('span'); span.className = cls; span.textContent = text; b.append(span); };
+          if (x.kind === 'start' || x.kind === 'end') add('read-label', x.label);
+          if (x.name) add('read-name', x.name);
+          b.setAttribute('aria-label', x.kind === 'num' ? `Go to step ${x.label}: ${x.name}` : x.kind === 'dot' ? `Go to ${x.name}`
+            : x.kind === 'start' ? `Go to the start: ${x.name}` : 'Go to the end');
+          b.addEventListener('click', () => land(i));
           nav.append(b);
         });
       }
       stops = t;
-      if (vert()) { [...nav.children].forEach((b) => { b.style.left = ''; }); return; }
-      // Where each stop sits along the bar, nudged apart so neighbouring labels never overlap.
-      const w = nav.clientWidth;
-      const px = t.map((x) => (max > 0 ? (Math.min(x.left, max) / max) * w : 0));
-      const gap = () => 16; // the dots sit on the line, below Start and End, so only they need room
-      for (let i = 1; i < px.length - 1; i++) px[i] = Math.max(px[i], px[i - 1] + gap(i));
-      for (let i = px.length - 2; i >= 1; i--) px[i] = Math.min(px[i], px[i + 1] - gap());
-      t.forEach((x, i) => { nav.children[i].style.left = `${px[i]}px`; });
-      xs = px;
     };
-    let xs = [];
     const update = () => {
       const max = maxOf();
-      const pos = posOf();
+      const pos = content.scrollTop;
       if (!(max > 0 && stops.length)) { setVar(bar, '--p', '0'); return; }
       let cur = 0;
-      stops.forEach((x, i) => { if (Math.min(x.left, max) <= pos + 40) cur = i; });
+      stops.forEach((x, i) => { if (Math.min(x.top, max) <= pos + 40) cur = i; });
       // How far through page i the reader is, 0 to 1. Nothing counts as read at the very start.
       const read = (i) => {
-        const from = Math.min(stops[i].left, max);
-        const to = Math.min(stops[i + 1]?.left ?? max, max);
+        const from = Math.min(stops[i].top, max);
+        const to = Math.min(stops[i + 1]?.top ?? max, max);
         return Math.max(0, Math.min(1, (pos + Math.min(40, pos) - from) / Math.max(1, to - from)));
       };
       const stopsEls = [...nav.children];
-      // A page's dot goes from faint to solid as the reader moves through that page.
+      // A page's dot goes from faint to solid as the reader moves through that page. At the very end the last page stays
+      // marked too (the list on a wide screen has no End).
       stopsEls.forEach((b, i) => {
-        b.classList.toggle('is-on', i === cur);
-        if (stops[i].kind === 'num' || stops[i].kind === 'dot') setVar(b, '--a', (0.2 + 0.8 * read(i)).toFixed(2));
+        b.classList.toggle('is-on', i === cur || (stops[cur].kind === 'end' && i === cur - 1));
+        if (stops[i].kind !== 'end') setVar(b, '--a', (0.2 + 0.8 * read(i)).toFixed(2));
       });
+      // The page you are on is also said, not only shown in colour; a list taller than a short window scrolls itself so it
+      // stays in view.
+      const on = stopsEls[stops[cur].kind === 'end' ? cur - 1 : cur];
+      stopsEls.forEach((b) => { if (b === on) { if (b.getAttribute('aria-current') !== 'location') b.setAttribute('aria-current', 'location'); } else if (b.hasAttribute('aria-current')) b.removeAttribute('aria-current'); });
+      if (on && nav.scrollHeight > nav.clientHeight + 1 && (on.offsetTop < nav.scrollTop || on.offsetTop + on.offsetHeight > nav.scrollTop + nav.clientHeight)) {
+        nav.scrollTop = on.offsetTop - nav.clientHeight / 2;
+      }
       // The line has no track: it grows from dot to dot, reaching a page's dot as that page begins.
       const w = nav.clientWidth;
-      const at = (i) => (i >= stops.length - 1 ? w : i === 0 ? 0
-        : vert() ? stopsEls[i].offsetLeft + stopsEls[i].offsetWidth / 2 : xs[i]);
+      const at = (i) => (i >= stops.length - 1 ? w : i === 0 ? 0 : stopsEls[i].offsetLeft + stopsEls[i].offsetWidth / 2);
       const x = cur >= stops.length - 1 ? w : at(cur) + read(cur) * (at(cur + 1) - at(cur));
       setVar(bar, '--p', w > 0 ? Math.max(0, Math.min(1, x / w)).toFixed(4) : '0');
     };
     content.addEventListener('scroll', update, { passive: true });
-    new ResizeObserver(() => { place(); update(); }).observe(content);
+    // The list beside the column is not inside the page it lists, so a wheel over it would scroll nothing: it scrolls the
+    // page, unless the list itself is taller than the window and can go that way.
+    nav.addEventListener('wheel', (e) => {
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? content.clientHeight : 1);
+      if (!dy || (dy > 0 ? nav.scrollTop < nav.scrollHeight - nav.clientHeight - 1 : nav.scrollTop > 0)) return;
+      e.preventDefault();
+      content.scrollTop += dy;
+    }, { passive: false });
+    // (the page grows as its pictures load, which moves the stops further down; and once the folder has turned upright
+    // as it opens, everything is measured again)
+    const resized = new ResizeObserver(() => { place(); update(); });
+    resized.observe(content);
+    resized.observe(work);
+    card.addEventListener('transitionend', (e) => {
+      if (e.propertyName === 'transform' && (e.target === card || e.target === work) && card.classList.contains('is-active')) { place(); update(); }
+    });
     new MutationObserver(() => { place(); update(); }).observe(content, { subtree: true, attributes: true, attributeFilter: ['style'] });
     window.addEventListener('resize', () => { place(); update(); });
     place();
@@ -1220,61 +1422,10 @@ function startProgress() {
 }
 startProgress();
 
-// ------------------------------------------------------------------ focus
-// In the open strip the page you are on fills the folder; the pages beside it step back, smaller and faded (motion.css).
-// The page you are on is the one under a reading line a third of the way in. Over the first and the last half screen the
-// line slides out to the edge, so the first and the last page get their turn too. Not on a phone (one long page) or with
-// reduced motion. Every page passed is remembered: a page's reveals wait until the reader reaches it (startReveals).
-const reachedPages = new WeakSet();
-function startFocus() {
-  if (!gallery) return;
-  const on = () => !reduceMotion.matches && !mobile.matches;
-  const queues = [];
-  cards.forEach((card) => {
-    const content = card.querySelector('.card-content');
-    const work = content?.querySelector('.work');
-    const figs = work ? [...work.querySelectorAll(':scope > figure')] : [];
-    if (!figs.length) return;
-    let ends = null; // each page's right edge in the strip, measured in the open folder (a resting `.work` is transformed)
-    let cur = -1;
-    let queued = 0;
-    const pick = () => {
-      queued = 0;
-      if (!on() || !card.classList.contains('is-active')) return;
-      ends ||= figs.map((f) => f.offsetLeft + f.offsetWidth);
-      const vw = content.clientWidth;
-      const s = content.scrollLeft;
-      const max = content.scrollWidth - vw;
-      const half = vw / 2;
-      const line = vw * 0.3;
-      const x = s + line - (Math.max(0, half - s) / half) * (line - 28) + (Math.max(0, s - (max - half)) / half) * (vw - 28 - line);
-      let k = ends.findIndex((e) => e > x);
-      if (k < 0) k = figs.length - 1;
-      if (k === cur) return;
-      cur = k;
-      figs.forEach((f, i) => { f.classList.toggle('is-cur', i === k); f.classList.toggle('is-before', i < k); });
-      if (!reachedPages.has(figs[k])) {
-        figs.slice(0, k + 1).forEach((f) => reachedPages.add(f));
-        content.dispatchEvent(new Event('pages-reached'));
-      }
-    };
-    const queue = () => { if (!queued) queued = requestAnimationFrame(pick); };
-    queues.push(queue);
-    content.addEventListener('scroll', queue, { passive: true });
-    new MutationObserver(queue).observe(card, { attributes: true, attributeFilter: ['class'] });
-    new ResizeObserver(() => { ends = null; queue(); }).observe(work);
-  });
-  const sync = () => { root.classList.toggle('has-focus', on()); queues.forEach((q) => q()); };
-  reduceMotion.addEventListener('change', sync);
-  mobile.addEventListener('change', sync);
-  sync();
-}
-startFocus();
-
 // ------------------------------------------------------- moving past screens
-// While the strip moves, a prototype it carries under the pointer lets the wheel through (site.css, .is-moving), so a
-// gesture never stops halfway over one; moving it also lets go of a screen or a prototype that was clicked. The Chengel
-// prototype is a page of this site: the wheel over it moves the strip unless its own screen can scroll that way. PlayMate's
+// While the case scrolls, a prototype it carries under the pointer lets the wheel through (site.css, .is-moving), so a
+// gesture never stops halfway over one; scrolling also lets go of a screen or a prototype that was clicked. The Chengel
+// prototype is a page of this site: the wheel over it scrolls the case unless its own screen can scroll that way. PlayMate's
 // is Figma's page, which this page cannot reach into, so it takes the pointer only after a click, like a phone screen.
 function passWheel(frame, content) {
   const hook = () => {
@@ -1282,17 +1433,14 @@ function passWheel(frame, content) {
     if (!win || win.passesWheel) return;
     win.passesWheel = true;
     win.addEventListener('wheel', (e) => {
-      if (mobile.matches || !frame.closest('.card.is-active')) return;
-      const vertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
-      const d = vertical ? e.deltaY : e.deltaX;
-      const room = (el, s) => (vertical
-        ? (!s || /auto|scroll/.test(s.overflowY)) && (d > 0 ? el.scrollTop < el.scrollHeight - el.clientHeight - 1 : el.scrollTop > 0)
-        : (!s || /auto|scroll/.test(s.overflowX)) && (d > 0 ? el.scrollLeft < el.scrollWidth - el.clientWidth - 1 : el.scrollLeft > 0));
+      if (!frame.closest('.card.is-active') || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const d = e.deltaY;
+      const room = (el, s) => (!s || /auto|scroll/.test(s.overflowY)) && (d > 0 ? el.scrollTop < el.scrollHeight - el.clientHeight - 1 : el.scrollTop > 0);
       for (let el = e.target; el?.nodeType === 1; el = el.parentElement) if (room(el, win.getComputedStyle(el))) return;
       const page = win.document.scrollingElement;
       if (page && room(page)) return;
       e.preventDefault();
-      content.scrollLeft += d;
+      content.scrollTop += d;
     }, { passive: false });
   };
   frame.addEventListener('load', hook);
@@ -1323,101 +1471,9 @@ function startStripMotion() {
 }
 startStripMotion();
 
-// ------------------------------------------------------------ page balance
-// Some designed pages end well above their bottom edge (a short board, a tree, the empathy map). On a screen their content
-// moves down until the space above it and below it is the same ("contenti sayfanın ortasına çek"): more padding on top, as
-// much less below, so the page keeps its size. Measured once per page in its own 700px units, in the open folder once the
-// folder has come up and the page's pictures have loaded (a picture still loading has no height yet). Not on a phone, where
-// a page is as tall as what is on it.
-function startPageBalance() {
-  if (!gallery) return;
-  const visual = (el, s) => /^(IMG|VIDEO|SVG|CANVAS|IFRAME)$/.test(el.tagName.toUpperCase()) || s.backgroundImage !== 'none' || s.boxShadow !== 'none'
-    || (s.backgroundColor !== 'transparent' && s.backgroundColor !== 'rgba(0, 0, 0, 0)') || parseFloat(s.borderTopWidth) > 0 || parseFloat(s.borderBottomWidth) > 0;
-  // Where the drawn content of a page starts and ends on screen: boxes with a fill, a border or a picture, and lines of text.
-  const extent = (page) => {
-    let top = Infinity;
-    let bottom = -Infinity;
-    const walk = (el) => {
-      for (const c of el.children) {
-        if (c.matches('.proto-tip')) continue;
-        const s = getComputedStyle(c);
-        // a prototype is only hidden while its page is not the one you are on (motion.css), so it still counts
-        if (s.display === 'none' || (s.visibility === 'hidden' && c.tagName !== 'IFRAME')) continue;
-        let r = null;
-        if (visual(c, s)) r = c.getBoundingClientRect();
-        else {
-          if ([...c.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) {
-            const range = document.createRange();
-            range.selectNodeContents(c);
-            r = range.getBoundingClientRect();
-          }
-          walk(c);
-        }
-        if (r?.width && r.height) { top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom); }
-      }
-    };
-    walk(page);
-    return { top, bottom };
-  };
-  const shifts = new Map(); // page -> design px it moved down, kept so a phone and back restores it without measuring again
-  const apply = (page, on) => {
-    const shift = shifts.get(page);
-    if (!shift) return;
-    if (!on) { page.style.paddingTop = page.dataset.pt; page.style.paddingBottom = page.dataset.pb; return; }
-    const s = getComputedStyle(page);
-    page.dataset.pt ??= page.style.paddingTop;
-    page.dataset.pb ??= page.style.paddingBottom;
-    const pt = parseFloat(s.paddingTop);
-    const pb = parseFloat(s.paddingBottom);
-    page.style.paddingTop = `${pt + shift}px`;
-    page.style.paddingBottom = `${Math.max(0, pb - shift)}px`;
-  };
-  const balance = (page) => {
-    if (mobile.matches || shifts.has(page) || !page.closest('.card.is-active') || !gallery.classList.contains('is-focused')) return;
-    const box = page.getBoundingClientRect();
-    if (!box.height) return;
-    const { top, bottom } = extent(page);
-    if (!Number.isFinite(top)) return;
-    const unit = parseFloat(getComputedStyle(page).height) / box.height; // design px per screen px, whatever the zoom or scale
-    const shift = Math.round((((box.bottom - bottom) - (top - box.top)) / 2) * unit);
-    shifts.set(page, shift >= 12 ? shift : 0);
-    apply(page, true);
-  };
-  const loaded = (page) => Promise.all([...page.querySelectorAll('img')].map((img) => (img.complete ? null
-    : new Promise((done) => { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }))));
-  const watchers = [];
-  cards.forEach((card) => {
-    const content = card.querySelector('.card-content');
-    let io = null;
-    const watch = () => {
-      const open = card.classList.contains('is-active') && !mobile.matches;
-      if (open === !!io) return;
-      io?.disconnect();
-      io = null;
-      if (!open) return;
-      io = new IntersectionObserver((entries) => entries.forEach(({ isIntersecting, target }) => {
-        if (!isIntersecting) return;
-        io?.unobserve(target);
-        const page = target.firstElementChild;
-        Promise.all([document.fonts.ready, loaded(page), new Promise((r) => setTimeout(r, cssMs(root, '--time-cards') + 60))])
-          .then(() => requestAnimationFrame(() => balance(page)));
-      }), { root: content, rootMargin: '0px 1500px' });
-      content.querySelectorAll('.work > figure.pmx').forEach((fig) => { if (!shifts.has(fig.firstElementChild)) io.observe(fig); });
-    };
-    new MutationObserver(watch).observe(card, { attributes: true, attributeFilter: ['class'] });
-    watchers.push(watch);
-    watch();
-  });
-  mobile.addEventListener('change', () => {
-    shifts.forEach((_, page) => apply(page, !mobile.matches));
-    watchers.forEach((w) => w());
-  });
-}
-startPageBalance();
-
 // ------------------------------------------------------------ pointer tag
-// With a mouse, a small tag beside the pointer says what a press does: "Open" over a closed folder, "Drag" over the open
-// strip until the reader has moved it once. The pointer itself stays as it is.
+// With a mouse, a small tag beside the pointer says what a press does: "Open" over a closed folder, "Drag" over a chart
+// wider than the column until the reader has moved one. The pointer itself stays as it is.
 function startPointerTag() {
   if (!gallery || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const tag = document.createElement('div');
@@ -1426,10 +1482,10 @@ function startPointerTag() {
   document.body.append(tag);
   let moved = false;
   let label = '';
-  cards.forEach((card) => card.querySelector('.card-content').addEventListener('scroll', (e) => {
-    if (card.classList.contains('is-active') && e.target.scrollLeft > 200) moved = true;
+  document.querySelectorAll('.work figure.pmx').forEach((fig) => fig.addEventListener('scroll', () => {
+    if (fig.scrollLeft > 120) moved = true;
   }, { passive: true }));
-  const own = 'a, button, input, select, textarea, iframe, [data-compare], [data-tall], .is-live, .pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll, .device-scroll';
+  const own = 'a, button, input, select, textarea, iframe, .is-live, .pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll, .device-scroll';
   const show = (next) => {
     if (next === label) return;
     label = next;
@@ -1443,45 +1499,13 @@ function startPointerTag() {
     let next = '';
     if (card && !card.classList.contains('is-active') && t.closest('.card-tab h2, .card-sheet')) next = 'Open';
     else if (book && active !== BOOK && t.closest?.('[data-book]')) next = 'Open';
-    else if (card && !moved && !mobile.matches && t.closest('.card-content') && !t.closest(own)) next = 'Drag';
+    else if (card?.classList.contains('is-active') && !moved && t.closest('figure.pmx.is-wide') && !t.closest(own)) next = 'Drag';
     show(next);
     if (next) tag.style.transform = `translate3d(${e.clientX + 14}px, ${e.clientY + 18}px, 0)`;
   }, { passive: true });
   root.addEventListener('mouseleave', () => show(''));
   // A click opens or closes something under the pointer: drop the tag until the pointer moves again.
   document.addEventListener('pointerdown', () => show(''), { passive: true });
-}
-
-// ------------------------------------------------------------ "things"
-// Pointing at "things" in the headline fans out the icons of the four apps from behind the word (motion.css).
-function startThings() {
-  const wrap = document.querySelector('[data-hero]');
-  const canvas = wrap?.querySelector('canvas');
-  if (!canvas || !hero || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  const fan = document.createElement('div');
-  fan.className = 'things-fan';
-  fan.setAttribute('aria-hidden', 'true');
-  fan.innerHTML = ['chengel-icon', 'hb-logo', 'playmate-logo', 'ikeep21-icon'].map((n) => `<img src="/images/${n}.webp" alt="" width="72" height="72" decoding="async">`).join('');
-  wrap.append(fan);
-  const place = () => {
-    const b = hero.wordBox();
-    if (!b) return;
-    setVar(fan, '--fx', `${Math.round(b.x + b.w / 2)}px`);
-    setVar(fan, '--fy', `${Math.round(b.bottom)}px`);
-  };
-  new ResizeObserver(place).observe(wrap);
-  document.fonts.ready.then(place);
-  place();
-  const set = (open) => (open ? addClass(fan, 'is-open') : fan.classList.remove('is-open'));
-  canvas.addEventListener('pointermove', (e) => {
-    const b = hero.wordBox();
-    if (!b || e.pointerType !== 'mouse') return;
-    const r = canvas.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const y = e.clientY - r.top;
-    set(x >= b.x && x <= b.x + b.w && y >= b.top && y <= b.bottom);
-  }, { passive: true });
-  canvas.addEventListener('pointerleave', () => set(false), { passive: true });
 }
 
 // ------------------------------------------------------ prototype hint
@@ -1512,10 +1536,8 @@ function startProtoHint() {
 
 // ---------------------------------------------------------------- reveals
 // A few pages build up the first time they come into view in the open folder (motion.css): the steps of a decision, the
-// test rounds, an A/B pair, HealthBar's numbers, the line under iKeep's result. On a screen a whole group starts at once and
-// the CSS staggers it; on a phone, where a group can be taller than the screen, each item starts as it scrolls in. With
-// reduced motion nothing is ever hidden.
-const revealGroups = '.pm-dec-steps, .pm-dec-vis, .pm-ut, .pm-stv, .mo-mark, .proto-tip';
+// test rounds, an A/B pair, HealthBar's numbers, the line under iKeep's result. A group can be taller than the screen, so
+// each item starts as it scrolls in. With reduced motion nothing is ever hidden.
 const revealItems = '.pm-dec-s, .pm-dec-ph, .pm-ut-r, .pm-stv, .mo-mark, .proto-tip';
 
 // "8 of 13" counts up from 0; "4 → 8 of 9" and "13s → 4s" run from the first number to the second. The page's own text is
@@ -1539,14 +1561,8 @@ function startReveals() {
   document.querySelectorAll('#ikeep .pmf strong').forEach((el) => { if (el.textContent.trim() === '52% more views') addClass(el, 'mo-mark'); });
   if (reduceMotion.matches || !('IntersectionObserver' in window)) return;
   addClass(root, 'has-reveals');
-  const itemsOf = (el) => (el.matches(revealItems) ? [el] : [...el.querySelectorAll(revealItems)]);
-  const waiting = new Set();
   const reveal = (el) => {
     if (el.classList.contains('is-seen')) return;
-    // In the strip a page's items wait for the reader to reach it (startFocus): a faded page at the side shows nothing yet.
-    const page = el.closest('.work > figure');
-    if (root.classList.contains('has-focus') && page && !reachedPages.has(page)) { waiting.add(el); return; }
-    waiting.delete(el);
     el.classList.add('is-seen');
     if (el.matches('.pm-stv')) countUp(el);
   };
@@ -1555,33 +1571,25 @@ function startReveals() {
     const all = [...content.querySelectorAll(revealItems)];
     let io = null;
     // Watch only while the folder is open: a closed folder's pages are not being read.
-    const watch = (force) => {
+    const watch = () => {
       const open = card.classList.contains('is-active');
-      if (!force && open === !!io) return;
+      if (open === !!io) return;
       io?.disconnect();
       io = null;
       if (!open) return;
-      const phone = mobile.matches;
       io = new IntersectionObserver((entries) => entries.forEach((e) => {
         if (!e.isIntersecting) return;
         // Everything before it shows too: a jump (a progress stop) can carry the reader past items they never saw.
-        const last = itemsOf(e.target).at(-1);
-        all.slice(0, all.indexOf(last) + 1).forEach(reveal);
+        all.slice(0, all.indexOf(e.target) + 1).forEach(reveal);
         io.unobserve(e.target);
-      }), { root: content, rootMargin: phone ? '0px 0px -12% 0px' : '0px -15% 0px 0px' });
-      content.querySelectorAll(phone ? revealItems : revealGroups).forEach((el) => {
-        if (el.parentElement.closest(revealGroups) && !phone) return; // inside a group that is watched already
-        if (itemsOf(el).some((i) => !i.classList.contains('is-seen'))) io.observe(el);
-      });
+      }), { root: content, rootMargin: '0px 0px -12% 0px' });
+      all.forEach((el) => { if (!el.classList.contains('is-seen')) io.observe(el); });
     };
-    new MutationObserver(() => watch(false)).observe(card, { attributes: true, attributeFilter: ['class'] });
-    mobile.addEventListener('change', () => watch(true));
-    content.addEventListener('pages-reached', () => waiting.forEach((el) => { if (content.contains(el)) reveal(el); }));
-    watch(false);
+    new MutationObserver(watch).observe(card, { attributes: true, attributeFilter: ['class'] });
+    watch();
   });
 }
 startPointerTag();
-startThings();
 startProtoHint();
 startReveals();
 
@@ -1609,26 +1617,31 @@ function startVideos() {
 startVideos();
 
 
-// A screen inside a frame only scrolls after you click (or tap) it, and a yellow outline shows it is live. Until then the wheel
-// (or a swipe) moves the folder. Click outside to let go. On a mouse, a small hint says so while you hover a scrollable screen.
+// A screen inside a frame scrolls under the mouse (site.css). While the pointer rests on one that has more to show and has
+// not been scrolled yet, a yellow tag in its middle says so (her "sarı renkli ve daha büyük yap ekranın ortasında olsun ve
+// dikkat çeksin"). On a touch screen a tap lets a screen scroll, until the case moves; no frame marks it.
 const liveScreens = '.pm-pmid, .pm-wsc, .pm-wmid, .pm-bscroll, .device-scroll';
 const scrollable = (el) => el.scrollHeight - el.clientHeight > 4;
 const hint = document.createElement('div');
 hint.className = 'scroll-hint';
-hint.textContent = 'Click to scroll';
+hint.setAttribute('aria-hidden', 'true');
+hint.innerHTML = 'Scroll <i>↓</i>';
 document.body.append(hint);
 const hideHint = () => hint.classList.remove('is-on');
 document.addEventListener('click', (e) => {
+  if (hoverScroll.matches) return;
   const hit = e.target.closest?.(liveScreens);
   document.querySelectorAll('.is-live').forEach((el) => { if (el !== hit) el.classList.remove('is-live'); });
-  if (hit) { hit.classList.add('is-live'); hideHint(); }
+  if (hit) hit.classList.add('is-live');
 });
 document.addEventListener('mouseover', (e) => {
   const hit = e.target.closest?.(liveScreens);
-  if (!hit || hit.classList.contains('is-live') || !scrollable(hit) || !hit.closest('.card.is-active')) { hideHint(); return; }
+  if (!hit || hit.dataset.moved || !scrollable(hit) || !hit.closest('.card.is-active') || hit.closest('.card-content.is-moving')) { hideHint(); return; }
+  // the middle of the part of the screen that is in view
   const r = hit.getBoundingClientRect();
   hint.style.left = `${r.left + r.width / 2}px`;
-  hint.style.top = `${Math.max(r.top, 0) + 10}px`;
+  hint.style.top = `${(Math.max(r.top, 0) + Math.min(r.bottom, innerHeight)) / 2}px`;
   hint.classList.add('is-on');
 });
-document.addEventListener('wheel', hideHint, { passive: true });
+// (on the way down: a screen that scrolls keeps its wheel to itself)
+document.addEventListener('wheel', hideHint, { passive: true, capture: true });

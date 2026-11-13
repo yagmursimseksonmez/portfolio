@@ -1,6 +1,6 @@
 ---
 title: HealthBar
-order: 2
+order: 3
 year: '2025 → now'
 tabNote: 'Most complex work · research to App Store'
 tile: { cover: /images/tiles/healthbar.webp, when: '2026 · ongoing · App Store' }
