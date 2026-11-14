@@ -15,7 +15,7 @@ const isWide = (img: { width?: number; height?: number }) => !!img.width && !!im
 const nextOf = (k: number) => {
   const n = projects[(k + 1) % count];
   const html = n.data.hero?.frame ? frameHtml[`../content/playmate-frames/${n.data.hero.frame}.html`] ?? '' : '';
-  return { id: n.id, title: n.data.title, note: n.data.tabNote, summary: n.data.summary, video: html.match(/<video src="([^"]+)"/)?.[1], poster: html.match(/<video [^>]*poster="([^"]+)"/)?.[1], wide: !html.includes('pm-hero-v pm-ph') };
+  return { id: n.id, title: n.data.title, note: n.data.tabNote, summary: n.data.summary, video: html.match(/<video src="([^"]+)"/)?.[1] ?? n.data.hero?.video?.src, poster: html.match(/<video [^>]*poster="([^"]+)"/)?.[1] ?? html.match(/class="pm-hero-v[^"]*"[^>]*><img src="([^"]+)"/)?.[1], wide: !html.includes('pm-hero-v pm-ph') && !html.includes('pml-reel') };
 };
 
 // Newest first; `years` is how many year rows each role spans on the timeline.
@@ -66,8 +66,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
               <h4>Based in Berlin · English, Turkish</h4>
             </div>
           </div>
-          <a class="link primary" href="mailto:n.yagmur.simsek@gmail.com"><h3>Get in touch</h3><Fragment set:html={arrow} /></a>
-          <button type="button" class="email" data-copy="n.yagmur.simsek@gmail.com">
+          <button type="button" class="email primary" data-copy="n.yagmur.simsek@gmail.com">
             <span class="email-addr">n.yagmur.simsek@gmail.com</span>
             <span class="email-copy">Copy</span>
           </button>
@@ -81,7 +80,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <nav class="grid">
         <h3>Yagmur Şimşek Sönmez</h3>
         <h3>Product Designer</h3>
-        <h3>“Portfolio”</h3>
+        <h3><a class="inline" href="/cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></h3>
         <h3><span data-clock>--:--</span> Berlin</h3>
       </nav>
       <div class="hero">
@@ -91,8 +90,8 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       </div>
       <div class="subheader grid" style={`--count:${count}`}>
         <p>
-          Designer. Researcher. Crafter. Constant learner. PhD in architectural history, Master’s in visual communication design.{' '}
-          <a class="inline" href="#about" data-open-book>Wanna know me better?</a><span class="ai-link"> · <a class="inline" href="#ai" data-to-ai>How I work with AI</a></span>
+          Product designer in Berlin. I design iOS apps from research to the App Store, and I can code what I design with Claude.{' '}
+          <a class="inline" href="#about" data-open-book>Wanna know me better?</a><span class="ai-link"> · <a class="inline" href="#ai" data-to-ai>How I work with AI</a></span><span class="cv-link"> · <a class="inline" href="/cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></span>
         </p>
         <h3>Selected work ↓</h3>
       </div>
@@ -108,6 +107,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
             <h2>{p.data.title}</h2>
             <p>{p.data.summary}</p>
             {p.data.tile && <span class="tile-meta">{p.data.tile.when}</span>}
+            {p.data.tile?.proof && <span class="tile-proof">{p.data.tile.proof}</span>}
           </span>
         </a>
       ))}
@@ -121,7 +121,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
         <div><dt>iKeep</dt><dd>I redesigned it in a week and coded the new interface with Claude.</dd></div>
         <div><dt>Chengel</dt><dd>I designed it with Claude Design and Figma, and an iOS developer built it. It took 3 weeks.</dd></div>
       </dl>
-      <p class="ai-tools">Tools: Claude (desktop app), Claude Code, BMAD, Claude Design, Figma, Stitch.</p>
+      <p class="ai-tools">Tools: Claude (desktop app), Claude Code, BMAD, Claude Design, Figma.</p>
     </section>
     </div>
 
@@ -150,8 +150,8 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                 <div class="about">
                   <img class="about-portrait" src="/images/IMG_5630.webp" alt="Yagmur in a courtyard in Istanbul" width="1824" height="1273" decoding="async" />
                   <div class="about-head">
-                    <h2>Hi, I’m Yagmur.</h2>
-                    <p class="about-lede">I’m a product designer in Berlin. I design apps from the first user interview to the App Store.</p>
+                    <h2>Hi, I’m Yagmur. <span>15 years in design, and still curious.</span></h2>
+                    <p class="about-lede">Interior architecture, visual communication, a PhD and four years of teaching gave me a trained eye for detail. Product work taught me to check that eye with real users. I’m a product designer in Berlin. I design apps from research to the App Store.</p>
                   </div>
                   <ul class="about-facts" aria-label="In short">
                     <li><span>Speaks</span>English, Turkish</li>
@@ -162,8 +162,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                   </ul>
                   <section class="about-story">
                     <h3>How I got here</h3>
-                    <p>I didn’t start in tech. I spent years with buildings: a PhD in architectural history, a master’s in visual communication, and four years teaching design students.</p>
-                    <p>What stayed with me is how people find their way through a place, and what makes them get lost. Apps are places too. So now I design those.</p>
+                    <p>I didn’t start in tech. What stayed with me from architecture is how people find their way through a place, and what makes them get lost. Apps are places too. So now I design those.</p>
                   </section>
                   <figure class="about-photo">
                     <img src="/images/conference-dare.webp" alt="Yagmur presenting at the Digital Architecture Research conference" width="1920" height="1207" loading="lazy" decoding="async" />
@@ -176,9 +175,9 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                   <section class="about-how">
                     <h3>How I work</h3>
                     <ul>
-                      <li><strong>People first.</strong> I talk to users and test with them before and after I draw.</li>
-                      <li><strong>I explain my choices.</strong> Teaching made that a habit. Every screen has a reason I can say out loud.</li>
-                      <li><strong>Close to the team.</strong> I like working next to founders and developers, not handing files over a wall.</li>
+                      <li><strong>Detail.</strong> Type, spacing, colour and hierarchy, down to the last state.</li>
+                      <li><strong>Checked with people.</strong> I test with users, and what they get stuck on goes into the next version.</li>
+                      <li><strong>Easy to work with.</strong> I’m sociable, I explain my choices, and I like working next to developers and founders.</li>
                     </ul>
                   </section>
                   <section class="about-work">
@@ -210,13 +209,13 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           const tools = d.facts.find((f) => f.label === 'Tools')?.value;
           const next = nextOf(k);
           return (
-            <section class="card" id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
+            <section class:list={['card', { 'is-lean': d.lean }]} id={p.id} style={`--i:${count - 1 - k};--slot:${k}`} aria-label={d.title} tabindex="0" data-card>
               <div class="card-tab"><h2 class:list={{ "has-note": !!d.tabNote }}><span>{d.title}</span>{d.tabNote && <small class="tab-note">{d.tabNote}</small>}</h2></div>
               <div class="card-sheet">
                 <article class="card-content" inert>
                   <div class="work">
                     {d.hero?.frame && (
-                      <figure class="pmx" aria-label="Overview" set:html={frameHtml[`../content/playmate-frames/${d.hero.frame}.html`]}></figure>
+                      <figure class:list={['pmx', { 'is-lean': d.lean }]} aria-label="Overview" set:html={frameHtml[`../content/playmate-frames/${d.hero.frame}.html`]}></figure>
                     )}
                     {d.hero && !d.hero.frame && (
                       <figure class:list={['hero', { compact: d.hero.compact }]}>
@@ -289,7 +288,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                     )}
                     {!d.cover && !d.showcase && !d.hero && <figure class="placeholder">Case study in progress</figure>}
                     {d.gallery.filter((g) => !g.info && !g.frame?.endsWith('summary')).map((g) => g.frame ? (
-                      <figure class="pmx" aria-label={g.label} set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
+                      <figure class:list={['pmx', { 'is-lean': d.lean }]} aria-label={g.label} set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
                     ) : g.panels ? (
                       <figure class="panels" aria-label={g.label}>
                         {g.step ? (
@@ -473,7 +472,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                     {d.gallery.filter((g) => g.frame?.endsWith('summary')).map((g) => (
                       <figure class="pmx" aria-label="Summary" set:html={frameHtml[`../content/playmate-frames/${g.frame}.html`]}></figure>
                     ))}
-                    {!d.gallery.some((g) => g.frame?.endsWith('summary')) && <div class:list={['info', { 'no-scope': !p.body?.trim(), 'has-overview': d.gallery.some((g) => g.info) }]}>
+                    {!d.lean && !d.gallery.some((g) => g.frame?.endsWith('summary')) && <div class:list={['info', { 'no-scope': !p.body?.trim(), 'has-overview': d.gallery.some((g) => g.info) }]}>
                       {d.gallery.filter((g) => g.info && g.beats).map((g) => (
                         <div class="info-overview" aria-label={g.label}>
                           {[0, 1].map((side) => (

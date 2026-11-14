@@ -13,7 +13,7 @@ seeMore: false
 facts:
   - { label: Position, value: 'Solo project' }
   - { label: Time, value: '3 months · Mar–Jun 2026' }
-  - { label: Tools, value: Figma · Claude · Stitch }
+  - { label: Tools, value: Figma · Claude }
 hero:
   kicker: PlayMate · solo project · community sports app
   title: "Find people to play sport with."

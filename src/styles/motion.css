@@ -69,7 +69,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .has-reveals .work .pmx :is(.pm-dec-s, .pm-dec-ph, .pm-ut-r):not(.is-seen) { opacity: 0; }
 
-  /* Decision boards: the steps come in one after another; the one that was chosen comes last, with a yellow ring that fades. */
+  /* Decision boards: the steps come in one after another; the one that was chosen comes last, its yellow frame drawing in. */
   .work .pmx :is(.pm-dec-s, .pm-ut-r).is-seen { animation: mo-rise var(--t-reveal) var(--ease-out) backwards; }
   .work .pmx .pm-dec-s.is-seen:nth-child(2) { animation-delay: 80ms; }
   .work .pmx .pm-dec-s.is-seen:nth-child(3) { animation-delay: 160ms; }
@@ -93,7 +93,8 @@
 @keyframes mo-rise { from { opacity: 0; translate: 0 24px; } }
 @keyframes mo-from-left { from { opacity: 0; translate: -48px 0; } }
 @keyframes mo-from-right { from { opacity: 0; translate: 48px 0; } }
-@keyframes mo-ring { from { box-shadow: inset 0 0 0 2px var(--pm-ac); } to { box-shadow: inset 0 0 0 2px transparent; } }
+/* ("What I chose" keeps its yellow frame, site.css: the ring draws in to it, with a glow that fades) */
+@keyframes mo-ring { from { box-shadow: inset 0 0 0 2px transparent, 0 0 0 0 rgba(255, 209, 0, 0.5); } to { box-shadow: inset 0 0 0 2px var(--pm-ac), 0 0 0 10px rgba(255, 209, 0, 0); } }
 
 /* ------------------------------------------- the case is one long page: pages come up from below as it scrolls */
 @supports (animation-timeline: view()) {

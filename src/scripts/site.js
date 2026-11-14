@@ -270,6 +270,11 @@ function startContact() {
   measure(contactToggle.getBoundingClientRect().width);
   new ResizeObserver(([e]) => measure(e.borderBoxSize[0].inlineSize)).observe(contactToggle);
   contactToggle.addEventListener('click', (e) => { e.stopPropagation(); setContact(!contactOpen()); });
+  // On a phone and a tablet the homepage scrolls under the button: it leaves with the header instead of sitting on the
+  // discs, and comes back at the top (site.css, .contact.is-away).
+  const away = () => contact.classList.toggle('is-away', mobile.matches && home.scrollTop > 24);
+  home?.addEventListener('scroll', away, { passive: true });
+  mobile.addEventListener('change', away);
   document.addEventListener('pointerdown', (e) => { if (contactOpen() && !contact.contains(e.target)) setContact(false); });
   // The address in the contact menu and the one under "Say hello" in the book. "Copied" shows on the button and is read
   // out from one hidden status line; with no clipboard (an older browser, no permission) the click writes an email.
@@ -401,8 +406,10 @@ function setFocus(next) {
     else if (prev !== next && prev === BOOK) closeBook();
   }
 
+  // (only when something opened or closed: a re-layout while the page starts must not wipe a link's #chengel before it
+  // has opened that case)
   const hash = isBook ? '#about' : focused ? `#${cards[next].id}` : '';
-  if (location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
+  if (prev !== next && location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
   // The homepage sits faded out behind an open folder: Tab must not walk through it, and a keyboard user who opened a
   // card from there carries on inside the folder.
   if (home) {
@@ -1096,13 +1103,18 @@ startDetails();
 startTimeline();
 playIntro();
 
-// Deep links: /#ikeep opens that folder, /#about opens the book.
-const linked = location.hash.slice(1);
-if (linked) {
-  const k = cards.findIndex((c) => c.id === linked);
-  const target = linked === 'about' ? BOOK : k >= 0 ? k : null;
-  if (target !== null) setTimeout(() => focusGallery(target), root.classList.contains('is-intro') ? 1400 : 0);
-}
+// Deep links: /#ikeep opens that folder, /#about opens the book. A link opened in a tab that already shows the page does
+// not load it again, only changes the hash, so that opens it too.
+const linkTarget = (id) => {
+  const k = cards.findIndex((c) => c.id === id);
+  return id === 'about' ? BOOK : k >= 0 ? k : null;
+};
+const linked = linkTarget(location.hash.slice(1));
+if (linked !== null) setTimeout(() => focusGallery(linked), root.classList.contains('is-intro') ? 1400 : 0);
+addEventListener('hashchange', () => {
+  const target = linkTarget(location.hash.slice(1));
+  if (target !== null && target !== active) focusGallery(target);
+});
 
 
 // ------------------------------------------------------- PlayMate pages
@@ -1207,6 +1219,8 @@ function prepareFrames() {
   document.querySelectorAll('.work figure.pmx').forEach((fig) => {
     const page = fig.firstElementChild;
     if (!page) return;
+    // (a lean case's pages are laid out for the column already, lean-case.css)
+    if (fig.classList.contains('is-lean')) return;
     if (page.classList.contains('pm-f-sum')) { addClass(fig, 'is-sum'); return; }
     if (page.classList.contains('pm-f-next')) { addClass(fig, 'is-next'); return; }
     if (!fig.closest(reflowCases)) return;
@@ -1251,7 +1265,7 @@ function prepareFrames() {
 // 70%). Everything is measured first and written after, so the case is laid out once.
 function fitFramesToWidth() {
   document.querySelectorAll('.card.is-active .work').forEach((work) => {
-    const figs = [...work.querySelectorAll('figure.pmx:not(.is-reflow, .is-sum, .is-next)')];
+    const figs = [...work.querySelectorAll('figure.pmx:not(.is-reflow, .is-sum, .is-next, .is-lean)')];
     if (!figs.length) return;
     const pad = getComputedStyle(work);
     const avail = work.clientWidth - parseFloat(pad.paddingLeft) - parseFloat(pad.paddingRight);
@@ -1321,9 +1335,9 @@ function startProgress() {
       const list = [{ label: 'Start', name: figs[0]?.getAttribute('aria-label') || '', top: 0, kind: 'start' }];
       figs.forEach((fig, k) => {
         if (k === 0) return;
-        const n = fig.querySelector('.pm-hd > .pm-big, .pm-bhn > .pm-big, .pm-ph > .pm-big')?.textContent.trim();
+        const n = fig.querySelector('.pm-hd > .pm-big, .pm-bhn > .pm-big, .pm-ph > .pm-big, .pml-sec-h > .pml-n')?.textContent.trim();
         const num = n && /^\d+$/.test(n);
-        list.push({ label: num ? n : '', name: fig.getAttribute('aria-label') || '', top: at(fig), kind: num ? 'num' : 'dot' });
+        list.push({ label: num ? String(Number(n)) : '', name: fig.getAttribute('aria-label') || '', top: at(fig), kind: num ? 'num' : 'dot' });
       });
       list.push({ label: 'End', name: '', top: Infinity, kind: 'end' });
       return list;

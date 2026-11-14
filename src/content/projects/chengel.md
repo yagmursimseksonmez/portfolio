@@ -1,6 +1,6 @@
 ---
 title: Chengel
-order: 1
+order: 2
 year: '2026'
 tabNote: 'Latest work · on the App Store'
 tile: { cover: /images/tiles/chengel.webp, when: '2026 · 3 weeks · App Store' }

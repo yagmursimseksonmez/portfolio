@@ -85,6 +85,7 @@ nav h3 { white-space: nowrap; }
    projects. */
 .subheader { display: flex; flex-direction: column; align-items: flex-start; gap: 36px; padding: 28px var(--pad) var(--pad); }
 .subheader p { max-width: 600px; text-wrap: pretty; }
+.subheader .cv-link { display: none; }
 
 /* ------------------------------------------------------------------ project cards */
 /* All four at a glance, as discs: the cover in a circle, the year and how long it took, and the name. On a screen they
@@ -126,18 +127,20 @@ nav h3 { white-space: nowrap; }
      all larger, the first high, right under the headline, the second large and a little lower. Middles at 10.9, 29.4,
      55.6 and 85.1% of the width; sizes 1, .8, .62, .55 of the largest, 28.5% of the width or what the height allows. A
      disc whose left edge is under the intro (640px wide, 90px tall) starts below it; --free is how far a disc can move
-     down and still keep its text (about 70px) on screen. */
-  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 172px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
+     down and still keep its text (about 70px) on screen. The first disc's text has one line more (its proof), so the
+     largest disc leaves about 104px under it. */
+  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 194px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
   .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 90px; }
   .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
   .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.2); }
   .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.85); }
   .tile-meta { white-space: nowrap; } /* (a small disc would break its year line in two; it may run a little past it) */
+  .tiles .tile-proof { white-space: nowrap; } /* (one line, under a disc of any size; .tiles to win over the base rule's text-wrap) */
 }
 /* Wide enough for the largest disc to clear the intro beside it (its round edge stays right of the text): it rises to the
    top, right under the headline, and has the full height. */
 @media (min-width: 1440px) {
-  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 82px), 520px); }
+  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 104px), 520px); }
   .tile:nth-child(1) { top: 0; }
 }
 /* Only with a mouse: a tap on a touch screen would leave :hover stuck, and the other three dimmed after the case closes. */
@@ -166,6 +169,8 @@ nav h3 { white-space: nowrap; }
 .tile-meta { order: -1; font-size: 13px; letter-spacing: 0.04em; color: rgba(214, 214, 214, 0.72); }
 .tile h2 { font-size: 22px; line-height: 1.2; font-weight: 600; color: var(--foreground); }
 .tile p { font-size: 15px; line-height: 1.4; color: rgba(214, 214, 214, 0.8); }
+/* One result under the name of the case to open first (HealthBar), the proof that reads in the first 10 seconds. */
+.tile-proof { font-size: 14px; line-height: 1.35; color: var(--accent); text-wrap: balance; }
 
 /* ------------------------------------------------------------------ AI band */
 /* Below the cards and set apart from them (no picture, a rule above), so it never reads as a fifth project. */
@@ -1160,6 +1165,11 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .grid { grid-template-columns: repeat(2, 1fr); }
   nav { height: 48px; }
   nav h3:nth-of-type(2), nav h3:nth-of-type(3), nav h3:nth-of-type(4) { display: none; }
+  /* The header shows only the name here, so the CV link joins the intro's links. */
+  .subheader .cv-link { display: inline; }
+  /* Scrolled down, the Contact button leaves with the header instead of sitting on the discs (site.js, startContact). */
+  .contact.is-away:not(.is-open) { opacity: 0; transform: translateY(-16px); }
+  .contact.is-away:not(.is-open) .contact-panel { pointer-events: none; }
   .subheader { gap: 8px; padding: 14px var(--pad) 10px; }
   .subheader h3 { margin-top: 6px; font-size: 13px; color: var(--secondary); }
   /* Two columns of discs, the right one a little lower so they read as scattered, with the year and the name under each
@@ -1175,6 +1185,7 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .tile-text { gap: 2px; max-width: none; padding: 10px 4px 0; }
   .tile-meta { font-size: 11px; letter-spacing: 0.02em; }
   .tile h2 { font-size: 16px; }
+  .tile-proof { font-size: 12px; }
   .tile p { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .ai-band { margin-top: 20px; padding: 28px 0 44px; }
   .ai-band h2 { font-size: 22px; }
@@ -1536,6 +1547,8 @@ body.is-scroll { overflow-x: clip; }
 .about p { font-size: 18px; line-height: 1.55; color: var(--primary); max-width: 58ch; text-wrap: pretty; }
 .about p + p { margin-top: 12px; }
 .about-head h2 { font-size: clamp(36px, 5cqw, 56px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; color: var(--foreground); }
+/* the greeting, then the claim on its own lines, balanced so no word hangs alone */
+.about-head h2 span { display: block; text-wrap: balance; }
 .about-head .about-lede { margin-top: 14px; font-size: 22px; line-height: 1.4; color: var(--foreground); }
 .about-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .about-facts li { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 14px; background: hsla(0, 0%, 0%, 0.24); font-size: 15px; line-height: 1.35; color: var(--foreground); }
@@ -1609,6 +1622,14 @@ body.is-scroll { overflow-x: clip; }
 @media (hover: hover) and (pointer: fine) {
   .contact-menu .email:hover { background: rgba(255, 255, 255, 0.1); }
   .contact-menu .email:hover .email-copy { color: var(--accent); }
+}
+/* The contact menu's first button copies the address (no mail app opens): yellow, like the button it replaced. */
+.contact-menu .email.primary { background: var(--accent); color: var(--on-accent); }
+.contact-menu .email.primary .email-addr { font-size: 15px; font-weight: 600; }
+.contact-menu .email.primary .email-copy, .contact-menu .email.primary::after { color: var(--on-accent); font-weight: 600; }
+@media (hover: hover) and (pointer: fine) {
+  .contact-menu .email.primary:hover { background: var(--accent); filter: brightness(92%); }
+  .contact-menu .email.primary:hover .email-copy { color: var(--on-accent); }
 }
 
 /* Reading progress of the open case: a line along the top that grows as you read, with Start and End above its two ends
@@ -1719,24 +1740,30 @@ body.is-scroll { overflow-x: clip; }
 .card.is-active .work figure.pmx.is-reflow { height: auto; overflow: visible; }
 .card.is-active .work .pmx.is-reflow > .pmf { display: flex !important; flex-direction: column !important; align-items: stretch !important; width: 100% !important; height: auto !important; gap: 16px !important; padding: 20px 16px !important; overflow: visible !important; }
 .card.is-active .work .pmx.is-reflow .pmf [style*="width"]:not(img):not(video):not(iframe) { width: auto !important; max-width: 100%; }
-.card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 22px !important; line-height: 1.2 !important; }
-.card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 19px !important; line-height: 1.25 !important; }
+/* Page titles a clear step above the text (the recruiter report, item 4: "bigger H2"): on a phone 22px over 14px text,
+   26px for the case's own title; on a tablet and a screen bigger still (below). */
+.card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 26px !important; line-height: 1.15 !important; letter-spacing: -0.02em; }
+.card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 22px !important; line-height: 1.2 !important; letter-spacing: -0.015em; max-width: none !important; }
 .card.is-active .work .pmx.is-reflow .pmf :is(h3, h4) { font-size: 16px !important; line-height: 1.3 !important; }
 .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 14px !important; line-height: 1.45 !important; }
 .card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11px !important; }
 .card.is-active .work .pmx.is-reflow .pm-big { font-size: 32px !important; line-height: 1 !important; }
 /* (written to outrank the body-text rule above, which had kept the problem titles at body size) */
-.card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 19px !important; line-height: 1.25 !important; font-weight: 700 !important; }
+.card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 22px !important; line-height: 1.2 !important; font-weight: 700 !important; letter-spacing: -0.015em; }
 .card.is-active .work .pmx.is-reflow .pmf .pm-big-h > h3 { font-size: 14px !important; }
 /* big number + label/title headers */
 .card.is-active .work .pmx.is-reflow :is(.pm-hd, .pm-bhn) { gap: 12px !important; align-items: flex-start !important; }
 /* first page: the phone on top, then the text */
 .card.is-active .work .pmx.is-reflow .pm-f-hero { gap: 18px !important; }
 .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v { width: 100% !important; height: auto !important; aspect-ratio: auto !important; justify-content: center !important; align-self: stretch !important; }
-.card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v.pm-ph > video { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
+.card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v.pm-ph > :is(video, img) { height: 440px !important; width: auto !important; margin: 0 auto !important; position: static !important; transform: none !important; }
 .card.is-active .work figure.pmx.is-reflow .pmf .pm-hero-v:not(.pm-ph) > video { width: 100% !important; height: auto !important; }
 .card.is-active .work .pmx.is-reflow .pm-hero-t { gap: 12px !important; padding: 0 !important; justify-content: flex-start !important; }
 .card.is-active .work .pmx.is-reflow .pm-grid2 { grid-template-columns: 1fr !important; }
+/* A first page leads with its Result, the largest of the four cards: the one thing to take away (item 4, "one big thing
+   per frame"). The other three follow in their order. */
+.card.is-active .work .pmx.is-reflow .pm-f-hero .pm-grid2 > .pm-card:last-child { order: -1; padding-block: 18px !important; }
+.card.is-active .work .pmx.is-reflow .pm-f-hero .pm-grid2 > .pm-card:last-child h4 { font-size: 20px !important; line-height: 1.25 !important; }
 .card.is-active .work .pmx.is-reflow :is(.pm-hfoot, .pm-ch-who) { flex-wrap: wrap !important; align-items: flex-start !important; gap: 12px !important; }
 .card.is-active .work .pmx.is-reflow .pm-ch-who { flex-direction: column !important; }
 .card.is-active .work .pmx.is-reflow .pm-ch-list::before { left: 33px; }
@@ -1774,6 +1801,25 @@ body.is-scroll { overflow-x: clip; }
 /* the get-it page: text first, then the phone */
 .card.is-active .work .pmx.is-reflow .pm-f-proto { align-items: center !important; }
 .card.is-active .work .pmx.is-reflow .pm-ptxt { order: -1; align-self: stretch; }
+/* A first page's tags, year and store button (the footer of its text) come right after the lede, before the STAR cards,
+   not at the very end of the page (her "bu asagıdaki seyleri daha gorunur bi yere belki ekranın soluna taşı"). Where
+   the page opens on a single phone and there is room (from 701px), they stand left of the phone instead, in the empty
+   side, the phone still in the middle. */
+.card.is-active .work .pmx.is-reflow .pm-hero-t > :is(.pm-grid2, .pm-ch-lim) { order: 1; }
+@media (min-width: 701px) {
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); column-gap: 20px; row-gap: 12px !important; align-items: center !important; }
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-t { display: contents !important; }
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-v { grid-column: 2; grid-row: 1; width: auto !important; margin-bottom: 8px; }
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-t > * { grid-column: 1 / -1; }
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-t > :is(.pm-hfoot, .pm-ch-who) { grid-column: 1; grid-row: 1; align-self: center; margin: 0 !important; }
+  /* (the year line gets a line of its own and may wrap: HealthBar's "Jun 2026 – now · ongoing" reached the phone in a
+     narrow cell) */
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-t > :is(.pm-hfoot, .pm-ch-who) :is(.pm-chips, .pm-when) { min-width: 0; }
+  .card.is-active .work .pmx.is-reflow > .pmf.pm-f-hero:has(> .pm-hero-v.pm-ph) > .pm-hero-t > :is(.pm-hfoot, .pm-ch-who) .pm-when { flex: 1 1 100% !important; margin-left: 0 !important; white-space: normal; }
+}
+/* A block whose parts were spaced only by the room between them (justify-content: space-between) has none once it
+   stacks to its content's height: it gets the pages' own 12px (her "arada bosluk olmalı", Chengel's two grids). */
+.card.is-active .work .pmx.is-reflow .pmf div[style*="justify-content:space-between"]:not([style*="gap"]) { gap: 12px !important; }
 /* Chengel's own pages: their inline rows stack; the download page's screenshots become a swipe row */
 .card.is-active .work .pmx.is-reflow .pm-ch div[style*="display:flex"]:not(.pm-shots) { flex-direction: column !important; flex-wrap: nowrap !important; }
 .card.is-active .work .pmx.is-reflow .pm-ch img[style*="height:"] { max-width: 100%; height: auto !important; }
@@ -1804,6 +1850,12 @@ body.is-scroll { overflow-x: clip; }
 .card.is-active .work .pmx.is-reflow .pm-dec-s { grid-template-columns: 1fr !important; row-gap: 4px; }
 .card.is-active .work .pmx.is-reflow .pm-dec-pick { margin: 4px -10px !important; padding: 12px 10px !important; }
 .card.is-active .work .pmx.is-reflow .pmf span.pm-dec-tag { font-size: 10px !important; line-height: 1.3 !important; }
+/* Only "What I chose" is framed in yellow (item 4): a tag, the persona quotes and the journey map's sections take a grey
+   line instead (.card: playmate-frames.css comes later). */
+.work .pmx .pm-dec-pick { box-shadow: inset 0 0 0 2px var(--pm-ac); }
+.card .work .pmx .pm-dec-tag { border-color: rgba(214, 214, 214, 0.4); }
+.card .work .pmx .pm-q2 { border-left-color: rgba(214, 214, 214, 0.4); }
+.card .work .pmx .pm-sec { border-color: rgba(214, 214, 214, 0.55); }
 .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) { flex-wrap: nowrap !important; gap: 12px !important; }
 .card.is-active .work .pmx.is-reflow .pm-dec-vis:has(.pm-dec-ph + .pm-dec-ph) .pm-phone { --pw: 148 !important; }
 .card.is-active .work .pmx.is-reflow .pm-dec-vis { flex-direction: row !important; flex-wrap: wrap !important; justify-content: flex-start !important; }
@@ -1824,11 +1876,17 @@ body.is-scroll { overflow-x: clip; }
 .card.is-active .work .pmx.is-reflow .pm-hfoot .pm-chips { flex-direction: row !important; flex-wrap: wrap !important; }
 .card.is-active .work .pmx.is-reflow .pm-hstore { align-items: flex-start !important; }
 .card.is-active .work .pmx.is-reflow .pm-hnote { text-align: left !important; max-width: none !important; }
+/* Chengel's design-system boards, cut into their panels and stacked, and its IA as rows of areas under the app: nothing in
+   Chengel scrolls sideways any more (the recruiter report, "yana kayan beş frame'i dikeye böl"). */
+.work .pmx .pm-parts { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+.work .pmx .pm-parts img { display: block; width: 100%; height: auto; }
+.work .pmx .pm-f-iav .pm-bus { display: none; }
+.work .pmx .pm-f-iav .pm-trees { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 14px; }
 /* charts: the title sits above at reading size, the drawing below scrolls sideways */
 .chart-cap { display: flex; gap: 12px; align-items: flex-start; margin: 10px 4px -4px; }
 .chart-cap > span { flex: none; color: var(--accent); font-size: 32px; font-weight: 700; line-height: 1; }
 .chart-cap small { display: block; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.chart-cap h3 { margin-top: 4px; color: #f4f4f2; font-size: 19px; line-height: 1.25; font-weight: 700; }
+.chart-cap h3 { margin-top: 4px; color: #f4f4f2; font-size: 22px; line-height: 1.2; font-weight: 700; letter-spacing: -0.015em; }
 .chart-cap a { display: inline-block; margin-top: 10px; padding: 9px 16px; border-radius: 99px; background: var(--accent); color: #202020; font-size: 14px; font-weight: 700; text-decoration: none; }
 .card.is-active .work figure.pmx.is-chart { height: auto; }
 .card.is-active .work .pmx.is-chart > .pmf { height: auto !important; }
@@ -1854,6 +1912,8 @@ body.is-scroll { overflow-x: clip; }
 /* A tablet reads the case in a centred column with slightly bigger text, so the lines stay under about 80 characters. */
 @media (min-width: 701px) and (max-width: 939px) {
   .card.is-active .work { max-width: 640px; margin-inline: auto; }
+  .card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 28px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf :is(h2, .pm-hd > div > p:not(.pm-big)), .chart-cap h3 { font-size: 24px !important; }
   .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; }
 }
 /* A screen reads it in a wider column with the text as on a tablet, 15px (her "yazılar cok buyuk geliyor gozume"; it was
@@ -1864,11 +1924,13 @@ body.is-scroll { overflow-x: clip; }
 @media (min-width: 940px) {
   .card.is-active .work { max-width: min(680px, 100% - 280px); margin-left: 256px; margin-right: auto; gap: 18px; }
   .card.is-active .work .pmx.is-reflow > .pmf { gap: 18px !important; padding: 26px 24px !important; }
-  .card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 24px !important; }
-  .card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 20px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf h1 { font-size: 32px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf h2 { font-size: 28px !important; }
+  .chart-cap h3 { font-size: 28px; }
+  .card.is-active .work .pmx.is-reflow .pm-f-hero .pm-grid2 > .pm-card:last-child h4 { font-size: 24px !important; }
   .card.is-active .work .pmx.is-reflow .pmf :is(h3, h4) { font-size: 16px !important; }
   .card.is-active .work .pmx.is-reflow .pmf :is(p, li, span:not(.pm-big):not(.pm-ch-num)) { font-size: 15px !important; line-height: 1.5 !important; }
-  .card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 20px !important; }
+  .card.is-active .work .pmx.is-reflow .pmf .pm-hd > div > p:not(.pm-big) { font-size: 28px !important; }
   .card.is-active .work .pmx.is-reflow .pm-lab { font-size: 11.5px !important; }
   .card.is-active .work .pmx.is-reflow .pm-big { font-size: 32px !important; }
   /* rows of screens three across (two when there are four), the store screenshots four across, the rest centred; a before

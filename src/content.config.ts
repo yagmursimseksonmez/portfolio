@@ -24,14 +24,18 @@ const projects = defineCollection({
     order: z.number(),
     // Left off the site but kept here: set back to false to show the case again.
     hidden: z.boolean().default(false),
+    // The lean case page (lean-case.css): its pages flow at their own height in a wide column, unscaled, and it ends on
+    // the next project without the overview pills (HealthBar, 2026-11-14).
+    lean: z.boolean().default(false),
     year: z.string(),
     // One line under the title on the homepage card and the case page.
     summary: z.string(),
     // A short hint on the folder tab, next to the title: what a recruiter will find inside.
     tabNote: z.string().optional(),
     // The project on the homepage: `cover` (the app's screen in a phone on the project's colour, tools/tiles/covers.mjs)
-    // and `when` (the year and how long it took).
-    tile: z.object({ cover: z.string(), when: z.string() }).optional(),
+    // and `when` (the year and how long it took); `proof`, one result under the name, for the case a recruiter should
+    // open first.
+    tile: z.object({ cover: z.string(), when: z.string(), proof: z.string().optional() }).optional(),
     tags: z.array(z.string()),
     // complete: full case study. rewriting / in-progress: short stub page.
     status: z.enum(['complete', 'rewriting', 'in-progress']),
