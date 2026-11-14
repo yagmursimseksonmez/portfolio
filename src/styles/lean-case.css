@@ -157,6 +157,11 @@
 .work figure.pmx.is-lean .pml-fig { width: 100%; }
 .work figure.pmx.is-lean .pml-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.6cqw, 24px); width: min(100%, 460px); margin-left: auto; }
 .work figure.pmx.is-lean .pml-result .pml-ba { max-width: 760px; margin-top: 8px; }
+/* boards in a row with labels over them (Chengel's design system): the labels share one row, set on its bottom line, and
+   the boards the next, so a label that wraps to two lines doesn't push its board below the others */
+.work figure.pmx.is-lean .pml-boards { grid-template-rows: auto auto; row-gap: 0; }
+.work figure.pmx.is-lean .pml-boards > div { display: grid; grid-template-rows: subgrid; grid-row: span 2; }
+.work figure.pmx.is-lean .pml-boards .pml-lab { align-self: end; }
 /* iKeep's two before-and-after groups side by side, three phones each; one under the other below 940px */
 .work figure.pmx.is-lean .pml-ba-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 3.4cqw, 56px); align-items: start; }
 
@@ -219,7 +224,8 @@
   .work figure.pmx.is-lean .pml-parts { --n: 2 !important; }
   .work figure.pmx.is-lean .pml-two { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-notes, .work figure.pmx.is-lean .pml-duo { grid-template-columns: 1fr; gap: 20px; }
-  .work figure.pmx.is-lean .pml-boards { --n: 1 !important; row-gap: 24px; }
+  .work figure.pmx.is-lean .pml-boards { --n: 1 !important; grid-template-rows: none; row-gap: 24px; }
+  .work figure.pmx.is-lean .pml-boards > div { display: block; }
   /* a cover's two or three phones as big as the column lets them: iKeep's two at about 170px, as HealthBar's one is readable */
   .work figure.pmx.is-lean .pml-cover .pml-row { max-width: calc(var(--n) * 180px); }
   .work figure.pmx.is-lean .pml-row .pml-cap { font-size: 13px; }
