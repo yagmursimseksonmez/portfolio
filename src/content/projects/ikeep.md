@@ -1,6 +1,7 @@
 ---
 title: iKeep
 order: 3
+lean: true
 year: '2026'
 tabNote: 'Redesign shipped in a week'
 tile: { cover: /images/tiles/ikeep.webp, when: '2026 · 1 week · App Store' }
@@ -19,7 +20,7 @@ facts:
 link: { label: View on the App Store, href: 'https://apps.apple.com/app/id6502346775' }
 kicker: Store the things to remember.
 hero:
-  frame: ikeep-hero
+  frame: ikeep-lean-cover
   kicker: iKeep · iOS · Freelance · Konkret · live on the App Store
   title: Store the things to remember.
   lede: iKeep is a vault for the values you type again and again, like Wi-Fi passwords and door codes. I was asked to rebrand it, and in one week I redesigned how it works too.
@@ -31,26 +32,16 @@ hero:
   chips: [iOS, Light and dark, iCloud sync]
   video: { src: /videos/ikeep21-demo.mp4, width: 786, height: 1708, label: 'iKeep walkthrough: a value hidden as dots and revealed with the eye, a new item added from the plus button and shown in its category, then the list in dark mode' }
 gallery:
-  - label: The app
-    frame: ikeep-result
   - label: Problem
-    frame: ikeep-problem
-  - label: Concept
-    frame: ikeep-cycle
-  - label: Information architecture
-    frame: ikeep-ia
+    frame: ikeep-lean-problem
   - label: Before and after
-    frame: ikeep-compare
+    frame: ikeep-lean-compare
+  - label: Decision
+    frame: ikeep-lean-decision
   - label: What I added
-    frame: ikeep-screens
-  - label: Get it
-    frame: ikeep-getit
+    frame: ikeep-lean-screens
   - label: Outcome
-    frame: ikeep-outcome
-  - label: Decision · category symbols
-    frame: ikeep-decision
-  - label: Overview
-    frame: ikeep-summary
+    frame: ikeep-lean-outcome
 ---
 
 I was asked to rebrand iKeep, an iOS vault for the values people copy again and again. In one week I redesigned how it works too, and it is now live on the App Store.

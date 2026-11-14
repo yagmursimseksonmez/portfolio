@@ -15,7 +15,10 @@ const isWide = (img: { width?: number; height?: number }) => !!img.width && !!im
 const nextOf = (k: number) => {
   const n = projects[(k + 1) % count];
   const html = n.data.hero?.frame ? frameHtml[`../content/playmate-frames/${n.data.hero.frame}.html`] ?? '' : '';
-  return { id: n.id, title: n.data.title, note: n.data.tabNote, summary: n.data.summary, video: html.match(/<video src="([^"]+)"/)?.[1] ?? n.data.hero?.video?.src, poster: html.match(/<video [^>]*poster="([^"]+)"/)?.[1] ?? html.match(/class="pm-hero-v[^"]*"[^>]*><img src="([^"]+)"/)?.[1], wide: !html.includes('pm-hero-v pm-ph') && !html.includes('pml-reel') };
+  // A lean cover with a still has no video: the card plays the walkthrough from the project file, poster from /images/posters.
+  const v = n.data.hero?.video ?? n.data.hero?.concept?.video;
+  const own = html.match(/<video src="([^"]+)"/)?.[1];
+  return { id: n.id, title: n.data.title, note: n.data.tabNote, summary: n.data.summary, video: own ?? v?.src, poster: html.match(/<video [^>]*poster="([^"]+)"/)?.[1] ?? html.match(/class="pm-hero-v[^"]*"[^>]*><img src="([^"]+)"/)?.[1] ?? v?.src.replace('/videos/', '/images/posters/').replace(/\.mp4$/, '.webp'), wide: own ? !html.includes('pm-hero-v pm-ph') && !html.includes('pml-reel') : !!v && v.width > v.height };
 };
 
 // Newest first; `years` is how many year rows each role spans on the timeline.
@@ -445,7 +448,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         ))}
                       </figure>
                     )}
-                    {d.prototype?.frame && !d.gallery.some((g) => g.frame === d.prototype!.frame) && (
+                    {!d.lean && d.prototype?.frame && !d.gallery.some((g) => g.frame === d.prototype!.frame) && (
                       <figure class="pmx" aria-label={d.prototype.label} set:html={frameHtml[`../content/playmate-frames/${d.prototype.frame}.html`]}></figure>
                     )}
                     {d.prototype && !d.prototype.frame && (

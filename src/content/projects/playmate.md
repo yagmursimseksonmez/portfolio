@@ -1,6 +1,7 @@
 ---
 title: PlayMate
 order: 4
+lean: true
 year: '2026'
 tabNote: 'Deepest UX research'
 tile: { cover: /images/tiles/playmate.webp, when: '2026 · 3 months' }
@@ -18,7 +19,7 @@ hero:
   kicker: PlayMate · solo project · community sports app
   title: "Find people to play sport with."
   compact: true
-  frame: hero
+  frame: playmate-lean-cover
   lede: 'PlayMate is a mobile app that matches people for sport. Instead of a group chat, you join a game room that shows the time, place, cost and who’s playing. Profiles show each player’s skill level, peer ratings and no-show penalties, so you can trust them before you meet.'
   points:
     - { label: Situation, title: 'Organising a game is chaos', text: 'All 4 players I interviewed had a routine, and all struggled with coordination, skill matching or trusting someone new.' }
@@ -30,46 +31,20 @@ hero:
     flat: true
     video: { src: /videos/playmate-hero-final.mp4, width: 1400, height: 916, label: 'PlayMate walkthrough: onboarding, finding a match, joining a game, creating one, friends, profiles and settings, with the words “mobile app that connects people through sport” floating around the phone' }
 gallery:
-  - label: The app
-    frame: result
   - label: Problem
-    frame: problem
-  - label: Planning
-    frame: plan
-  - label: Interviews
-    frame: people
-  - label: Synthesis
-    frame: synthesis
-  - label: Empathy map
-    frame: empathy
-  - label: Personas and journey map
-    frame: personas
-  - label: Concept
-    frame: playmate-cycle
-  - label: Information architecture
-    frame: playmate-ia
-  - label: Low fidelity wireframes
-    frame: wireframes
-  - label: Usability testing
-    frame: testing
-  - label: Testing round 1
-    frame: testing-round-1
-  - label: Decision · no-shows
-    frame: playmate-decision
-  - label: Iterations
-    frame: compare
-  - label: Design system and components
-    frame: foundations
-  - label: Components
-    frame: playmate-components
-  - label: Final screens
-    frame: final
-  - label: Try it
-    frame: prototype
+    frame: playmate-lean-problem
+  - label: Research
+    frame: playmate-lean-research
+  - label: Decision
+    frame: playmate-lean-decision
+  - label: Test rounds
+    frame: playmate-lean-testing
+  - label: Screens
+    frame: playmate-lean-screens
+  - label: Design system
+    frame: playmate-lean-system
   - label: Outcome
-    frame: playmate-outcome
-  - label: Overview
-    frame: summary
+    frame: playmate-lean-outcome
 prototype:
   frame: prototype
   label: Try it

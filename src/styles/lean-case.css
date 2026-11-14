@@ -1,5 +1,6 @@
-/* HealthBar's lean case (her "sade yalın ve net bir anlatım", 2026-11-13; preview in sirket/portfolyo/notlar/
-   2026-11-13-case-redesign, her "build only healthbar", 2026-11-14): a cover, then six numbered sections, each one
+/* The lean case page (her "sade yalın ve net bir anlatım", 2026-11-13; preview in sirket/portfolyo/notlar/
+   2026-11-13-case-redesign): HealthBar first (her "build only healthbar", 2026-11-14), then Chengel, iKeep and PlayMate
+   (her "digerlerini de bi tasarla bakayım", the same day). A cover, then up to seven numbered sections, each one
    statement and one visual that uses the column's whole width and shrinks with it. No colour behind the phones (her
    "telefon gorsellerine farklı renk arka plan ekleme"). Its pages are figure.pmx.is-lean (index.astro, `lean` in the
    project file): they flow at their own height, unscaled (site.js leaves them out of the frame fitting). Sizes follow the
@@ -131,6 +132,51 @@
 .work figure.pmx.is-lean .pml-box p { margin-top: 10px; font-size: 17px; line-height: 1.5; }
 .work figure.pmx.is-lean .pml-box p b { color: var(--l-fg); }
 
+/* ------------------------------------------------ Chengel, iKeep and PlayMate on the same page (her "digerlerini de bi
+   tasarla bakayım", 2026-11-14): the parts HealthBar did not need */
+/* a cover with a still beside the title: Chengel's grid, or two or three phones kept to phone size */
+.work figure.pmx.is-lean .pml-shot img { width: 100%; border-radius: clamp(10px, 1.4cqw, 18px); }
+.work figure.pmx.is-lean .pml-cover .pml-row { max-width: calc(var(--n) * clamp(120px, 14cqw, 210px)); margin-inline: auto; }
+/* a board: an image that is a picture of a page, not a phone */
+.work figure.pmx.is-lean .pml img.pml-board { width: 100%; border-radius: clamp(10px, 1.2cqw, 16px); }
+/* a label or a caption above what it names */
+.work figure.pmx.is-lean .pml-lab { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-cap:first-child { margin: 0 0 12px; }
+.work figure.pmx.is-lean .pml-chip { margin-left: auto; padding: 4px 11px; border-radius: 99px; box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--accent); font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+
+/* three short notes side by side: the question, the idea, what was found */
+.work figure.pmx.is-lean .pml-notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-notes > div { padding-top: 16px; border-top: 2px solid var(--l-rule); }
+.work figure.pmx.is-lean .pml-notes span { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.work figure.pmx.is-lean .pml-notes p { margin-top: 10px; font-size: clamp(16px, 1.3cqw, 19px); line-height: 1.45; }
+
+/* a big board beside two small ones (Chengel's typeface and its grids) */
+.work figure.pmx.is-lean .pml-duo { display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: clamp(8px, 1.4cqw, 20px); align-items: start; }
+.work figure.pmx.is-lean .pml-stack { display: grid; gap: clamp(8px, 1.4cqw, 20px); }
+/* the decision's right side as a board, or as two phones to compare (A and B, round 1 and final) */
+.work figure.pmx.is-lean .pml-fig { width: 100%; }
+.work figure.pmx.is-lean .pml-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.6cqw, 24px); width: min(100%, 460px); margin-left: auto; }
+.work figure.pmx.is-lean .pml-result .pml-ba { max-width: 760px; margin-top: 8px; }
+/* iKeep's two before-and-after groups side by side, three phones each; one under the other below 940px */
+.work figure.pmx.is-lean .pml-ba-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 3.4cqw, 56px); align-items: start; }
+
+/* PlayMate's findings and the features they became: the finding in grey, the feature in yellow */
+.work figure.pmx.is-lean .pml-map { margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-map > div { display: grid; grid-template-columns: minmax(0, 1fr) 2em minmax(0, 1.15fr); gap: clamp(12px, 2cqw, 28px); align-items: baseline; padding: 18px 0; border-top: 1px solid var(--l-rule); }
+.work figure.pmx.is-lean .pml-map > .pml-map-h { padding: 0 0 12px; border-top: 0; }
+.work figure.pmx.is-lean .pml-map-h span { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-map-h span:last-child { grid-column: 3; }
+.work figure.pmx.is-lean .pml-map p { font-size: clamp(16px, 1.3cqw, 19px); line-height: 1.45; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-map i { font-style: normal; color: var(--accent); font-weight: 700; }
+.work figure.pmx.is-lean .pml-map b { display: block; margin-bottom: 2px; color: var(--accent); font-size: clamp(19px, 1.6cqw, 24px); line-height: 1.25; letter-spacing: -0.01em; }
+
+/* the four test rounds, in order */
+.work figure.pmx.is-lean .pml-rounds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-rounds > div { padding-top: 16px; border-top: 2px solid var(--l-rule); }
+.work figure.pmx.is-lean .pml-rounds > div:last-child { border-top-color: var(--accent); }
+.work figure.pmx.is-lean .pml-rounds span { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.work figure.pmx.is-lean .pml-rounds p { margin-top: 8px; font-size: 16px; line-height: 1.45; }
+
 /* ------------------------------------------------ narrower */
 @media (max-width: 1359px) {
   .work figure.pmx.is-lean .pml-tag { display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border-radius: 50%; font-size: 13px; }
@@ -147,6 +193,10 @@
   .work figure.pmx.is-lean .pml-dec, .work figure.pmx.is-lean .pml-cover { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-annot { width: min(72%, 280px); margin-inline: auto; }
   .work figure.pmx.is-lean .pml-reel .pml-phone { width: min(62%, 280px); }
+  .work figure.pmx.is-lean .pml-shot { width: min(100%, 560px); margin-inline: auto; }
+  .work figure.pmx.is-lean .pml-pair, .work figure.pmx.is-lean .pml-fig { width: min(100%, 460px); margin-inline: auto; }
+  .work figure.pmx.is-lean .pml-rounds { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
+  .work figure.pmx.is-lean .pml-ba-rows { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .work figure.pmx.is-lean .pml { font-size: 16px; }
@@ -168,4 +218,14 @@
   .work figure.pmx.is-lean .pml-levels small { display: none; }
   .work figure.pmx.is-lean .pml-parts { --n: 2 !important; }
   .work figure.pmx.is-lean .pml-two { grid-template-columns: 1fr; }
+  .work figure.pmx.is-lean .pml-notes, .work figure.pmx.is-lean .pml-duo { grid-template-columns: 1fr; gap: 20px; }
+  .work figure.pmx.is-lean .pml-boards { --n: 1 !important; row-gap: 24px; }
+  .work figure.pmx.is-lean .pml-row .pml-cap { font-size: 13px; }
+  .work figure.pmx.is-lean .pml-map > div { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
+  .work figure.pmx.is-lean .pml-map > .pml-map-h, .work figure.pmx.is-lean .pml-map i { display: none; }
+  .work figure.pmx.is-lean .pml-map > .pml-map-h + div { border-top: 0; }
+  .work figure.pmx.is-lean .pml-map p:first-child { font-size: 15px; }
+  .work figure.pmx.is-lean .pml-rounds { grid-template-columns: 1fr; }
+  .work figure.pmx.is-lean .pml-chip { margin-left: 0; }
+  .work figure.pmx.is-lean .pml-sec-h { flex-wrap: wrap; }
 }
