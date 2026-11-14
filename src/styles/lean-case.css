@@ -150,9 +150,9 @@
 .work figure.pmx.is-lean .pml-notes span { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .work figure.pmx.is-lean .pml-notes p { margin-top: 10px; font-size: clamp(16px, 1.3cqw, 19px); line-height: 1.45; }
 
-/* a big board beside two small ones (Chengel's typeface and its grids) */
-.work figure.pmx.is-lean .pml-duo { display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: clamp(8px, 1.4cqw, 20px); align-items: start; }
-.work figure.pmx.is-lean .pml-stack { display: grid; gap: clamp(8px, 1.4cqw, 20px); }
+/* two boards side by side at the same height: each column as wide as its image's width-to-height ratio
+   (Chengel's typeface, 1440×900, beside its grid, 780×520) */
+.work figure.pmx.is-lean .pml-duo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.5fr); gap: clamp(8px, 1.4cqw, 20px); align-items: start; }
 /* the decision's right side as a board, or as two phones to compare (A and B, round 1 and final) */
 .work figure.pmx.is-lean .pml-fig { width: 100%; }
 .work figure.pmx.is-lean .pml-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.6cqw, 24px); width: min(100%, 460px); margin-left: auto; }
@@ -220,6 +220,8 @@
   .work figure.pmx.is-lean .pml-two { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-notes, .work figure.pmx.is-lean .pml-duo { grid-template-columns: 1fr; gap: 20px; }
   .work figure.pmx.is-lean .pml-boards { --n: 1 !important; row-gap: 24px; }
+  /* a cover's two or three phones as big as the column lets them: iKeep's two at about 170px, as HealthBar's one is readable */
+  .work figure.pmx.is-lean .pml-cover .pml-row { max-width: calc(var(--n) * 180px); }
   .work figure.pmx.is-lean .pml-row .pml-cap { font-size: 13px; }
   .work figure.pmx.is-lean .pml-map > div { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
   .work figure.pmx.is-lean .pml-map > .pml-map-h, .work figure.pmx.is-lean .pml-map i { display: none; }
