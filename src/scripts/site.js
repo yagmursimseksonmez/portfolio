@@ -1630,8 +1630,7 @@ function startVideos() {
     });
     new MutationObserver(() => vids.forEach(sync)).observe(card, { attributes: true, attributeFilter: ['class'] });
   });
-  // each case cover's walkthrough loops, so it has a pause button (WCAG 2.2.2); the next-project cards' clips sit inside a
-  // link, where a button cannot go, and stay still only with reduced motion
+  // each case cover's walkthrough and each next-project clip loops, so each has a pause button (WCAG 2.2.2)
   document.querySelectorAll('.pml-pause').forEach((btn) => {
     const v = btn.parentElement.querySelector('video');
     const show = () => {
@@ -1644,6 +1643,19 @@ function startVideos() {
       show(); sync(v);
     });
     show();
+  });
+  // the next-project card's button is the figure's (a button cannot sit inside the card's link), set beside the phone's
+  // foot from layout offsets, so the card's opening and closing transforms don't move it
+  document.querySelectorAll('.pm-nx-pause').forEach((btn) => {
+    const fig = btn.parentElement, peek = fig.querySelector('.pm-nx-peek');
+    const place = () => {
+      let x = 0, y = 0;
+      for (let el = peek; el && el !== fig; el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
+      btn.style.left = `${x + peek.offsetWidth + 12}px`;
+      btn.style.top = `${Math.min(y + peek.offsetHeight, fig.clientHeight - 12)}px`; // its foot (site.css lifts it by its height)
+    };
+    new ResizeObserver(place).observe(fig);
+    new ResizeObserver(place).observe(peek);
   });
 }
 startVideos();

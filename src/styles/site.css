@@ -1917,6 +1917,14 @@ body.is-scroll { overflow-x: clip; }
 .work figure.pmx.is-next .pm-nx-sum { font-size: 16px; }
 .work figure.pmx.is-next .pm-nx-peek { width: 200px; margin-top: 32px; }
 .work figure.pmx.is-next .pm-nx-peek.is-wide { width: 100%; }
+/* the next-project clip loops too, so it has a pause button (WCAG 2.2.2); a button cannot sit in the card's link, so it
+   is the figure's, placed beside the phone by site.js (startVideos) */
+.work figure.pmx.is-next { position: relative; }
+.work figure.pmx.is-next .pm-nx-pause { position: absolute; z-index: 1; translate: 0 -100%; margin: 0; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; box-sizing: border-box; border-radius: 50%; background: var(--pm-on); color: var(--pm-ac); cursor: pointer; }
+.work figure.pmx.is-next .pm-nx-pause svg { width: 16px; height: 16px; fill: currentColor; }
+.work figure.pmx.is-next .pm-nx-pause .pml-ic-play, .work figure.pmx.is-next .pm-nx-pause.is-held .pml-ic-pause { display: none; }
+.work figure.pmx.is-next .pm-nx-pause.is-held .pml-ic-play { display: inline; }
+.work figure.pmx.is-next .pm-nx-pause:focus-visible { outline: 2px solid var(--pm-on); outline-offset: 3px; }
 /* A tablet reads the case in a centred column with slightly bigger text, so the lines stay under about 80 characters. */
 @media (min-width: 701px) and (max-width: 939px) {
   .card.is-active .work { max-width: 640px; margin-inline: auto; }
