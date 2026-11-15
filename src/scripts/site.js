@@ -1612,8 +1612,10 @@ startReveals();
 // its first frame is ready it shows a dark box, and a picture that arrives late comes up from dark (motion.css).
 function startVideos() {
   const onScreen = new WeakMap();
+  // a video someone paused (or every video, with reduced motion) stays still until its button plays it again
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sync = (v) => {
-    const go = onScreen.get(v) && v.closest('[data-card]').classList.contains('is-active');
+    const go = onScreen.get(v) && v.closest('[data-card]').classList.contains('is-active') && !v.dataset.held;
     if (go && v.paused) v.play().catch(() => {});
     else if (!go && !v.paused) v.pause();
   };
@@ -1621,11 +1623,27 @@ function startVideos() {
   cards.forEach((card) => {
     const vids = [...card.querySelectorAll('video')];
     vids.forEach((v) => {
+      if (still) v.dataset.held = '1';
       if (v.autoplay) { v.autoplay = false; v.preload = 'auto'; }
       if (v.readyState < 2) v.addEventListener('loadeddata', () => addClass(v, 'is-loaded'), { once: true });
       io.observe(v);
     });
     new MutationObserver(() => vids.forEach(sync)).observe(card, { attributes: true, attributeFilter: ['class'] });
+  });
+  // each case cover's walkthrough loops, so it has a pause button (WCAG 2.2.2); the next-project cards' clips sit inside a
+  // link, where a button cannot go, and stay still only with reduced motion
+  document.querySelectorAll('.pml-pause').forEach((btn) => {
+    const v = btn.parentElement.querySelector('video');
+    const show = () => {
+      btn.classList.toggle('is-held', !!v.dataset.held);
+      btn.setAttribute('aria-label', v.dataset.held ? 'Play the video' : 'Pause the video');
+    };
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (v.dataset.held) delete v.dataset.held; else v.dataset.held = '1';
+      show(); sync(v);
+    });
+    show();
   });
 }
 startVideos();
