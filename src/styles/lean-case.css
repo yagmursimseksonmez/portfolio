@@ -43,6 +43,11 @@
 .work figure.pmx.is-lean .pml-eyebrow { color: var(--accent); font-size: 12.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 .work figure.pmx.is-lean .pml h1 { margin-top: 16px; max-width: 14em; color: var(--l-fg); font-size: clamp(36px, 4.2cqw, 62px); line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; text-wrap: balance; }
 .work figure.pmx.is-lean .pml-lede { margin-top: 20px; max-width: 34em; font-size: clamp(17px, 1.45cqw, 21px); line-height: 1.5; }
+/* the app's icon and where to get it, under the title (her "isaretli yere uygulamanın ikonunu ve appstore baglantısını koy.
+   tüm caselerde", 2026-11-15); PlayMate has no store page, so its link opens the prototype */
+.work figure.pmx.is-lean .pml-store { display: flex; align-items: center; gap: 16px; margin-top: clamp(24px, 2.8cqw, 36px); }
+.work figure.pmx.is-lean .pml-store img { width: clamp(48px, 4.4cqw, 64px); border-radius: 22%; }
+.work figure.pmx.is-lean .pml-store a.pml-link { margin-top: 0; }
 .work figure.pmx.is-lean .pml h2 { max-width: 18em; color: var(--l-fg); font-size: clamp(28px, 3.2cqw, 46px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 700; text-wrap: balance; }
 .work figure.pmx.is-lean .pml-say { margin-top: 18px; max-width: 36em; font-size: clamp(16px, 1.3cqw, 19px); color: var(--l-2); text-wrap: pretty; }
 

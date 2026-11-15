@@ -1,6 +1,6 @@
 ---
 title: HealthBar
-order: 1
+order: 2
 lean: true
 year: '2026 → now'
 tabNote: 'Most complex work · research to App Store'
