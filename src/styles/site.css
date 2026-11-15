@@ -1614,6 +1614,14 @@ body.is-scroll { overflow-x: clip; }
 @media (max-width: 1024px) { .card-tab h2 .tab-note { display: none; } .card-tab h2.has-note { flex-direction: row; align-items: center; } }
 /* a little smaller than its box, so it has room to float (site.js, floatAvatar) */
 .clock.avatar-wrap { width: calc(min(100cqw, 100cqh) * 0.94); background: none; overflow: hidden; }
+/* The card is as tall as what is in it: the illustration in a square of at most 360px, the text and the two buttons
+   right under it (her "bu cizimi biraz yukarı cekelim ve aşagıda yazan şeyleri de... boylece o kart biraz kücülsün");
+   a short window still shrinks the illustration. Closed, the panel is clipped to the button as before. */
+.contact { height: auto; }
+.contact-panel { position: relative; inset: auto; }
+.contact-menu { position: relative; inset: auto; max-height: calc(100dvh - 20px); }
+.contact-card { flex: 0 1 auto; }
+.contact-time { flex: 0 1 auto; aspect-ratio: 1; max-height: 360px; }
 /* The email and its Copy button share one row: a smaller Copy, so the address never runs under it. */
 .email { gap: 10px; }
 .email-addr { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; }
