@@ -27,8 +27,6 @@ hero:
 gallery:
   - label: Idea
     frame: chengel-lean-idea
-  - label: Handwriting
-    frame: chengel-lean-hand
   - label: Concept
     frame: chengel-lean-concept
   - label: Information architecture
