@@ -20,6 +20,14 @@
 .work figure.pmx.is-lean { width: var(--max-w); padding: 0; background: none; border-radius: 0; }
 .card.is-active .work figure.pmx.is-lean { width: 100%; height: auto; overflow: visible; border-radius: 0; }
 .card.is-active .work figure.pmx.is-lean + figure.pmx.is-next { margin-top: clamp(64px, 8cqw, 120px); }
+/* the next-project card: its phone beside the text, from the top, whole (her "hepsinde: telefonu buraya al", 2026-11-15);
+   on a phone it stays under the button */
+@media (min-width: 641px) {
+  .card.is-lean .work figure.pmx.is-next .pmf { display: grid; grid-template-columns: minmax(0, 400px) auto; grid-auto-rows: min-content; justify-content: start; align-content: start; column-gap: clamp(32px, 4cqw, 64px); height: auto; padding: 30px clamp(22px, 3cqw, 40px); }
+  .card.is-lean .work figure.pmx.is-next .pmf > :not(.pm-nx-peek) { grid-column: 1; }
+  .card.is-lean .work figure.pmx.is-next .pm-nx-btn { justify-self: start; }
+  .card.is-lean .work figure.pmx.is-next .pm-nx-peek { grid-column: 2; grid-row: 1 / span 6; align-self: start; width: clamp(170px, 16cqw, 220px); margin-top: 0; }
+}
 
 /* Everything inside a lean page is scoped to the page (`.work figure.pmx.is-lean …`), so it wins over the frames' own element
    rules (playmate-frames.css: `.work .pmx p`, `.work .pmx h2`, `.work .pmx *`). Written out flat: the build keeps CSS
@@ -46,8 +54,8 @@
 /* the app's icon and where to get it, under the title (her "isaretli yere uygulamanın ikonunu ve appstore baglantısını koy.
    tüm caselerde", 2026-11-15); PlayMate has no store page, so its link opens the prototype */
 .work figure.pmx.is-lean .pml-store { display: flex; align-items: center; gap: 16px; margin-top: clamp(24px, 2.8cqw, 36px); }
-.work figure.pmx.is-lean .pml-store img { width: clamp(48px, 4.4cqw, 64px); border-radius: 22%; }
-.work figure.pmx.is-lean .pml-store a.pml-link { margin-top: 0; }
+.work figure.pmx.is-lean .pml-store img { width: clamp(48px, 4.4cqw, 64px); border-radius: 12.5%; } /* the icons' own corner (Chengel's
+   cells are drawn to it; a rounder clip thinned the frame at two corners only), given to iKeep's square too */
 .work figure.pmx.is-lean .pml h2 { max-width: 18em; color: var(--l-fg); font-size: clamp(28px, 3.2cqw, 46px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 700; text-wrap: balance; }
 .work figure.pmx.is-lean .pml-say { margin-top: 18px; max-width: 36em; font-size: clamp(16px, 1.3cqw, 19px); color: var(--l-2); text-wrap: pretty; }
 
@@ -127,6 +135,7 @@
 /* ------------------------------------------------ a link out (Figma, the App Store, a prototype) */
 .work figure.pmx.is-lean .pml a.pml-link { display: inline-flex; margin-top: 20px; padding: 10px 18px; border-radius: 99px; background: var(--accent); color: var(--on-accent); font-size: 15px; font-weight: 700; text-decoration: none; }
 .work figure.pmx.is-lean .pml a.pml-link:focus-visible, .work figure.pmx.is-lean .pml-brief a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.work figure.pmx.is-lean .pml-store a.pml-link { margin-top: 0; } /* after .pml a.pml-link, which has the same weight */
 
 /* ------------------------------------------------ the outcome: what is not known yet, what comes next */
 .work figure.pmx.is-lean .pml-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
