@@ -1,7 +1,8 @@
 /* The lean case page (her "sade yalın ve net bir anlatım", 2026-11-13; preview in sirket/portfolyo/notlar/
    2026-11-13-case-redesign): HealthBar first (her "build only healthbar", 2026-11-14), then Chengel, iKeep and PlayMate
-   (her "digerlerini de bi tasarla bakayım", the same day). A cover, then up to seven numbered sections, each one
-   statement and one visual that uses the column's whole width and shrinks with it. No colour behind the phones (her
+   (her "digerlerini de bi tasarla bakayım", the same day). A cover, then a numbered section for every page the live case
+   had (her "caseler cok kısa olmuş", 2026-11-15), each one statement and the visuals under it, using the column's whole
+   width and shrinking with it. No colour behind the phones (her
    "telefon gorsellerine farklı renk arka plan ekleme"). Its pages are figure.pmx.is-lean (index.astro, `lean` in the
    project file): they flow at their own height, unscaled (site.js leaves them out of the frame fitting). Sizes follow the
    card (cqw: .card-content is the container), so they match the preview, where they followed the window. */
@@ -64,11 +65,14 @@
 .work figure.pmx.is-lean .pml-row { display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: clamp(8px, 1.6cqw, 28px); align-items: start; }
 .work figure.pmx.is-lean .pml-phone { border-radius: clamp(8px, 1.4cqw, 22px); overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.28); background: #111; }
 .work figure.pmx.is-lean .pml-phone :is(img, video) { display: block; width: 100%; height: auto; }
-/* the cover's one phone, playing the walkthrough of the app as it is on the App Store (her, 2026-11-14: "Eski ekranı ve
-   videoyu kullan daha gondermedik uygulamayi appstorea"): big enough to read the HP bar, small enough that the title
-   and the whole phone share the first screen */
+/* the cover's one phone, playing a walkthrough of the app: HealthBar's as it is on the App Store (her, 2026-11-14: "Eski
+   ekranı ve videoyu kullan daha gondermedik uygulamayi appstorea"), then on every cover (her, 2026-11-15: "light mode'dan
+   screen recording olsun burda. diger caselerde de bu kısımda video olsun"). Big enough to read the HP bar, small enough
+   that the title and the whole phone share the first screen. A clip cut from a recording of a phone keeps that screen's
+   rounder corners (PlayMate's). */
 .work figure.pmx.is-lean .pml-reel { display: grid; place-items: center; }
 .work figure.pmx.is-lean .pml-reel .pml-phone { width: clamp(180px, 20cqw, 280px); }
+.work figure.pmx.is-lean .pml-phone.pml-crop { border-radius: 12% / 5.5%; }
 
 /* ------------------------------------------------ a numbered section */
 .work figure.pmx.is-lean .pml-sec { padding-top: clamp(64px, 7cqw, 120px); }
@@ -115,13 +119,7 @@
 .work figure.pmx.is-lean .pml-key { display: none; }
 .work figure.pmx.is-lean .pml-key span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 
-/* ------------------------------------------------ the design system: the HP levels and the parts */
-.work figure.pmx.is-lean .pml-levels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
-.work figure.pmx.is-lean .pml-levels div { padding: 14px; border-radius: 12px; background: var(--c); color: #1b1613; font-size: 13px; font-weight: 700; }
-.work figure.pmx.is-lean .pml-levels small { display: block; margin-top: 18px; font-size: 12px; font-weight: 500; } /* (full colour: at .75 the red and the orange fell under 4.5:1) */
-/* the parts are cut out of the app, so they keep its dark background */
-.work figure.pmx.is-lean .pml-parts { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: clamp(8px, 1.4cqw, 20px); align-items: center; margin-top: clamp(8px, 1.4cqw, 20px); padding: clamp(16px, 3cqw, 40px); border-radius: clamp(14px, 1.8cqw, 24px); background: #1b1613; }
-.work figure.pmx.is-lean .pml-parts img { margin-inline: auto; }
+/* ------------------------------------------------ a link out (Figma, the App Store, a prototype) */
 .work figure.pmx.is-lean .pml a.pml-link { display: inline-flex; margin-top: 20px; padding: 10px 18px; border-radius: 99px; background: var(--accent); color: var(--on-accent); font-size: 15px; font-weight: 700; text-decoration: none; }
 .work figure.pmx.is-lean .pml a.pml-link:focus-visible, .work figure.pmx.is-lean .pml-brief a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -134,9 +132,6 @@
 
 /* ------------------------------------------------ Chengel, iKeep and PlayMate on the same page (her "digerlerini de bi
    tasarla bakayım", 2026-11-14): the parts HealthBar did not need */
-/* a cover with a still beside the title: Chengel's grid, or two or three phones kept to phone size */
-.work figure.pmx.is-lean .pml-shot img { width: 100%; border-radius: clamp(10px, 1.4cqw, 18px); }
-.work figure.pmx.is-lean .pml-cover .pml-row { max-width: calc(var(--n) * clamp(120px, 14cqw, 210px)); margin-inline: auto; }
 /* a board: an image that is a picture of a page, not a phone */
 .work figure.pmx.is-lean .pml img.pml-board { width: 100%; border-radius: clamp(10px, 1.2cqw, 16px); }
 /* a label or a caption above what it names */
@@ -182,6 +177,53 @@
 .work figure.pmx.is-lean .pml-rounds span { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .work figure.pmx.is-lean .pml-rounds p { margin-top: 8px; font-size: 16px; line-height: 1.45; }
 
+/* ------------------------------------------------ the live cases' content back on this page (her "caseler cok kısa olmuş.
+   şu an canlıda olan versiyonu gibi olmalı içerik yogunlugu … sayfa kurgusu bu sekilde kalsın", 2026-11-15): every page the
+   live case has, as a numbered section here */
+/* a long screen that scrolls under its pinned top bar and tab bar, as on the live case: the same parts (.pm-ptop, .pm-pmid,
+   .pm-pbot, so site.js scrolls it and shows its hint), sized by the phone's own width instead of a fixed one */
+.work figure.pmx.is-lean .pml-long { position: relative; aspect-ratio: var(--ar, 402 / 874); container-type: inline-size; --s: calc(100cqw / var(--w, 402)); background: var(--scr, #111); }
+/* steps or notes side by side: a number, a title, a line */
+.work figure.pmx.is-lean .pml-cols { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: clamp(20px, 2.4cqw, 32px) var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-cols > div { padding-top: 16px; border-top: 2px solid var(--l-rule); }
+.work figure.pmx.is-lean .pml-cols i { display: block; margin-bottom: 8px; color: var(--accent); font-size: 14px; font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.work figure.pmx.is-lean .pml-cols b { display: block; color: var(--l-fg); font-size: clamp(17px, 1.4cqw, 20px); line-height: 1.3; letter-spacing: -0.01em; }
+.work figure.pmx.is-lean .pml-cols p { margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-cols p + p { margin-top: 10px; color: var(--l-1); }
+.work figure.pmx.is-lean .pml-lab + .pml-cols { margin-top: 0; }
+/* phones with a caption over each: the captions share one row, set on its bottom line, so a caption of two lines doesn't
+   push its phone below the others (as the boards do) */
+.work figure.pmx.is-lean .pml-row:has(> div > .pml-cap:first-child) { grid-template-rows: auto auto; row-gap: 0; }
+.work figure.pmx.is-lean .pml-row > div:has(> .pml-cap:first-child) { display: grid; grid-template-rows: subgrid; grid-row: span 2; }
+.work figure.pmx.is-lean .pml-row > div > .pml-cap:first-child { align-self: end; }
+.work figure.pmx.is-lean * + .pml-lab { margin-top: clamp(28px, 3.4cqw, 48px); }
+/* the information architecture: one column per part of the app, its screens and what is on them */
+.work figure.pmx.is-lean .pml-ia { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: clamp(20px, 2.4cqw, 32px) var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-ia > div > b { display: block; padding: 12px 14px; border-radius: 12px; background: var(--l-box); box-shadow: inset 0 2px 0 var(--accent); color: var(--l-fg); font-size: 15px; line-height: 1.3; }
+.work figure.pmx.is-lean .pml-ia ul { margin: 0; padding: 0; list-style: none; }
+.work figure.pmx.is-lean .pml-ia > div > ul { margin: 6px 0 0 14px; padding-left: 14px; border-left: 1px solid var(--l-rule); }
+.work figure.pmx.is-lean .pml-ia li { padding-top: 8px; font-size: 15px; line-height: 1.35; color: var(--l-1); }
+.work figure.pmx.is-lean .pml-ia li ul { padding-left: 12px; }
+.work figure.pmx.is-lean .pml-ia li li { padding-top: 4px; font-size: 13.5px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: clamp(28px, 3.4cqw, 48px); font-size: 15px; }
+.work figure.pmx.is-lean .pml-flow span { padding: 8px 14px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--l-rule); color: var(--l-fg); }
+.work figure.pmx.is-lean .pml-flow i { color: var(--accent); font-style: normal; font-weight: 700; }
+.work figure.pmx.is-lean .pml-flow + .pml-ia { margin-top: 20px; }
+/* colour tokens: the colour, its name and its value */
+.work figure.pmx.is-lean .pml-sw { display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: 8px; }
+.work figure.pmx.is-lean .pml-sw > div { display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; min-height: clamp(76px, 8.4cqw, 124px); padding: 10px 11px; border-radius: 12px; background: var(--c); color: var(--i, #1b1613); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); font: 12px/1.3 ui-monospace, 'SF Mono', Menlo, monospace; }
+.work figure.pmx.is-lean .pml-sw b { font-size: 12.5px; overflow-wrap: anywhere; }
+/* a typeface shown in the app's own sizes, on its own background */
+.work figure.pmx.is-lean .pml-type { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding: 22px 20px; border-radius: 12px; background: var(--bg, #1b1613); color: var(--fg, #e4f2f2); font-family: var(--ff, ui-monospace, 'SF Mono', Menlo, monospace); font-weight: 700; line-height: 1.2; }
+/* components in their groups, each part named above it, on the app's own background */
+.work figure.pmx.is-lean .pml-kit-h { display: flex; align-items: baseline; gap: 10px; margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-kit-h i { color: var(--accent); font-size: 14px; font-style: normal; font-weight: 700; }
+.work figure.pmx.is-lean .pml-kit-h b { color: var(--l-fg); font-size: clamp(17px, 1.4cqw, 20px); }
+.work figure.pmx.is-lean .pml-kit-h span { font-size: 15px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-kit { columns: var(--n, 3); column-gap: clamp(16px, 2cqw, 32px); margin-top: 12px; padding: clamp(16px, 2.6cqw, 36px) clamp(16px, 2.6cqw, 36px) 0; border-radius: clamp(14px, 1.8cqw, 24px); background: var(--bg, #1b1613); }
+.work figure.pmx.is-lean .pml-kit > div { display: block; margin: 0 0 clamp(16px, 2.6cqw, 36px); break-inside: avoid; }
+.work figure.pmx.is-lean .pml-kit > div > span { display: block; margin-bottom: 8px; font-size: 13px; line-height: 1.35; color: var(--cap, rgba(228, 242, 242, 0.72)); }
+
 /* ------------------------------------------------ narrower */
 @media (max-width: 1359px) {
   .work figure.pmx.is-lean .pml-tag { display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border-radius: 50%; font-size: 13px; }
@@ -198,10 +240,13 @@
   .work figure.pmx.is-lean .pml-dec, .work figure.pmx.is-lean .pml-cover { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-annot { width: min(72%, 280px); margin-inline: auto; }
   .work figure.pmx.is-lean .pml-reel .pml-phone { width: min(62%, 280px); }
-  .work figure.pmx.is-lean .pml-shot { width: min(100%, 560px); margin-inline: auto; }
   .work figure.pmx.is-lean .pml-pair, .work figure.pmx.is-lean .pml-fig { width: min(100%, 460px); margin-inline: auto; }
   .work figure.pmx.is-lean .pml-rounds { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
   .work figure.pmx.is-lean .pml-ba-rows { grid-template-columns: 1fr; }
+  .work figure.pmx.is-lean .pml-cols { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14em), 1fr)); }
+  .work figure.pmx.is-lean .pml-ia { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work figure.pmx.is-lean .pml-sw { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+  .work figure.pmx.is-lean .pml-kit { columns: 2; }
 }
 @media (max-width: 640px) {
   .work figure.pmx.is-lean .pml { font-size: 16px; }
@@ -218,16 +263,10 @@
   .work figure.pmx.is-lean .pml-row.pml-read { --n: 3 !important; }
   .work figure.pmx.is-lean .pml-row.pml-read.pml-q4 { --n: 2 !important; }
   .work figure.pmx.is-lean .pml-step { grid-template-columns: 1fr; gap: 4px; }
-  .work figure.pmx.is-lean .pml-levels { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
-  .work figure.pmx.is-lean .pml-levels div { padding: 10px 6px; font-size: 12px; }
-  .work figure.pmx.is-lean .pml-levels small { display: none; }
-  .work figure.pmx.is-lean .pml-parts { --n: 2 !important; }
   .work figure.pmx.is-lean .pml-two { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-notes, .work figure.pmx.is-lean .pml-duo { grid-template-columns: 1fr; gap: 20px; }
   .work figure.pmx.is-lean .pml-boards { --n: 1 !important; grid-template-rows: none; row-gap: 24px; }
   .work figure.pmx.is-lean .pml-boards > div { display: block; }
-  /* a cover's two or three phones as big as the column lets them: iKeep's two at about 170px, as HealthBar's one is readable */
-  .work figure.pmx.is-lean .pml-cover .pml-row { max-width: calc(var(--n) * 180px); }
   .work figure.pmx.is-lean .pml-row .pml-cap { font-size: 13px; }
   .work figure.pmx.is-lean .pml-map > div { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
   .work figure.pmx.is-lean .pml-map > .pml-map-h, .work figure.pmx.is-lean .pml-map i { display: none; }
@@ -236,4 +275,135 @@
   .work figure.pmx.is-lean .pml-rounds { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-chip { margin-left: 0; }
   .work figure.pmx.is-lean .pml-sec-h { flex-wrap: wrap; }
+  .work figure.pmx.is-lean .pml-ia { gap: 20px 14px; }
+  .work figure.pmx.is-lean .pml-ia li { font-size: 14px; }
+  .work figure.pmx.is-lean .pml-ia li li { font-size: 13px; }
+  .work figure.pmx.is-lean .pml-sw { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .work figure.pmx.is-lean .pml-kit-h { flex-wrap: wrap; }
+}
+
+/* ------------------------------------------------ Chengel's own parts */
+/* the typeface beside the two grids it writes in, all three one height: each column as wide as its image is for its height */
+.work figure.pmx.is-lean .pml-trio { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.5fr) minmax(0, 1.5fr); gap: clamp(8px, 1.4cqw, 20px); align-items: start; }
+/* boards in a row at one height, whatever their shapes: --cols gives each column its image's width-to-height ratio */
+.work figure.pmx.is-lean .pml-row.pml-fit { grid-template-columns: var(--cols); }
+/* the dark greys tried for dark mode, under the note about them */
+.work figure.pmx.is-lean .pml-night { max-width: 760px; margin-top: 4px; }
+.work figure.pmx.is-lean .pml-night > div { min-height: 52px; }
+/* the app's icon and name beside the App Store link */
+.work figure.pmx.is-lean .pml-get { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px; margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-get img { width: 72px; height: 72px; border-radius: 16px; }
+.work figure.pmx.is-lean .pml-get b { display: block; color: var(--l-fg); font-size: 22px; letter-spacing: -0.01em; }
+.work figure.pmx.is-lean .pml-get span { display: block; margin-top: 2px; font-size: 15px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-get .pml-link { margin: 0 0 0 auto; }
+/* the five parts of the app in three columns where five would be too narrow to read */
+@media (min-width: 940px) and (max-width: 1199px) {
+  .work figure.pmx.is-lean .pml-ia.pml-ia-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 939px) {
+  .work figure.pmx.is-lean .pml-trio { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work figure.pmx.is-lean .pml-trio > :first-child { grid-column: 1 / -1; }
+  /* the atoms beside the molecules, the organisms under both */
+  .work figure.pmx.is-lean .pml-row.pml-fit3 { grid-template-columns: minmax(0, 699fr) minmax(0, 1283fr); }
+  .work figure.pmx.is-lean .pml-row.pml-fit3 > :last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .work figure.pmx.is-lean .pml-trio, .work figure.pmx.is-lean .pml-row.pml-fit, .work figure.pmx.is-lean .pml-row.pml-fit3 { grid-template-columns: 1fr; }
+  .work figure.pmx.is-lean .pml-get .pml-link { margin-left: 0; }
+}
+
+/* ------------------------------------------------ iKeep's own parts */
+/* a before and after pair, as on the live case: "Before" over its one phone, "After" over the one or two that replaced
+   it; the two captions share a row, set on its bottom line, and the phones start level under them */
+.work figure.pmx.is-lean .pml-bapair { align-items: start; }
+.work figure.pmx.is-lean .pml-bapair > .pml-cap { align-self: end; margin: 0 0 12px; }
+.work figure.pmx.is-lean .pml-bapair > .pml-cap + .pml-cap b { color: var(--accent); }
+.work figure.pmx.is-lean .pml-bapair > .pml-span2 { grid-column: span 2; }
+.work figure.pmx.is-lean .pml-bapair > .pml-phone { grid-row: 2; }
+
+/* ------------------------------------------------ PlayMate's own parts: the research pages the live case has */
+/* a FigJam board with its areas outlined and numbered, as on the live case: the notes above it carry the same numbers */
+.work figure.pmx.is-lean .pml-marked { position: relative; }
+.work figure.pmx.is-lean .pml-marked > i { position: absolute; border: 1.5px dashed var(--accent); border-radius: 6px; pointer-events: none; }
+.work figure.pmx.is-lean .pml-marked > i b { position: absolute; right: -11px; top: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 12px; font-style: normal; font-weight: 700; }
+/* the six themes: what was heard in grey, what became a feature in yellow */
+.work figure.pmx.is-lean .pml-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: -2px 0 14px; font-size: 14px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.work figure.pmx.is-lean .pml-legend i { width: 12px; height: 12px; border-radius: 3px; background: var(--l-box); box-shadow: inset 0 0 0 1px var(--l-rule); }
+.work figure.pmx.is-lean .pml-legend i.pml-y, .work figure.pmx.is-lean .pml-themes li.pml-y { background: var(--accent); color: var(--on-accent); }
+.work figure.pmx.is-lean .pml-themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 2.4cqw, 32px) var(--l-gutter); }
+.work figure.pmx.is-lean .pml-themes b { display: flex; gap: 8px; color: var(--l-fg); font-size: 16px; line-height: 1.3; }
+.work figure.pmx.is-lean .pml-themes b i { color: var(--accent); font-style: normal; }
+.work figure.pmx.is-lean .pml-themes ul { display: grid; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
+.work figure.pmx.is-lean .pml-themes li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 11px; border-radius: 8px; background: var(--l-box); font-size: 14px; line-height: 1.35; }
+.work figure.pmx.is-lean .pml-themes li.pml-y { font-weight: 600; }
+.work figure.pmx.is-lean .pml-themes li span { font-size: inherit; line-height: inherit; color: inherit; } /* over the frames' `.work .pmx li span` */
+.work figure.pmx.is-lean .pml-themes em { flex: none; font-style: normal; opacity: 0.75; }
+/* the two personas side by side */
+.work figure.pmx.is-lean .pml-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--l-gutter); margin-top: clamp(28px, 3.4cqw, 48px); }
+.work figure.pmx.is-lean .pml-persona { padding: clamp(20px, 2.4cqw, 32px); border-radius: 18px; background: var(--l-box); font-size: 15px; line-height: 1.45; }
+.work figure.pmx.is-lean .pml-persona-h { display: flex; gap: 16px; align-items: center; }
+.work figure.pmx.is-lean .pml-persona-h img { flex: none; width: clamp(72px, 7cqw, 96px); border-radius: 50%; }
+.work figure.pmx.is-lean .pml-persona-h h3 { color: var(--l-fg); font-size: clamp(22px, 2cqw, 28px); line-height: 1.1; letter-spacing: -0.02em; }
+.work figure.pmx.is-lean .pml-persona-h p { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-persona-h p b { color: var(--accent); font-weight: 700; }
+.work figure.pmx.is-lean .pml-persona blockquote { margin: 18px 0 0; color: var(--l-fg); font-size: clamp(17px, 1.5cqw, 20px); line-height: 1.35; font-weight: 500; }
+.work figure.pmx.is-lean .pml-persona h4 { margin-top: 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-persona h4 + * { margin-top: 6px; }
+.work figure.pmx.is-lean .pml-persona ul { margin-bottom: 0; padding-left: 1.1em; }
+.work figure.pmx.is-lean .pml-persona li + li { margin-top: 2px; }
+.work figure.pmx.is-lean .pml-persona ul.pml-needs li::marker { color: var(--accent); }
+.work figure.pmx.is-lean .pml-sl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; }
+.work figure.pmx.is-lean .pml-sl > div > div { display: flex; justify-content: space-between; font-size: 12px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-sl > div > i { position: relative; display: block; height: 4px; margin-top: 5px; border-radius: 2px; background: var(--l-rule); }
+.work figure.pmx.is-lean .pml-sl > div > i b { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); transform: translate(-50%, -50%); }
+/* the journey board's four phases, coloured as on the board */
+.work figure.pmx.is-lean .pml-phases { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: -2px 0 14px; font-size: 14px; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-phases span { display: inline-flex; align-items: center; gap: 8px; }
+.work figure.pmx.is-lean .pml-phases i { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+/* the journey map: one column per phase, its rows lined up across the phases */
+.work figure.pmx.is-lean .pml-jm { display: grid; grid-template-columns: 7.5em repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(7, auto); gap: 8px; font-size: 14px; line-height: 1.35; }
+.work figure.pmx.is-lean .pml-jm > div { display: grid; grid-template-rows: subgrid; grid-row: 1 / span 7; }
+/* each column placed by hand: the feelings curve crosses row 4, and an auto-placed column would step around it */
+.work figure.pmx.is-lean .pml-jm > div:nth-child(2) { grid-column: 2; }
+.work figure.pmx.is-lean .pml-jm > div:nth-child(3) { grid-column: 3; }
+.work figure.pmx.is-lean .pml-jm > div:nth-child(4) { grid-column: 4; }
+.work figure.pmx.is-lean .pml-jm > div:nth-child(5) { grid-column: 5; }
+.work figure.pmx.is-lean .pml-jm > div > * { padding: 10px 12px; border-radius: 8px; background: var(--l-box); }
+.work figure.pmx.is-lean .pml-jm small { display: none; }
+.work figure.pmx.is-lean .pml-jm > .pml-jm-l > * { padding: 10px 0; background: none; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-p { padding: 0 0 4px; background: none; color: var(--l-fg); font-size: 15px; font-weight: 700; }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-g { color: var(--l-fg); box-shadow: inset 3px 0 0 var(--l-2); }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-sp { min-height: 64px; padding: 0; background: none; }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-f { padding: 0 12px; background: none; color: var(--l-2); }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-o { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.work figure.pmx.is-lean .pml-jm > div > .pml-jm-a { background: none; box-shadow: inset 0 0 0 1px var(--l-rule); color: var(--l-fg); }
+.work figure.pmx.is-lean .pml-jm-curve { display: block; position: relative; grid-row: 4; grid-column: 2 / -1; height: 64px; }
+.work figure.pmx.is-lean .pml-jm-curve svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.work figure.pmx.is-lean .pml-jm-curve polyline { fill: none; stroke: var(--l-2); stroke-width: 2; }
+.work figure.pmx.is-lean .pml-jm-curve i { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--c, var(--l-fg)); transform: translate(-50%, -50%); }
+/* a test round's changes, each by name */
+.work figure.pmx.is-lean .pml-rounds p b { display: block; color: var(--l-fg); }
+.work figure.pmx.is-lean .pml-rounds p + p { margin-top: 12px; }
+/* the clickable prototype, as on the live case: a tap lets it take the scroll (site.js) */
+.work figure.pmx.is-lean .pml-proto { width: min(100%, 360px); margin-left: auto; aspect-ratio: 420 / 712; border-radius: clamp(10px, 1.4cqw, 18px); overflow: hidden; background: var(--l-box); }
+.work figure.pmx.is-lean .pml-proto iframe { display: block; width: 100%; height: 100%; border: 0; }
+/* the four before-and-after pairs stay two across on a tablet, where one across made each phone as wide as half the page */
+@media (min-width: 641px) and (max-width: 939px) {
+  .work figure.pmx.is-lean .pml-ba-rows.pml-iter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 939px) {
+  .work figure.pmx.is-lean .pml-themes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work figure.pmx.is-lean .pml-personas { grid-template-columns: 1fr; }
+  .work figure.pmx.is-lean .pml-proto { margin-inline: auto; }
+}
+@media (max-width: 640px) {
+  .work figure.pmx.is-lean .pml-marked > i b { right: -8px; top: -8px; width: 18px; height: 18px; font-size: 10.5px; }
+  .work figure.pmx.is-lean .pml-themes, .work figure.pmx.is-lean .pml-sl { grid-template-columns: 1fr; }
+  /* the journey map phase by phase, each cell named */
+  .work figure.pmx.is-lean .pml-jm { grid-template-columns: 1fr; grid-template-rows: none; gap: 20px; }
+  .work figure.pmx.is-lean .pml-jm > div, .work figure.pmx.is-lean .pml-jm > div:nth-child(n) { grid-template-rows: none; grid-row: auto; grid-column: auto; gap: 6px; }
+  .work figure.pmx.is-lean .pml-jm > .pml-jm-l, .work figure.pmx.is-lean .pml-jm-curve, .work figure.pmx.is-lean .pml-jm > div > .pml-jm-sp { display: none; }
+  .work figure.pmx.is-lean .pml-jm small { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; }
+  .work figure.pmx.is-lean .pml-jm > div > .pml-jm-f { padding: 10px 12px; background: var(--l-box); }
 }

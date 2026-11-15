@@ -34,12 +34,16 @@ hero:
 gallery:
   - label: Problem
     frame: ikeep-lean-problem
+  - label: Concept
+    frame: ikeep-lean-concept
+  - label: Information architecture
+    frame: ikeep-lean-ia
   - label: Before and after
     frame: ikeep-lean-compare
-  - label: Decision
-    frame: ikeep-lean-decision
   - label: What I added
     frame: ikeep-lean-screens
+  - label: Decision · category symbols
+    frame: ikeep-lean-decision
   - label: Outcome
     frame: ikeep-lean-outcome
 ---

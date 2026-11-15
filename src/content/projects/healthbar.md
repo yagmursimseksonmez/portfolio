@@ -32,14 +32,24 @@ hero:
 gallery:
   - label: Problem
     frame: healthbar-lean-problem
-  - label: The idea
+  - label: Survey
+    frame: healthbar-lean-survey
+  - label: Concept
     frame: healthbar-lean-idea
-  - label: Decision
+  - label: Information architecture
+    frame: healthbar-lean-ia
+  - label: Onboarding
+    frame: healthbar-lean-onboarding
+  - label: Daily loop
+    frame: healthbar-lean-daily
+  - label: Character
+    frame: healthbar-lean-character
+  - label: Decision · the home screen
     frame: healthbar-lean-decision
-  - label: Screens
-    frame: healthbar-lean-screens
-  - label: Design system
+  - label: Design system · Foundations
     frame: healthbar-lean-system
+  - label: Design system · Components
+    frame: healthbar-lean-components
   - label: Outcome
     frame: healthbar-lean-outcome
 ---

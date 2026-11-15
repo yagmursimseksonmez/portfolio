@@ -1,17 +1,19 @@
-// Records a walk through the Chengel prototype in dark mode: first run, a puzzle, the words, the flash cards,
-// the awards and the garden. Frames come from Chrome's screencast; ffmpeg turns them into one sped-up clip.
+// Records a walk through the Chengel prototype in dark mode (or light, for the case cover): first run, a puzzle, the
+// words, the flash cards, the awards and the garden. Frames come from Chrome's screencast; ffmpeg turns them into one
+// sped-up clip.
 //
-//   node tools/chengel/record.mjs <prototype.html> <out.mp4> [speed]
+//   node tools/chengel/record.mjs <prototype.html> <out.mp4> [speed] [dark|light]
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { launch } from './cdp.mjs';
 
-const [, , proto, out, speedArg] = process.argv;
+const [, , proto, out, speedArg, theme = 'dark'] = process.argv;
 const speed = Number(speedArg || 2);
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'chengel-rec-'));
-// 780x1688 pixels at scale 1, with the page zoomed 2x, so the clip is sharp
+// 780x1688 pixels at scale 1, with the 390x844 phone scaled 2x, so the clip is sharp (html body: the prototype's own
+// full-window rule for .phone comes later in the page and would win)
 const c = await launch({ width: 780, height: 1688, scale: 1 });
 const q = JSON.stringify;
 const click = (sel) => c.eval(`document.querySelector(${q(sel)}).click()`);
@@ -21,8 +23,8 @@ const type = async (w, gap = 170) => { for (const k of w) { await key(k); await 
 const tab = (i) => c.eval(`document.querySelectorAll('.wc-tab')[${i}].click()`);
 
 await c.goto('file://' + proto);
-await c.eval(`document.documentElement.setAttribute('data-theme','dark'); document.documentElement.style.zoom='2';
-  const st=document.createElement('style'); st.textContent='.bar{display:none!important} body{background:var(--paper)!important} .stage{padding:0!important} .phone{position:fixed!important;inset:0!important;width:390px!important;height:844px!important;max-height:none!important;min-height:0!important;border:0!important;border-radius:0!important;box-shadow:none!important} #toast{display:none!important}'; document.head.appendChild(st);`);
+await c.eval(`document.documentElement.setAttribute('data-theme',${q(theme)});
+  const st=document.createElement('style'); st.textContent='.bar{display:none!important} body{background:var(--paper)!important} .stage{padding:0!important} html body .phone{position:fixed!important;inset:0 auto auto 0!important;width:390px!important;height:844px!important;transform:scale(2)!important;transform-origin:0 0!important;max-height:none!important;min-height:0!important;border:0!important;border-radius:0!important;box-shadow:none!important} #toast{display:none!important}'; document.head.appendChild(st);`);
 await c.sleep(400);
 
 const frames = [];

@@ -24,19 +24,33 @@ hero:
     - { label: Action, title: 'A crossword in my handwriting', text: 'I tried four keyboards in light and dark. I chose tonal keys over outlined ones, so the puzzle stays louder than the keys.' }
     - { label: Result, title: 'Built in 3 weeks, now on the App Store', text: 'It was designed and built Oct 1–20, 2026. Every text pair passes 4.5:1 contrast, and the key letters stay at 8.4:1 in light and 6.8:1 in dark. It has not been tested with learners yet.' }
   chips: [iOS, Design system, Light and dark]
-  # the next-project card from HealthBar plays this walkthrough; the cover itself is a still
-  video: { src: /videos/chengel-demo.mp4, width: 780, height: 1688, label: 'Chengel in dark mode: first launch, a puzzle in my handwriting, the word folders and flash cards, the awards and the garden' }
 gallery:
   - label: Idea
     frame: chengel-lean-idea
   - label: Handwriting
     frame: chengel-lean-hand
-  - label: Decision
+  - label: Concept
+    frame: chengel-lean-concept
+  - label: Information architecture
+    frame: chengel-lean-ia
+  - label: Iterations · keyboard and dark mode
     frame: chengel-lean-decision
-  - label: Screens
-    frame: chengel-lean-screens
-  - label: Design system
-    frame: chengel-lean-system
+  - label: Design system · colour
+    frame: chengel-lean-colour
+  - label: Design system · type
+    frame: chengel-lean-type
+  - label: Design system · components
+    frame: chengel-lean-components
+  - label: Design system · icons and illustrations
+    frame: chengel-lean-icons
+  - label: Build with the kit
+    frame: chengel-lean-kit
+  - label: Final screens · dark
+    frame: chengel-lean-dark
+  - label: Final screens · light
+    frame: chengel-lean-light
+  - label: Prototype
+    frame: chengel-lean-prototype
   - label: Outcome
     frame: chengel-lean-outcome
 prototype:

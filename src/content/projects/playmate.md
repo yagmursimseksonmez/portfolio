@@ -33,16 +33,38 @@ hero:
 gallery:
   - label: Problem
     frame: playmate-lean-problem
-  - label: Research
-    frame: playmate-lean-research
-  - label: Decision
-    frame: playmate-lean-decision
-  - label: Test rounds
+  - label: Planning
+    frame: playmate-lean-plan
+  - label: Interviews
+    frame: playmate-lean-people
+  - label: Synthesis
+    frame: playmate-lean-synthesis
+  - label: Empathy map
+    frame: playmate-lean-empathy
+  - label: Personas and journey map
+    frame: playmate-lean-personas
+  - label: Concept
+    frame: playmate-lean-concept
+  - label: Information architecture
+    frame: playmate-lean-ia
+  - label: Low fidelity wireframes
+    frame: playmate-lean-wireframes
+  - label: Usability testing
     frame: playmate-lean-testing
-  - label: Screens
-    frame: playmate-lean-screens
-  - label: Design system
+  - label: Testing round 1
+    frame: playmate-lean-round1
+  - label: Decision · no-shows
+    frame: playmate-lean-decision
+  - label: Iterations
+    frame: playmate-lean-iterations
+  - label: Design system · Foundations
     frame: playmate-lean-system
+  - label: Design system · Components
+    frame: playmate-lean-components
+  - label: Final screens
+    frame: playmate-lean-final
+  - label: Try it
+    frame: playmate-lean-proto
   - label: Outcome
     frame: playmate-lean-outcome
 prototype:
