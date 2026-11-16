@@ -506,7 +506,8 @@ nav h3 { white-space: nowrap; }
 #root:has(.gallery.is-shrinking) .home { transform: none; opacity: 1; transition: none; pointer-events: none; }
 /* While the balloon swells the page is already open under it, clipped to nothing (site.js, popOpen): the homepage, Contact
    and Close stay as they were until it pops. */
-#root:has(.gallery.is-inflating) :is(.home, .contact) { transform: none; opacity: 1; transition: none; }
+#root:has(.gallery.is-inflating) :is(.home, .contact) { transform: none; opacity: 1; visibility: visible; transition: none; }
+#root:has(.gallery.is-inflating) .about-btn { opacity: 1; visibility: visible; pointer-events: none; transition: none; }
 .gallery.is-inflating :is(.gallery-dismiss, .gallery-step) { opacity: 0; visibility: hidden; transition: none; }
 
 .card-content {
