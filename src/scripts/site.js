@@ -421,7 +421,8 @@ function setFocus(next) {
   // The homepage sits faded out behind an open folder: Tab must not walk through it, and a keyboard user who opened a
   // card from there carries on inside the folder.
   if (home) {
-    const leaving = home.contains(document.activeElement);
+    // (About me sits with Contact, outside the homepage, and is hidden once the About opens: it hands the focus on too)
+    const leaving = home.contains(document.activeElement) || !!contact?.contains(document.activeElement);
     home.inert = focused;
     if (focused && prev !== next && leaving) (isBook ? book : cards[next]).focus({ preventScroll: true });
   }
