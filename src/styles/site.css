@@ -133,8 +133,8 @@ nav h3 { white-space: nowrap; }
      intro narrowed so it ends left of that disc, and the two on the left starting below the intro wherever it ends
      (--intro-h, site.js markSubBottom). */
   .subheader p { max-width: min(600px, 41.35vw - var(--pad) - 24px); }
-  /* the header's four columns end before About me and Contact */
-  nav { padding-right: 290px; }
+  /* the header's four columns end before About me and Contact, with room between them */
+  nav.grid { grid-template-columns: repeat(4, minmax(max-content, 1fr)); column-gap: 24px; padding-right: 290px; }
   .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 104px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
   .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 0; }
   .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
@@ -214,9 +214,11 @@ nav h3 { white-space: nowrap; }
   width: var(--w);
   height: var(--h);
   pointer-events: none;
-  transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease);
+  transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease), visibility 0s;
 }
-#root:has(.gallery.is-focused) .contact { transform: translateY(-20px) scale(0.98); opacity: 0; }
+/* Out of sight it is also hidden, so Tab never lands on it; visibility flips after the fade out and at once on the way
+   in, as for Close. */
+#root:has(.gallery.is-focused) .contact { transform: translateY(-20px) scale(0.98); opacity: 0; visibility: hidden; transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); }
 .contact-panel {
   position: absolute;
   inset: 0;
@@ -253,11 +255,11 @@ nav h3 { white-space: nowrap; }
    bi butonla koy, ismi; about me olsun", 2026-11-16): it opens the About, as "Wanna know me better?" did. It goes with
    the Contact button (out of sight while a folder is open, away on a scrolled phone) and steps aside while the contact
    menu is open over it. */
-.about-btn { position: absolute; top: 0; right: calc(var(--btn-w) + 8px); display: flex; align-items: center; gap: 8px; height: var(--btn-h); padding: 0 14px 0 16px; border-radius: var(--radius-card); background: rgba(51, 53, 51, 0.9); -webkit-backdrop-filter: blur(20px) saturate(115%); backdrop-filter: blur(20px) saturate(115%); color: var(--accent); white-space: nowrap; pointer-events: auto; transition: opacity var(--dur) var(--ease); }
+.about-btn { position: absolute; top: 0; right: calc(var(--btn-w) + 8px); display: flex; align-items: center; gap: 8px; height: var(--btn-h); padding: 0 14px 0 16px; border-radius: var(--radius-card); background: rgba(51, 53, 51, 0.9); -webkit-backdrop-filter: blur(20px) saturate(115%); backdrop-filter: blur(20px) saturate(115%); color: var(--accent); white-space: nowrap; pointer-events: auto; transition: opacity var(--dur) var(--ease), visibility 0s; }
 .about-btn h3 { font-size: 16px; color: inherit; }
 .about-btn svg { width: 16px; height: 16px; }
 .about-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.contact.is-open .about-btn, #root:has(.gallery.is-focused) .about-btn { opacity: 0; pointer-events: none; }
+.contact.is-open .about-btn, #root:has(.gallery.is-focused) .about-btn { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity var(--dur) var(--ease), visibility 0s linear var(--dur); }
 .contact.is-open .contact-toggle { transform: translate(-10px, 10px); }
 .contact.is-open .contact-toggle h3 { opacity: 0; }
 .contact.is-open .contact-toggle svg { transform: rotate(45deg); }
@@ -1174,7 +1176,7 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   /* The header shows only the name here, so the CV link joins the intro's links. */
   .subheader .cv-link { display: inline; }
   /* Scrolled down, the Contact button leaves with the header instead of sitting on the discs (site.js, startContact). */
-  .contact.is-away:not(.is-open) { opacity: 0; transform: translateY(-16px); }
+  .contact.is-away:not(.is-open) { opacity: 0; visibility: hidden; transform: translateY(-16px); transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); }
   .contact.is-away:not(.is-open) :is(.contact-panel, .about-btn) { pointer-events: none; }
   .subheader { gap: 8px; padding: 14px var(--pad) 10px; }
   .subheader h3 { margin-top: 6px; font-size: 13px; color: var(--secondary); }

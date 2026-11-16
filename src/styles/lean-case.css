@@ -341,10 +341,6 @@
 @media (max-width: 640px) {
   .work figure.pmx.is-lean .pml-ba-side > .pml-cap { font-size: 13px; }
 }
-  .work figure.pmx.is-lean .pml-ba.pml-ba-1 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .work figure.pmx.is-lean .pml-ba-ph { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
-  .work figure.pmx.is-lean .pml-ba-side > .pml-cap { font-size: 13px; }
-}
 
 /* ------------------------------------------------ PlayMate's own parts: the research pages the live case has */
 /* a FigJam board with its areas outlined and numbered, as on the live case: the notes above it carry the same numbers */
