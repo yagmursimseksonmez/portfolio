@@ -4,7 +4,7 @@ order: 2
 lean: true
 year: '2026 → now'
 tabNote: 'Most complex work · research to App Store'
-tile: { cover: /images/tiles/healthbar.webp, when: '2026 · ongoing · App Store', proof: '8 of 9 read their HP correctly at first glance, up from 4' }
+tile: { cover: /images/tiles/healthbar.webp, when: '2026 · ongoing · App Store' }
 summary: An RPG-style companion that turns Apple Health data into a game.
 tags: [iOS, Apple Watch, UX research]
 status: complete

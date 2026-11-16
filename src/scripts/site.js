@@ -308,6 +308,7 @@ const cards = gallery ? [...gallery.querySelectorAll('[data-card]')] : [];
 const book = gallery?.querySelector('[data-book]');
 const bookScroll = book?.querySelector('[data-book-scroll]');
 const count = cards.length;
+const steps = gallery ? [...gallery.querySelectorAll('[data-step-by]')] : [];
 let active = null;
 let hero = null;
 
@@ -399,6 +400,13 @@ function setFocus(next) {
     else card.style.setProperty('--y', y);
   });
 
+  // the previous and the next project's buttons say which case each opens
+  if (focused && !isBook) steps.forEach((btn) => {
+    const to = cards[(next + Number(btn.dataset.stepBy) + count) % count];
+    btn.querySelector('span').textContent = to.getAttribute('aria-label');
+    btn.setAttribute('aria-label', `${btn.dataset.stepBy < 0 ? 'Previous' : 'Next'} project: ${to.getAttribute('aria-label')}`);
+  });
+
   if (book) {
     book.tabIndex = isBook ? -1 : 0;
     book.querySelector('.book-stage').inert = !isBook; // the same for the closed book: its links wait until it opens
@@ -418,9 +426,9 @@ function setFocus(next) {
     if (focused && prev !== next && leaving) (isBook ? book : cards[next]).focus({ preventScroll: true });
   }
   if (!focused && inside) {
-    // Closing hands the focus back to what opened it (the project on the homepage, or "Wanna know me better?"), so a
+    // Closing hands the focus back to what opened it (the project on the homepage, or "About me"), so a
     // keyboard user sees where they are.
-    const back = prev === BOOK ? document.querySelector('.subheader [data-open-book]') : prev !== null ? document.querySelector(`[data-open-case="${prev}"]`) : null;
+    const back = prev === BOOK ? document.querySelector('.about-btn') : prev !== null ? document.querySelector(`[data-open-case="${prev}"]`) : null;
     if (back && prev !== next) back.focus({ preventScroll: true });
     else document.activeElement.blur();
   }
@@ -692,6 +700,13 @@ function startGallery() {
       if ((e.key === 'Enter' || e.key === ' ') && e.target === card && active !== k) { e.preventDefault(); focusGallery(k); }
     });
   });
+  // The previous and the next project open from their first page, as the card at the end of a case does.
+  steps.forEach((btn) => btn.addEventListener('click', () => {
+    if (typeof active !== 'number') return;
+    const to = (active + Number(btn.dataset.stepBy) + count) % count;
+    cards[to].querySelector('.card-content').scrollTop = 0;
+    openNext(to, btn.querySelector('span'));
+  }));
 
   book?.addEventListener('click', () => { if (active !== BOOK) focusGallery(BOOK); });
   book?.addEventListener('keydown', (e) => {
@@ -1084,9 +1099,14 @@ hero = startHero();
 
 // Phone: the folder list (and "Selected work" above it) starts below the intro text, however far the text runs on a
 // short screen (site.css, --list-top).
+// On a screen the two discs on the left start below the intro, however many lines it takes (site.css, --intro-h).
 const subText = document.querySelector('.subheader p');
+const tilesBox = document.querySelector('.tiles');
 const markSubBottom = () => {
-  if (subText && !root.querySelector('.gallery.is-focused')) root.style.setProperty('--sub-bottom', `${Math.round(subText.getBoundingClientRect().bottom + scrollY)}px`);
+  if (!subText || root.querySelector('.gallery.is-focused')) return;
+  const bottom = subText.getBoundingClientRect().bottom;
+  root.style.setProperty('--sub-bottom', `${Math.round(bottom + scrollY)}px`);
+  tilesBox?.style.setProperty('--intro-h', `${Math.round(bottom - tilesBox.getBoundingClientRect().top + 16)}px`);
 };
 if (subText) new ResizeObserver(markSubBottom).observe(subText);
 addEventListener('resize', markSubBottom);

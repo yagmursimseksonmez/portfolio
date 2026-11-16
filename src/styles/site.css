@@ -126,22 +126,22 @@ nav h3 { white-space: nowrap; }
      two, smallest, on the left under the intro. Then she drew where each should be (her "daireler bu sekilde dizilsin"):
      all larger, the first high, right under the headline, the second large and a little lower. Middles at 10.9, 29.4,
      55.6 and 85.1% of the width; sizes 1, .8, .62, .55 of the largest, 28.5% of the width or what the height allows. A
-     disc whose left edge is under the intro (640px wide, 90px tall) starts below it; --free is how far a disc can move
-     down and still keep its text (about 70px) on screen. The first disc's text has one line more (its proof), so the
-     largest disc leaves about 104px under it. */
-  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 194px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
-  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 90px; }
+     disc whose left edge is under the intro starts below it; --free is how far a disc can move down and still keep its
+     text (about 70px) on screen. The largest disc leaves about 104px under it for its text. */
+  /* The widest screen's places hold at every width down to 1025px (her "sayfayı büyütüp kücültünce caselerin yeri
+     degisiyo. aynı kalmalı. en geniş hali en güncel hali", 2026-11-16): the first disc right under the headline, the
+     intro narrowed so it ends left of that disc, and the two on the left starting below the intro wherever it ends
+     (--intro-h, site.js markSubBottom). */
+  .subheader p { max-width: min(600px, 41.35vw - var(--pad) - 24px); }
+  /* the header's four columns end before About me and Contact */
+  nav { padding-right: 290px; }
+  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 104px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 0; }
   .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
-  .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.2); }
-  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: max(90px, var(--free) * 0.85); }
+  .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: min(var(--free), max(90px, var(--intro-h, 0px), var(--free) * 0.2)); }
+  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: min(var(--free), max(90px, var(--intro-h, 0px), var(--free) * 0.85)); }
   .tile-meta { white-space: nowrap; } /* (a small disc would break its year line in two; it may run a little past it) */
   .tiles .tile-proof { white-space: nowrap; } /* (one line, under a disc of any size; .tiles to win over the base rule's text-wrap) */
-}
-/* Wide enough for the largest disc to clear the intro beside it (its round edge stays right of the text): it rises to the
-   top, right under the headline, and has the full height. */
-@media (min-width: 1440px) {
-  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 104px), 520px); }
-  .tile:nth-child(1) { top: 0; }
 }
 /* Only with a mouse: a tap on a touch screen would leave :hover stuck, and the other three dimmed after the case closes. */
 @media (hover: hover) and (pointer: fine) {
@@ -244,8 +244,20 @@ nav h3 { white-space: nowrap; }
 }
 .contact-toggle h3 { font-size: 16px; transition: opacity var(--dur) var(--ease), color 100ms; }
 .contact-toggle svg { width: 20px; height: 20px; fill: var(--primary); transition: transform var(--dur) var(--ease), fill 100ms; }
-.contact-toggle:hover h3 { color: var(--accent); }
-.contact-toggle:hover svg { fill: var(--accent); }
+/* The text in Contact and About me is yellow, so they read as buttons (her "bu iki butonun icindeki textin renkleri sarı
+   olsun clickable oldgunu anlatmak için", 2026-11-16); pointed at, it is underlined like the links. */
+.contact-toggle h3 { color: var(--accent); }
+.contact-toggle svg { fill: var(--accent); }
+.contact-toggle:hover h3, .about-btn:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
+/* About me, left of Contact and like it (her "wanne know me better kısmını ordan al, contactın soluna tıpkı contact gibi
+   bi butonla koy, ismi; about me olsun", 2026-11-16): it opens the About, as "Wanna know me better?" did. It goes with
+   the Contact button (out of sight while a folder is open, away on a scrolled phone) and steps aside while the contact
+   menu is open over it. */
+.about-btn { position: absolute; top: 0; right: calc(var(--btn-w) + 8px); display: flex; align-items: center; gap: 8px; height: var(--btn-h); padding: 0 14px 0 16px; border-radius: var(--radius-card); background: rgba(51, 53, 51, 0.9); -webkit-backdrop-filter: blur(20px) saturate(115%); backdrop-filter: blur(20px) saturate(115%); color: var(--accent); white-space: nowrap; pointer-events: auto; transition: opacity var(--dur) var(--ease); }
+.about-btn h3 { font-size: 16px; color: inherit; }
+.about-btn svg { width: 16px; height: 16px; }
+.about-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.contact.is-open .about-btn, #root:has(.gallery.is-focused) .about-btn { opacity: 0; pointer-events: none; }
 .contact.is-open .contact-toggle { transform: translate(-10px, 10px); }
 .contact.is-open .contact-toggle h3 { opacity: 0; }
 .contact.is-open .contact-toggle svg { transform: rotate(45deg); }
@@ -362,29 +374,22 @@ nav h3 { white-space: nowrap; }
 }
 .gallery-dismiss svg { width: 20px; height: 20px; fill: var(--on-accent); transform: rotate(45deg); }
 .gallery-dismiss:hover { filter: brightness(90%); }
-.gallery-keys {
-  position: absolute;
-  top: 9px;
-  right: 10px;
-  z-index: 99;
-  display: grid;
-  grid-template-columns: repeat(3, 20px);
-  gap: 2px;
+/* The previous and the next project, from inside any case (her "bir case'a tıklayınca digerine de gecebileyim, belki
+   yukarda next case-previous case gibi bi yer olur", 2026-11-16): two buttons at the top right, named after the case each
+   opens (site.js, startGallery), in the order of the discs and round again. On a phone only the arrows show. They took
+   the place of the arrow-key hint. */
+.gallery-step { position: absolute; top: 10px; right: 10px; z-index: 99; display: flex; align-items: start; gap: 8px; height: auto; margin: 0; padding: 0; }
+.step-btn { display: flex; align-items: center; gap: 8px; height: 40px; margin: 0; padding: 0 14px; border-radius: var(--radius-card); background: rgba(51, 53, 51, 0.9); -webkit-backdrop-filter: blur(20px) saturate(115%); backdrop-filter: blur(20px) saturate(115%); color: var(--accent); font-size: 16px; white-space: nowrap; box-shadow: var(--elevation-control); transition: filter 100ms var(--ease); }
+.step-btn svg { flex: none; width: 16px; height: 16px; }
+.step-btn:hover { filter: brightness(1.2); }
+.step-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 700px) {
+  .step-btn { width: 36px; padding: 0; justify-content: center; }
+  .step-btn span { display: none; }
 }
-.gallery-keys span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  border-radius: var(--radius-image);
-  background: var(--tertiary);
-  color: var(--page);
-  font-size: 13px;
-}
-.gallery-keys span:first-child { grid-column: 2; }
 /* Hidden (not only transparent) while no folder is open, so Tab never lands on the invisible Close; visibility flips
    after the fade out and at once on the way in. */
-.gallery-dismiss, .gallery-keys {
+.gallery-dismiss, .gallery-step {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -392,7 +397,7 @@ nav h3 { white-space: nowrap; }
   transition: opacity 300ms var(--ease), transform 300ms var(--ease), filter 120ms var(--ease), visibility 0s linear 300ms;
 }
 .gallery.is-focused .gallery-dismiss { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
-.gallery.is-focused .gallery-keys { opacity: 0.66; visibility: visible; transform: none; transition-delay: 0s; }
+.gallery.is-focused:not(.is-book) .gallery-step { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
 
 /* A folder: a tab with sloped ears on top of a full-screen sheet. */
 .card {
@@ -493,14 +498,14 @@ nav h3 { white-space: nowrap; }
 .tiles.is-popping .tile:not(.is-popped) { opacity: 0.25; transition: opacity 300ms var(--ease); }
 .tile.is-popped .tile-text { opacity: 0; transition: opacity 200ms var(--ease); }
 .gallery.is-popping :is(.card, .card-tab h2) { transition: none !important; }
-.gallery.is-popping :is(.gallery-dismiss, .gallery-keys) { transition-delay: 260ms; }
+.gallery.is-popping :is(.gallery-dismiss, .gallery-step) { transition-delay: 260ms; }
 /* Closing draws the page back into its disc. The homepage is back at once behind it (the page still covers it), so the disc
    is measured where it really is; Contact sits above the folders, so it comes back only once the page is gone. */
 #root:has(.gallery.is-shrinking) .home { transform: none; opacity: 1; transition: none; pointer-events: none; }
 /* While the balloon swells the page is already open under it, clipped to nothing (site.js, popOpen): the homepage, Contact
    and Close stay as they were until it pops. */
 #root:has(.gallery.is-inflating) :is(.home, .contact) { transform: none; opacity: 1; transition: none; }
-.gallery.is-inflating :is(.gallery-dismiss, .gallery-keys) { opacity: 0; visibility: hidden; transition: none; }
+.gallery.is-inflating :is(.gallery-dismiss, .gallery-step) { opacity: 0; visibility: hidden; transition: none; }
 
 .card-content {
   position: relative;
@@ -1120,7 +1125,7 @@ nav h3 { white-space: nowrap; }
 
 /* ------------------------------------------------------------------- intro */
 html.is-intro { --intro-hero: 600ms; --intro-card: 450ms; --intro-stagger: 100ms; --intro-chrome: 450ms; --intro-start: 250ms; }
-html.is-intro .gallery, html.is-intro .contact, html.is-intro .contact-panel, html.is-intro .tiles { pointer-events: none; }
+html.is-intro .gallery, html.is-intro .contact, html.is-intro .contact-panel, html.is-intro .about-btn, html.is-intro .tiles { pointer-events: none; }
 html.is-intro .hero { opacity: 0; filter: blur(10px); transform: translateY(var(--intro-y, 0px)) scale(0.9); }
 html.is-intro .card, html.is-intro .book, html.is-intro .tile { opacity: 0; transition: none; }
 html.is-intro .contact, html.is-intro nav, html.is-intro .subheader { opacity: 0; filter: blur(4px); }
@@ -1150,7 +1155,8 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .gallery { --tab: 44px; }
   .card { --t-pad: 64px; }
   .gallery-dismiss { top: 4px; left: 4px; width: 36px; height: 36px; }
-  .gallery-keys { display: none; }
+  .gallery-step { top: 4px; right: 4px; }
+  .step-btn { height: 36px; }
   .bio-links { flex-direction: column; }
   .timeline { --slot: 28px; grid-template-columns: 60px 76px minmax(0, 1fr); }
 }
@@ -1169,7 +1175,7 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .subheader .cv-link { display: inline; }
   /* Scrolled down, the Contact button leaves with the header instead of sitting on the discs (site.js, startContact). */
   .contact.is-away:not(.is-open) { opacity: 0; transform: translateY(-16px); }
-  .contact.is-away:not(.is-open) .contact-panel { pointer-events: none; }
+  .contact.is-away:not(.is-open) :is(.contact-panel, .about-btn) { pointer-events: none; }
   .subheader { gap: 8px; padding: 14px var(--pad) 10px; }
   .subheader h3 { margin-top: 6px; font-size: 13px; color: var(--secondary); }
   /* Two columns of discs, the right one a little lower so they read as scattered, with the year and the name under each
@@ -1202,17 +1208,30 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
   .info { width: 86vw; }
   .contact { --w: calc(100vw - 20px); }
 }
-/* A tablet in portrait gets the phone layout with bigger text. Held sideways (or in a short window), the four discs sit
-   in one row, every other one a little lower. */
+/* A tablet, or a narrow window, has the widest screen's arrangement too, scaled to the width (her "aynı kalmalı. en geniş
+   hali en güncel hali", 2026-11-16): the same places and sizes as on a 1440 × 900 screen, in a box as tall as the lowest
+   disc and its name (the page scrolls here, so the box need not fit the height). A phone keeps its two columns. */
 @media (min-width: 701px) and (max-width: 1024px) {
-  .tiles { --row: 40px; }
-  .tile-text { gap: 4px; max-width: 360px; padding: 14px 8px 0; }
-  .tile-meta { font-size: 13px; }
+  .tiles { position: relative; display: block; height: 0; margin-top: 12px; padding: 0 0 calc(36% + 76px); container-type: inline-size; }
+  .tiles .tile { --D: 28.5cqw; --disc: calc(var(--D) * var(--f, 1)); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 0; }
+  .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: 13.2cqw; }
+  .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: 6.25cqw; }
+  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: 18.5cqw; }
+  .tile-text { gap: 4px; max-width: none; padding: 14px 0 0; }
+  .tile-meta { font-size: 11px; letter-spacing: 0.02em; white-space: nowrap; }
   .tile h2 { font-size: 20px; }
 }
-@media (min-width: 701px) and (max-width: 1024px) and (orientation: landscape) {
-  .tiles { --D: clamp(140px, min(21vw, 100dvh - 19vw - 290px), 300px); grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: calc(12px + var(--D) * 0.2); }
-  .tile:nth-child(even) { top: calc(var(--D) * 0.2); }
+/* On a phone the name takes two lines, so About me and Contact fit beside it. */
+@media (max-width: 700px) {
+  nav h3:first-of-type { max-width: 8em; white-space: normal; line-height: 1.15; }
+  .about-btn { gap: 6px; padding: 0 10px 0 12px; }
+  .about-btn h3, .contact-toggle h3 { font-size: 15px; }
+  .contact-toggle { gap: 6px; padding: 0 10px 0 12px; }
+}
+@media (max-width: 380px) {
+  .about-btn { right: calc(var(--btn-w) + 6px); padding: 0 8px 0 10px; }
+  .contact-toggle { padding: 0 8px 0 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
@@ -1737,7 +1756,7 @@ body.is-scroll { overflow-x: clip; }
 @media (hover: none) { .scroll-hint { display: none; } }
 
 /* Phone: the book only shows open, without the page turn (the turning page's back was a second copy of her photo that
-   flashed by before the About's own photo). "Wanna know me better?" opens it. */
+   flashed by before the About's own photo). "About me" opens it. */
 @media (max-width: 1024px) {
   .book { --closed-x: 0%; --closed-scale: 0.96; opacity: 0; transition: transform var(--time-cards) var(--ease), opacity 240ms var(--ease); }
   .gallery.is-book .book { opacity: 1; }

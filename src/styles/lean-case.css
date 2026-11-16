@@ -171,7 +171,7 @@
 .work figure.pmx.is-lean .pml-boards { grid-template-rows: auto auto; row-gap: 0; }
 .work figure.pmx.is-lean .pml-boards > div { display: grid; grid-template-rows: subgrid; grid-row: span 2; }
 .work figure.pmx.is-lean .pml-boards .pml-lab { align-self: end; }
-/* iKeep's two before-and-after groups side by side, three phones each; one under the other below 940px */
+/* PlayMate's before-and-after pairs side by side; one under the other below 940px */
 .work figure.pmx.is-lean .pml-ba-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 3.4cqw, 56px); align-items: start; }
 
 /* PlayMate's findings and the features they became: the finding in grey, the feature in yellow */
@@ -327,13 +327,24 @@
 }
 
 /* ------------------------------------------------ iKeep's own parts */
-/* a before and after pair, as on the live case: "Before" over its one phone, "After" over the one or two that replaced
-   it; the two captions share a row, set on its bottom line, and the phones start level under them */
-.work figure.pmx.is-lean .pml-bapair { align-items: start; }
-.work figure.pmx.is-lean .pml-bapair > .pml-cap { align-self: end; margin: 0 0 12px; }
-.work figure.pmx.is-lean .pml-bapair > .pml-cap + .pml-cap b { color: var(--accent); }
-.work figure.pmx.is-lean .pml-bapair > .pml-span2 { grid-column: span 2; }
-.work figure.pmx.is-lean .pml-bapair > .pml-phone { grid-row: 2; }
+/* iKeep's four changes, one per row (her "iki sütun halinde kurgula: sol before sag: after olsun ve ekranları onun
+   altına yerleştir", 2026-11-16): Before on the left, After on the right, each with its sentence over its phones. The
+   row has three equal columns, Before one and After two, so the old phone and each new one are the same size and After
+   starts at the same place in every row; the two sentences share a row, set on its bottom line, so the phones start level. */
+.work figure.pmx.is-lean .pml-ba-list { display: grid; gap: clamp(40px, 5cqw, 72px); max-width: 640px; }
+.work figure.pmx.is-lean .pml-ba { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto; gap: 0 clamp(8px, 1.6cqw, 28px); align-items: start; }
+.work figure.pmx.is-lean .pml-ba-side { display: grid; grid-template-rows: subgrid; grid-row: span 2; }
+.work figure.pmx.is-lean .pml-ba-side + .pml-ba-side { grid-column: span 2; grid-template-columns: subgrid; }
+.work figure.pmx.is-lean .pml-ba-side > .pml-cap { grid-column: 1 / -1; align-self: end; margin: 0 0 12px; }
+.work figure.pmx.is-lean .pml-ba-side + .pml-ba-side > .pml-cap b { color: var(--accent); }
+.work figure.pmx.is-lean .pml-ba-ph { display: contents; }
+@media (max-width: 640px) {
+  .work figure.pmx.is-lean .pml-ba-side > .pml-cap { font-size: 13px; }
+}
+  .work figure.pmx.is-lean .pml-ba.pml-ba-1 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work figure.pmx.is-lean .pml-ba-ph { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
+  .work figure.pmx.is-lean .pml-ba-side > .pml-cap { font-size: 13px; }
+}
 
 /* ------------------------------------------------ PlayMate's own parts: the research pages the live case has */
 /* a FigJam board with its areas outlined and numbered, as on the live case: the notes above it carry the same numbers */

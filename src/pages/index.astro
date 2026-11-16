@@ -76,6 +76,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
           <a class="link" href="https://www.linkedin.com/in/yagmursimseks" target="_blank" rel="noopener noreferrer"><h3>LinkedIn</h3><Fragment set:html={arrow} /></a>
         </div>
       </div>
+      <a class="about-btn" href="#about" data-open-book><h3>About me</h3><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
     </div>
 
     <div class="home" data-home>
@@ -94,7 +95,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <div class="subheader grid" style={`--count:${count}`}>
         <p>
           Product designer in Berlin. I design iOS apps from research to the App Store, and I can code what I design with Claude.{' '}
-          <a class="inline" href="#about" data-open-book>Wanna know me better?</a><span class="ai-link"> · <a class="inline" href="#ai" data-to-ai>How I work with AI</a></span><span class="cv-link"> · <a class="inline" href="/Yagmur-Simsek-CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></span>
+          <span class="ai-link"><a class="inline" href="#ai" data-to-ai>How I work with AI</a></span><span class="cv-link"><a class="inline" href="/Yagmur-Simsek-CV.pdf" target="_blank" rel="noopener">CV (PDF)</a></span>
         </p>
         <h3>Selected work ↓</h3>
       </div>
@@ -139,7 +140,10 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
       <button class="gallery-dismiss" type="button" aria-label="Close" data-dismiss>
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M9 3h2v6h6v2h-6v6H9v-6H3V9h6z" /></svg>
       </button>
-      <div class="gallery-keys" aria-hidden="true"><span>↑</span><span>←</span><span>↓</span><span>→</span></div>
+      <nav class="gallery-step" aria-label="Other projects" data-step>
+        <button class="step-btn" type="button" data-step-by="-1"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg><span></span></button>
+        <button class="step-btn" type="button" data-step-by="1"><span></span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+      </nav>
 
       <div class="gallery-stage">
         <section class="book" id="about" tabindex="0" aria-label="About Yagmur" data-book>
