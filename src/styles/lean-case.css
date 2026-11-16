@@ -84,15 +84,7 @@
    that the title and the whole phone share the first screen. A clip cut from a recording of a phone keeps that screen's
    rounder corners (PlayMate's). */
 .work figure.pmx.is-lean .pml-reel { display: grid; place-items: center; }
-.work figure.pmx.is-lean .pml-reel-in { position: relative; width: clamp(180px, 20cqw, 280px); }
-/* a pause button beside the phone's foot: the walkthrough plays on its own and loops, so it can be stopped (WCAG 2.2.2,
-   her "Evet, ekle", 2026-11-15); with reduced motion it starts paused (site.js, startVideos) */
-.work figure.pmx.is-lean .pml-pause { position: absolute; left: calc(100% + 12px); bottom: 0; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; box-sizing: border-box; border-radius: 50%; background: var(--l-box); color: var(--l-fg); box-shadow: inset 0 0 0 1px var(--l-rule); cursor: pointer; transition: color 100ms, box-shadow 100ms; }
-.work figure.pmx.is-lean .pml-pause svg { width: 16px; height: 16px; fill: currentColor; }
-.work figure.pmx.is-lean .pml-pause .pml-ic-play, .work figure.pmx.is-lean .pml-pause.is-held .pml-ic-pause { display: none; }
-.work figure.pmx.is-lean .pml-pause.is-held .pml-ic-play { display: inline; }
-.work figure.pmx.is-lean .pml-pause:hover { color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.work figure.pmx.is-lean .pml-pause:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.work figure.pmx.is-lean .pml-reel .pml-phone { width: clamp(180px, 20cqw, 280px); }
 .work figure.pmx.is-lean .pml-phone.pml-crop { border-radius: 12% / 5.5%; }
 
 /* ------------------------------------------------ a numbered section */
@@ -261,7 +253,7 @@
   .work figure.pmx.is-lean .pml-brief div:nth-child(n + 4) { border-top: 1px solid var(--l-rule); }
   .work figure.pmx.is-lean .pml-dec, .work figure.pmx.is-lean .pml-cover { grid-template-columns: 1fr; }
   .work figure.pmx.is-lean .pml-annot { width: min(72%, 280px); margin-inline: auto; }
-  .work figure.pmx.is-lean .pml-reel-in { width: min(62%, 280px); }
+  .work figure.pmx.is-lean .pml-reel .pml-phone { width: min(62%, 280px); }
   .work figure.pmx.is-lean .pml-pair, .work figure.pmx.is-lean .pml-fig { width: min(100%, 460px); margin-inline: auto; }
   .work figure.pmx.is-lean .pml-rounds { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
   .work figure.pmx.is-lean .pml-ba-rows { grid-template-columns: 1fr; }

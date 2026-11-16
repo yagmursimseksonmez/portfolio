@@ -1612,10 +1612,10 @@ startReveals();
 // its first frame is ready it shows a dark box, and a picture that arrives late comes up from dark (motion.css).
 function startVideos() {
   const onScreen = new WeakMap();
-  // a video someone paused (or every video, with reduced motion) stays still until its button plays it again
+  // with reduced motion no video plays; each shows its poster (the page has no pause buttons, her call, 2026-11-16)
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sync = (v) => {
-    const go = onScreen.get(v) && v.closest('[data-card]').classList.contains('is-active') && !v.dataset.held;
+    const go = onScreen.get(v) && v.closest('[data-card]').classList.contains('is-active') && !still;
     if (go && v.paused) v.play().catch(() => {});
     else if (!go && !v.paused) v.pause();
   };
@@ -1623,39 +1623,11 @@ function startVideos() {
   cards.forEach((card) => {
     const vids = [...card.querySelectorAll('video')];
     vids.forEach((v) => {
-      if (still) v.dataset.held = '1';
       if (v.autoplay) { v.autoplay = false; v.preload = 'auto'; }
       if (v.readyState < 2) v.addEventListener('loadeddata', () => addClass(v, 'is-loaded'), { once: true });
       io.observe(v);
     });
     new MutationObserver(() => vids.forEach(sync)).observe(card, { attributes: true, attributeFilter: ['class'] });
-  });
-  // each case cover's walkthrough and each next-project clip loops, so each has a pause button (WCAG 2.2.2)
-  document.querySelectorAll('.pml-pause').forEach((btn) => {
-    const v = btn.parentElement.querySelector('video');
-    const show = () => {
-      btn.classList.toggle('is-held', !!v.dataset.held);
-      btn.setAttribute('aria-label', v.dataset.held ? 'Play the video' : 'Pause the video');
-    };
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (v.dataset.held) delete v.dataset.held; else v.dataset.held = '1';
-      show(); sync(v);
-    });
-    show();
-  });
-  // the next-project card's button is the figure's (a button cannot sit inside the card's link), set beside the phone's
-  // foot from layout offsets, so the card's opening and closing transforms don't move it
-  document.querySelectorAll('.pm-nx-pause').forEach((btn) => {
-    const fig = btn.parentElement, peek = fig.querySelector('.pm-nx-peek');
-    const place = () => {
-      let x = 0, y = 0;
-      for (let el = peek; el && el !== fig; el = el.offsetParent) { x += el.offsetLeft; y += el.offsetTop; }
-      btn.style.left = `${x + peek.offsetWidth + 12}px`;
-      btn.style.top = `${Math.min(y + peek.offsetHeight, fig.clientHeight - 12)}px`; // its foot (site.css lifts it by its height)
-    };
-    new ResizeObserver(place).observe(fig);
-    new ResizeObserver(place).observe(peek);
   });
 }
 startVideos();

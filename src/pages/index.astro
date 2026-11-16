@@ -517,7 +517,6 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                         <span class="pm-nx-btn">Open {next.title}<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
                         {next.video && <div class:list={['pm-nx-peek', { 'is-wide': next.wide }]}><video src={next.video} poster={next.poster} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video></div>}
                       </a>
-                      {next.video && <button class="pml-pause pm-nx-pause" type="button" aria-label="Pause the video"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="pml-ic-pause" d="M4 3h3v10H4zM9 3h3v10H9z" /><path class="pml-ic-play" d="M5 3l8 5-8 5z" /></svg></button>}
                     </figure>
                   </div>
                 </article>
