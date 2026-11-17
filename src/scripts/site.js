@@ -404,7 +404,7 @@ function setFocus(next) {
   if (focused && !isBook) steps.forEach((btn) => {
     const to = cards[(next + Number(btn.dataset.stepBy) + count) % count];
     btn.querySelector('span').textContent = to.getAttribute('aria-label');
-    btn.setAttribute('aria-label', `${btn.dataset.stepBy < 0 ? 'Previous' : 'Next'} project: ${to.getAttribute('aria-label')}`);
+    btn.setAttribute('aria-label', `${btn.dataset.stepBy < 0 ? 'Previous' : 'Next'} case: ${to.getAttribute('aria-label')}`);
   });
 
   if (book) {
