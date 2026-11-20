@@ -105,6 +105,7 @@ nav h3 { white-space: nowrap; }
 .tile:nth-child(2) { --f: 0.86; }
 .tile:nth-child(3) { --f: 0.76; }
 .tile:nth-child(4) { --f: 0.68; }
+.tile:nth-child(5) { --f: 0.6; } /* Kitbox, her earliest case, the smallest (her "kitboxu koyalım en kücük baloncuk olarak") */
 @media (min-width: 1025px) {
   /* The intro floats over the top left of the space under the headline; the discs fill that space around it. */
   /* It does not scroll as long as everything fits; in a very short window it still can, so nothing is out of reach. */
@@ -135,11 +136,21 @@ nav h3 { white-space: nowrap; }
   .subheader p { max-width: min(600px, 41.35vw - var(--pad) - 24px); }
   /* the header's four columns end before About me and Contact, with room between them */
   nav.grid { grid-template-columns: repeat(4, minmax(max-content, 1fr)); column-gap: 24px; padding-right: 290px; }
-  .tile { --D: clamp(190px, min(28.5cqw, 100cqh - 104px), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
-  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 0; }
-  .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
+  /* A fifth disc, Kitbox, the smallest (2026-11-17): it sits low between the first and the second, at 70%, .36 of the
+     largest. To make room the first moved from 55.6 to 53.5% and the second from 85.1 to 87%, and every disc is a little
+     smaller: 26.5% of the width (was 28.5) or 95% of what the height allows. Checked at 63 window sizes from 1025 × 600
+     to 2560 × 1300: no disc, name or the intro comes closer than 14px to another. */
+  .tile { --D: clamp(190px, min(26.5cqw, (100cqh - 104px) * 0.95), 520px); --disc: calc(var(--D) * var(--f, 1)); --free: calc(100cqh - var(--disc) - 82px); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { --f: 1; left: calc(53.5cqw - var(--disc) / 2); top: 0; }
+  .tile:nth-child(2) { --f: 0.8; left: calc(87cqw - var(--disc) / 2); top: calc(var(--free) * 0.9); }
   .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: min(var(--free), max(90px, var(--intro-h, 0px), var(--free) * 0.2)); }
   .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: min(var(--free), max(90px, var(--intro-h, 0px), var(--free) * 0.85)); }
+  .tile:nth-child(5) { --f: 0.36; left: calc(70cqw - var(--disc) / 2); top: var(--free); }
+  /* (its summary would run past so small a disc: it starts higher, a little wider, over a taller fade) */
+  .tiles .tile:nth-child(5) p { top: calc(var(--disc) * 0.3); width: calc(var(--disc) * 0.84); font-size: 12px; }
+  .tile:nth-child(5) .tile-shot::after { background: linear-gradient(to top, rgba(22, 23, 22, 0.92) 0%, rgba(22, 23, 22, 0.86) 72%, rgba(22, 23, 22, 0) 100%); }
+  /* … and in a window where even that runs past the disc, it does not show (site.js fitSummaries) */
+  .tiles .tile.no-summary p, .tile.no-summary .tile-shot::after { opacity: 0 !important; }
   .tile-meta { white-space: nowrap; } /* (a small disc would break its year line in two; it may run a little past it) */
   .tiles .tile-proof { white-space: nowrap; } /* (one line, under a disc of any size; .tiles to win over the base rule's text-wrap) */
 }
@@ -1220,12 +1231,15 @@ html.is-intro-chrome .contact, html.is-intro-chrome nav, html.is-intro-chrome .s
    hali en güncel hali", 2026-11-16): the same places and sizes as on a 1440 × 900 screen, in a box as tall as the lowest
    disc and its name (the page scrolls here, so the box need not fit the height). A phone keeps its two columns. */
 @media (min-width: 701px) and (max-width: 1024px) {
-  .tiles { position: relative; display: block; height: 0; margin-top: 12px; padding: 0 0 calc(36% + 76px); container-type: inline-size; }
-  .tiles .tile { --D: 28.5cqw; --disc: calc(var(--D) * var(--f, 1)); position: absolute; width: var(--disc); }
-  .tile:nth-child(1) { --f: 1; left: calc(55.6cqw - var(--disc) / 2); top: 0; }
-  .tile:nth-child(2) { --f: 0.8; left: calc(85.1cqw - var(--disc) / 2); top: 13.2cqw; }
+  .tiles { position: relative; display: block; height: 0; margin-top: 12px; padding: 0 0 calc(36% + 112px); container-type: inline-size; }
+  .tiles .tile { --D: 26.5cqw; --disc: calc(var(--D) * var(--f, 1)); position: absolute; width: var(--disc); }
+  .tile:nth-child(1) { --f: 1; left: calc(53.5cqw - var(--disc) / 2); top: 0; }
+  .tile:nth-child(2) { --f: 0.8; left: calc(87cqw - var(--disc) / 2); top: 14.85cqw; }
   .tile:nth-child(3) { --f: 0.62; left: calc(29.4cqw - var(--disc) / 2); top: 6.25cqw; }
-  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: 18.5cqw; }
+  .tile:nth-child(4) { --f: 0.55; left: calc(10.9cqw - var(--disc) / 2); top: 19.66cqw; }
+  /* (Kitbox a little lower than on the screen: the names keep their size here while the places shrink, so its name starts
+     under HealthBar's) */
+  .tile:nth-child(5) { --f: 0.36; left: calc(70cqw - var(--disc) / 2); top: calc(26.5cqw + 52px); }
   .tile-text { gap: 4px; max-width: none; padding: 14px 0 0; }
   .tile-meta { font-size: 11px; letter-spacing: 0.02em; white-space: nowrap; }
   .tile h2 { font-size: 20px; }

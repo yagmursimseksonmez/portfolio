@@ -1,6 +1,6 @@
 // The phone covers for the homepage cards: the app's real screen in a phone, on the project's own colour, some with a
 // quiet motif from the case. Renders public/images/tiles/<id>.webp (600 x 600) with headless Chrome.
-// Run from the repo root: node tools/tiles/covers.mjs (Chrome starts through tools/chengel/cdp.mjs).
+// Run from the repo root: node tools/tiles/covers.mjs [id …] (Chrome starts through tools/chengel/cdp.mjs); with ids, only those.
 import fs from 'node:fs';
 import sharp from 'sharp';
 import { launch } from '../chengel/cdp.mjs';
@@ -16,7 +16,10 @@ const covers = [
   { id: 'healthbar', bg: '#a66759', screen: 'healthbar-home-1.webp', motif: 'pixels', island: true },
   { id: 'playmate', bg: '#d0c78b', screen: 'playmate-app-home-1.webp', motif: 'court' },
   { id: 'ikeep', bg: '#f4f1ea', screen: 'ikeep21-all-light.webp', motif: 'dots', island: true },
+  // Kitbox: its home screen (cut from her board, notch included) on the brand's light green.
+  { id: 'kitbox', bg: '#7ccab4', screen: 'kitbox-scr-home.webp' },
 ];
+const only = process.argv.slice(2);
 
 const motif = {
   grid: `<div class="m grid"></div><b class="cell" style="left:14px;top:74px"></b><b class="cell" style="left:494px;top:134px"></b><b class="cell" style="left:74px;top:434px"></b><b class="cell" style="left:494px;top:494px"></b>`,
@@ -49,7 +52,7 @@ const page = (c) => `<!doctype html><html><head><meta charset="utf-8"><style>
 const tmp = fs.mkdtempSync('/tmp/covers-');
 const b = await launch({ port: 9590, width: 600, height: 600, scale: 2 });
 await b.send('Emulation.setDeviceMetricsOverride', { width: 600, height: 600, deviceScaleFactor: 1, mobile: false });
-for (const c of covers) {
+for (const c of covers.filter((c) => !only.length || only.includes(c.id))) {
   const file = `${tmp}/${c.id}.html`;
   fs.writeFileSync(file, page(c));
   await b.goto(`file://${file}`);

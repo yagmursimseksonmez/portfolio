@@ -1113,6 +1113,16 @@ if (subText) new ResizeObserver(markSubBottom).observe(subText);
 addEventListener('resize', markSubBottom);
 document.fonts.ready.then(markSubBottom);
 markSubBottom();
+
+// A summary that would run past its disc (Kitbox's, the smallest, in a small window) does not show on hover
+// (.no-summary, site.css); a screen reader still reads it.
+const fitSummaries = () => tilesBox?.querySelectorAll('.tile').forEach((t) => {
+  const p = t.querySelector('p');
+  const shot = t.querySelector('.tile-shot');
+  if (p && shot) t.classList.toggle('no-summary', p.offsetTop + p.offsetHeight > shot.offsetTop + shot.offsetHeight - 4);
+});
+if (tilesBox) new ResizeObserver(fitSummaries).observe(tilesBox);
+document.fonts.ready.then(fitSummaries);
 startContact();
 startAi();
 startGallery();
