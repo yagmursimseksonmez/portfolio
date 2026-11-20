@@ -36,6 +36,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
 ---
 <Base
   title={site.home.title}
+  canonicalPath="/"
   description={site.home.description}
   image={site.home.image}
   intro
@@ -104,7 +105,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
     <!-- The four projects at a glance: each card opens its folder (the case) below. -->
     <section class="tiles" aria-label="Selected work">
       {projects.map((p, k) => (
-        <a class="tile" href={`#${p.id}`} style={`--k:${k}`} data-open-case={k}>
+        <a class="tile" href={`/${p.id}/`} style={`--k:${k}`} data-open-case={k}>
           {p.data.tile && <span class="tile-shot"><img src={p.data.tile.cover} alt="" decoding="async" /></span>}
           {/* The name first for screen readers; the status line still shows above it (order: -1). */}
           <span class="tile-text">
@@ -513,7 +514,7 @@ const arrow = '<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="t
                       )}
                     </div>}
                     <figure class="pmx" aria-label="Next project">
-                      <a class="pmf pm-f-next" href={`#${next.id}`} data-next={next.id} aria-label={`Next project: ${next.title}`}>
+                      <a class="pmf pm-f-next" href={`/${next.id}/`} data-next={next.id} aria-label={`Next project: ${next.title}`}>
                         <h2>Next project</h2>
                         <h3>{next.title}</h3>
                         {next.note && <p class="pm-nx-note">{next.note}</p>}

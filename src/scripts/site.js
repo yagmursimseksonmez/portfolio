@@ -414,10 +414,12 @@ function setFocus(next) {
     else if (prev !== next && prev === BOOK) closeBook();
   }
 
-  // (only when something opened or closed: a re-layout while the page starts must not wipe a link's #chengel before it
+  // Each case has its own path (/ikeep/), because Cloudflare's visitor counter counts the path and drops the #…; that is
+  // how it tells the cases apart. The About stays /#about.
+  // (only when something opened or closed: a re-layout while the page starts must not wipe a link's /chengel/ before it
   // has opened that case)
-  const hash = isBook ? '#about' : focused ? `#${cards[next].id}` : '';
-  if (prev !== next && location.hash !== hash) history.replaceState(null, '', hash || location.pathname);
+  const url = isBook ? '/#about' : focused ? `/${cards[next].id}/` : '/';
+  if (prev !== next && location.pathname + location.hash !== url) history.replaceState(null, '', url);
   // The homepage sits faded out behind an open folder: Tab must not walk through it, and a keyboard user who opened a
   // card from there carries on inside the folder.
   if (home) {
@@ -679,6 +681,10 @@ function stepWork(delta) {
   return true;
 }
 
+// A click with Cmd, Ctrl, Shift or Alt (or not the main button) is the browser's: it opens the case's own address
+// (/ikeep/) in a new tab or window.
+const browserClick = (e) => e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0;
+
 function startGallery() {
   if (!gallery) return;
   // Focus moves inside a folder must never scroll the stage itself; the layout is driven by transforms.
@@ -690,8 +696,9 @@ function startGallery() {
     // The card at the end of a case opens the next folder from its first page. It stops here, or the sheet's own click
     // would bring this folder back.
     card.querySelectorAll('[data-next]').forEach((a) => a.addEventListener('click', (e) => {
-      e.preventDefault();
       e.stopPropagation();
+      if (browserClick(e)) return;
+      e.preventDefault();
       const to = cards.findIndex((c) => c.id === a.dataset.next);
       if (to < 0) return;
       cards[to].querySelector('.card-content').scrollTop = 0;
@@ -718,7 +725,7 @@ function startGallery() {
   );
   // The discs on the homepage open their projects, as a balloon that pops.
   document.querySelectorAll('[data-open-case]').forEach((a) =>
-    a.addEventListener('click', (e) => { e.preventDefault(); popOpen(Number(a.dataset.openCase), a); }),
+    a.addEventListener('click', (e) => { if (browserClick(e)) return; e.preventDefault(); popOpen(Number(a.dataset.openCase), a); }),
   );
   gallery.querySelector('[data-dismiss]').addEventListener('click', () => focusGallery(null));
 
@@ -1134,18 +1141,22 @@ startDetails();
 startTimeline();
 playIntro();
 
-// Deep links: /#ikeep opens that folder, /#about opens the book. A link opened in a tab that already shows the page does
-// not load it again, only changes the hash, so that opens it too.
-const linkTarget = (id) => {
+// Deep links: /ikeep/ opens that folder (the older /#ikeep links too), /#about opens the book. A link opened in a tab that
+// already shows the page does not load it again, only changes the hash, so that opens it too. Going back to an entry
+// whose path names another case (/ikeep/ after /playmate/) changes no hash, so popstate opens it.
+const caseNamed = (id) => {
   const k = cards.findIndex((c) => c.id === id);
-  return id === 'about' ? BOOK : k >= 0 ? k : null;
+  return k >= 0 ? k : null;
 };
-const linked = linkTarget(location.hash.slice(1));
+const linkTarget = () => (location.hash === '#about' ? BOOK : caseNamed(location.hash.slice(1)) ?? caseNamed(location.pathname.split('/')[1]));
+const linked = linkTarget();
 if (linked !== null) setTimeout(() => focusGallery(linked), root.classList.contains('is-intro') ? 1400 : 0);
-addEventListener('hashchange', () => {
-  const target = linkTarget(location.hash.slice(1));
+const followLink = () => {
+  const target = linkTarget();
   if (target !== null && target !== active) focusGallery(target);
-});
+};
+addEventListener('hashchange', followLink);
+addEventListener('popstate', followLink);
 
 
 // ------------------------------------------------------- PlayMate pages

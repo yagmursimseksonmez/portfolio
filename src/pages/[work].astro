@@ -1,0 +1,13 @@
+---
+// Each case has its own address (/ikeep/ …), so Cloudflare's visitor counter, which counts the path and drops the #…,
+// can tell the cases apart. It is the homepage itself: site.js opens the case the path names, and opening another case
+// or closing it changes the path in place (history.replaceState), so a shared link and a reload land on that case.
+import { getCollection } from 'astro:content';
+import Home from './index.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.hidden);
+  return projects.map((p) => ({ params: { work: p.id } }));
+}
+---
+<Home />
