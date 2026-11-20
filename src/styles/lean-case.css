@@ -76,16 +76,18 @@
 .work figure.pmx.is-lean .pml-band { margin-top: clamp(32px, 4cqw, 56px); }
 .work figure.pmx.is-lean .pml-cover .pml-band { margin-top: 0; }
 .work figure.pmx.is-lean .pml-row { display: grid; grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: clamp(8px, 1.6cqw, 28px); align-items: start; }
-.work figure.pmx.is-lean .pml-phone { border-radius: clamp(8px, 1.4cqw, 22px); overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.28); background: #111; }
+/* corners: a share of the phone's own width, like a real iPhone screen, the same on every phone at every size. Some
+   screens and recordings carry their own rounded corners (Kitbox's, the old iKeep screens, PlayMate's recording);
+   16.5% is rounder than the roundest of them (the old iKeep screens, about 16%), so their corners stay inside the
+   frame (her, 2026-11-20: "bu köşe problemlerini düzelt. tüm caselerde"). 7.6% is the same corner down the height. */
+.work figure.pmx.is-lean .pml-phone { border-radius: 16.5% / 7.6%; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.28); background: #111; }
 .work figure.pmx.is-lean .pml-phone :is(img, video) { display: block; width: 100%; height: auto; }
 /* the cover's one phone, playing a walkthrough of the app: HealthBar's as it is on the App Store (her, 2026-11-14: "Eski
    ekranı ve videoyu kullan daha gondermedik uygulamayi appstorea"), then on every cover (her, 2026-11-15: "light mode'dan
    screen recording olsun burda. diger caselerde de bu kısımda video olsun"). Big enough to read the HP bar, small enough
-   that the title and the whole phone share the first screen. A clip cut from a recording of a phone keeps that screen's
-   rounder corners (PlayMate's). */
+   that the title and the whole phone share the first screen. */
 .work figure.pmx.is-lean .pml-reel { display: grid; place-items: center; }
 .work figure.pmx.is-lean .pml-reel .pml-phone { width: clamp(180px, 20cqw, 280px); }
-.work figure.pmx.is-lean .pml-phone.pml-crop { border-radius: 12% / 5.5%; }
 
 /* ------------------------------------------------ a numbered section */
 .work figure.pmx.is-lean .pml-sec { padding-top: clamp(64px, 7cqw, 120px); }
