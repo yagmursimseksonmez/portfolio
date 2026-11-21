@@ -384,6 +384,13 @@ function setFocus(next) {
   gallery.classList.toggle('is-book', isBook);
   gallery.classList.toggle('has-front', focused && !isBook && next < count - 1);
   if (prev !== next) hero?.setCovered(focused);
+  // Closing a case, About me and Contact wait until Previous and Next case have left the corner (site.css,
+  // .is-case-closing); after the About or a scroll on the phone they come back at once.
+  if (typeof prev === 'number' && next === null) {
+    root.classList.add('is-case-closing');
+    clearTimeout(setFocus.handBack);
+    setFocus.handBack = setTimeout(() => root.classList.remove('is-case-closing'), 450);
+  }
 
   cards.forEach((card, k) => {
     const isActive = k === next;

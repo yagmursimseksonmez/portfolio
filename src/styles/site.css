@@ -229,7 +229,7 @@ nav h3 { white-space: nowrap; }
 }
 /* Out of sight it is also hidden, so Tab never lands on it; visibility flips after the fade out and at once on the way
    in, as for Close. */
-#root:has(.gallery.is-focused) .contact { transform: translateY(-20px) scale(0.98); opacity: 0; visibility: hidden; transition: opacity var(--time-cards) var(--ease), transform var(--time-cards) var(--ease), visibility 0s linear var(--time-cards); }
+#root:has(.gallery.is-focused) .contact { transform: translateY(-20px) scale(0.98); opacity: 0; visibility: hidden; transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 0s linear 160ms; }
 .contact-panel {
   position: absolute;
   inset: 0;
@@ -416,6 +416,15 @@ nav h3 { white-space: nowrap; }
 }
 .gallery.is-focused .gallery-dismiss { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
 .gallery.is-focused:not(.is-book) .gallery-step { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
+/* About me and Contact hand the top right corner to Previous and Next case, and take it back, one pair at a time (her
+   "case acılırken sag ust kosedeki contact ve about me kısmı ile previous next case yazıları üst üste geliyor",
+   2026-11-20): opening a case they leave in 160ms (.contact above) and the case buttons come in after 180ms; closing,
+   the case buttons leave in 160ms and About me and Contact come back after 180ms (.is-case-closing, set by site.js
+   setFocus only when a case closes; after the About and the phone's scroll they come back at once, as before). They
+   never show at once. */
+html.is-case-closing .contact { transition: opacity 240ms var(--ease) 180ms, transform 240ms var(--ease) 180ms, visibility 0s; }
+.gallery-step { transition: opacity 160ms var(--ease), transform 160ms var(--ease), visibility 0s linear 160ms; }
+.gallery.is-focused:not(.is-book) .gallery-step { transition: opacity 240ms var(--ease) 180ms, transform 240ms var(--ease) 180ms, visibility 0s linear 180ms; }
 
 /* A folder: a tab with sloped ears on top of a full-screen sheet. */
 .card {
@@ -517,6 +526,9 @@ nav h3 { white-space: nowrap; }
 .tile.is-popped .tile-text { opacity: 0; transition: opacity 200ms var(--ease); }
 .gallery.is-popping :is(.card, .card-tab h2) { transition: none !important; }
 .gallery.is-popping :is(.gallery-dismiss, .gallery-step) { transition-delay: 260ms; }
+/* (closing, Previous and Next case start to fade at once, so About me and Contact can come back after them; they stay
+   visible until the fade ends: opacity, transform, visibility) */
+.gallery.is-popping:not(.is-focused) .gallery-step { transition-delay: 0s, 0s, 160ms; }
 /* Closing draws the page back into its disc. The homepage is back at once behind it (the page still covers it), so the disc
    is measured where it really is; Contact sits above the folders, so it comes back only once the page is gone. */
 #root:has(.gallery.is-shrinking) .home { transform: none; opacity: 1; transition: none; pointer-events: none; }
@@ -524,7 +536,7 @@ nav h3 { white-space: nowrap; }
    and Close stay as they were until it pops. */
 #root:has(.gallery.is-inflating) :is(.home, .contact) { transform: none; opacity: 1; visibility: visible; transition: none; }
 #root:has(.gallery.is-inflating) .about-btn { opacity: 1; visibility: visible; pointer-events: none; transition: none; }
-.gallery.is-inflating :is(.gallery-dismiss, .gallery-step) { opacity: 0; visibility: hidden; transition: none; }
+.gallery.is-inflating :is(.gallery-dismiss, .gallery-step), .gallery.is-inflating.is-focused:not(.is-book) .gallery-step { opacity: 0; visibility: hidden; transition: none; }
 
 .card-content {
   position: relative;
