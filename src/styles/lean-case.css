@@ -105,7 +105,7 @@
 .work figure.pmx.is-lean .pml-lead > div:first-child { border-top-color: var(--accent); }
 /* real use, from the apps' own analytics (her "bu sekilde gercek data kullanalım biz de firebase'den cekerek", 2026-11-20,
    with a row of number tiles; the numbers she chose on 2026-11-22, "Önerdiklerin", from sirket/portfolyo/notlar/
-   2026-11-20-firebase-veri/rapor.md): each number with its base, the dates on the label above, the source under it */
+   2026-11-20-firebase-veri/rapor.md): each number with its base, the dates on the label above, the source under it; on the cover, under the brief, since her "bu daha kısmını en basa alalım hepsinde" (2026-11-22) */
 .work figure.pmx.is-lean .pml-usage { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.4cqw, 20px); }
 .work figure.pmx.is-lean .pml-usage > div { padding: clamp(18px, 2cqw, 28px); border: 1px solid var(--l-rule); border-radius: 20px; background: rgba(255, 255, 255, 0.03); }
 .work figure.pmx.is-lean .pml-usage b { display: block; color: var(--l-fg); font-size: clamp(28px, 2.8cqw, 44px); line-height: 1; letter-spacing: -0.03em; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
