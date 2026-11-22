@@ -103,6 +103,15 @@
 .work figure.pmx.is-lean .pml-facts b i { font-style: normal; color: var(--l-2); font-weight: 500; }
 .work figure.pmx.is-lean .pml-facts span { display: block; margin-top: 10px; max-width: 20em; font-size: 15px; line-height: 1.4; color: var(--l-2); }
 .work figure.pmx.is-lean .pml-lead > div:first-child { border-top-color: var(--accent); }
+/* real use, from the apps' own analytics (her "bu sekilde gercek data kullanalım biz de firebase'den cekerek", 2026-11-20,
+   with a row of number tiles; the numbers she chose on 2026-11-22, "Önerdiklerin", from sirket/portfolyo/notlar/
+   2026-11-20-firebase-veri/rapor.md): each number with its base, the dates on the label above, the source under it */
+.work figure.pmx.is-lean .pml-usage { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(12px, 1.4cqw, 20px); }
+.work figure.pmx.is-lean .pml-usage > div { padding: clamp(18px, 2cqw, 28px); border: 1px solid var(--l-rule); border-radius: 20px; background: rgba(255, 255, 255, 0.03); }
+.work figure.pmx.is-lean .pml-usage b { display: block; color: var(--l-fg); font-size: clamp(28px, 2.8cqw, 44px); line-height: 1; letter-spacing: -0.03em; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.work figure.pmx.is-lean .pml-usage b i { font-style: normal; color: var(--l-2); font-weight: 500; }
+.work figure.pmx.is-lean .pml-usage span { display: block; margin-top: 10px; font-size: 15px; line-height: 1.4; color: var(--l-2); text-wrap: pretty; }
+.work figure.pmx.is-lean .pml-usage + .pml-cap { margin-top: 14px; }
 .work figure.pmx.is-lean .pml-quote { margin-top: clamp(28px, 3cqw, 40px); max-width: 30em; color: var(--l-fg); font-size: clamp(20px, 2cqw, 28px); line-height: 1.3; font-weight: 500; letter-spacing: -0.01em; }
 .work figure.pmx.is-lean .pml-quote cite { display: block; margin-top: 10px; color: var(--l-2); font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: 0; }
 .work figure.pmx.is-lean .pml-cap { display: block; margin-top: 12px; font-size: 14px; line-height: 1.4; color: var(--l-2); }
@@ -252,6 +261,7 @@
   .work figure.pmx.is-lean .pml-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 14px; font-size: 14px; color: var(--l-2); }
   .work figure.pmx.is-lean .pml-key i { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 12px; font-weight: 700; }
 }
+@media (max-width: 1199px) { .work figure.pmx.is-lean .pml-usage { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 939px) {
   .work figure.pmx.is-lean .pml-brief { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .work figure.pmx.is-lean .pml-brief div:nth-child(4) { border-left: 0; }
@@ -273,6 +283,8 @@
   .work figure.pmx.is-lean .pml-proof > div, .work figure.pmx.is-lean .pml-facts > div { display: grid; grid-template-columns: 8.2em minmax(0, 1fr); gap: 14px; align-items: baseline; }
   .work figure.pmx.is-lean .pml-proof span, .work figure.pmx.is-lean .pml-facts span { margin-top: 0; }
   .work figure.pmx.is-lean .pml-proof b, .work figure.pmx.is-lean .pml-facts b { font-size: 30px; }
+  .work figure.pmx.is-lean .pml-usage b { font-size: clamp(24px, 7.4vw, 28px); }
+  .work figure.pmx.is-lean .pml-usage span { font-size: 14px; }
   .work figure.pmx.is-lean .pml-brief { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .work figure.pmx.is-lean .pml-brief div { border-left: 0; border-top: 1px solid var(--l-rule); }
   .work figure.pmx.is-lean .pml-brief div:nth-child(even) { border-left: 1px solid var(--l-rule); }
